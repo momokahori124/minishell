@@ -12,9 +12,10 @@ void	put_envs(char *envp[])
 	}
 }
 
-int		main(int argc, char *argv[], char *envp[], char *apple[])
+int		main(int argc, char *argv[], char *envp[])
 {
 	put_envs(envp);
-
+	(void)argc;
+	(void)argv;
 }
 
