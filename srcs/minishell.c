@@ -1,12 +1,19 @@
 #include "../includes/minishell.h"
 
-char    *read_file()
+void	put_envs(char *envp[])
 {
-    char *
+	int i = 0;
+	while (1)
+	{
+		if (envp[i] == NULL)
+			break;
+		printf("%s\n", envp[i]);
+		i++;
+	}
 }
 
-int main()
+int		main(int argc, char *argv[], char *envp[], char *apple[])
 {
-
+	put_envs(envp);
 
 }
