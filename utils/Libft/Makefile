@@ -6,7 +6,7 @@
 #    By: momoka <momoka@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2020/11/23 12:08:54 by momoka           ###   ########.fr        #
+#    Updated: 2020/11/23 13:36:45 by momoka           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,22 +80,26 @@ BONUS =	srcs/ft_lstadd_back.c \
 		srcs/ft_lstmap.c \
 
 OBJS = $(SRCS:.c=.o)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
 BONUSOBJS = $(BONUS:.c=.o)
 
 $(NAME): $(OBJS)
-	make -C ./srcs/libvec3D
-	cp ./srcs/libvec3D/libvec.a $(NAME)
-	ar rcs $(NAME) $(OBJS)
+	@make -C ./srcs/libvec3D
+	@cp ./srcs/libvec3D/libvec.a $(NAME)
+	@ar rcs $(NAME) $(OBJS)
 
 all:	$(NAME)
 
 clean:
-	make clean -C ./srcs/libvec3D
-	$(RM) $(OBJS) $(BONUSOBJS)
+	@make clean -C ./srcs/libvec3D
+	@$(RM) $(OBJS) $(BONUSOBJS)
 
 fclean: clean
-	make fclean -C ./srcs/libvec3D
-	$(RM) $(NAME)
+	@make fclean -C ./srcs/libvec3D
+	@$(RM) $(NAME)
 
 re:	fclean all
 
