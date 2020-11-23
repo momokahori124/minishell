@@ -50,12 +50,12 @@ void		console_loop(char *envp[])
 {
 	char *line;
 
-	ft_putstr("> ");
+	ft_putstr("❤️ ");
 	while (get_next_line(0, &line) > 0)
 	{
 		execute_cmd(line, envp);//コマンドを実行する
 		free(line);
-		ft_putstr("> ");
+		ft_putstr("❤️ ");
 	}
 }
 
