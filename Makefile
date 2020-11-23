@@ -6,7 +6,7 @@
 #    By: momoka <momoka@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/11/23 12:08:28 by momoka           ###   ########.fr        #
+#    Updated: 2020/11/23 12:30:49 by momoka           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,10 @@ CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra
 
+FLAGS =  ./utils/libft/libft.a
+
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(FLAGS)
 
 all: $(NAME)
 
