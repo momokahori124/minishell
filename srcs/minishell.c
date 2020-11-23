@@ -12,9 +12,23 @@ void	put_envs(char *envp[])
 	}
 }
 
+void		console_loop(char *envp[])
+{
+	char *line;
+
+	// ft_putstr("> ");
+	while (get_next_line(0, &line) > 0)
+	{
+		printf("%s\n", line);
+	}
+	(void)envp;
+}
+
 int		main(int argc, char *argv[], char *envp[])
 {
-	put_envs(envp);
+	console_loop(envp);
+	// put_envs(envp);
+	// (void)envp;
 	(void)argc;
 	(void)argv;
 }
