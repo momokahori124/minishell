@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: momoka <momoka@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 15:23:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/11/07 19:59:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/11/23 12:08:42 by momoka           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void			*ft_memmove(void *dst, const void *src, size_t len);
 void			*ft_memset(void *b, int c, size_t len);
 void			*ft_memchr(const void *s, int c, size_t n);
 void			ft_bzero(void *s, size_t n);
+void    		ft_putstr(char *str);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char *s, int fd);
 void			ft_putendl_fd(char *s, int fd);

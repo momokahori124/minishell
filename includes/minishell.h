@@ -8,5 +8,4 @@
 # include "../utils/Libft/srcs/GNL/get_next_line.h"
 
 
-
 #endif

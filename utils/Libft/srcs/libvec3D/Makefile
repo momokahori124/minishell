@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
+#    By: momoka <momoka@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/23 15:04:22 by tjinichi          #+#    #+#              #
-#    Updated: 2020/11/20 15:30:03 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/11/23 13:37:06 by momoka           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,18 +29,21 @@ SRCS =	add_vec.c \
 		cos_vec.c \
 		scal_sub_vec.c \
 
-OBJS = ${SRCS:.c=.o}
+OBJS = $(SRCS:.c=.o)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 $(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 
 all:	$(NAME)
 
 clean:
-	$(RM) $(OBJS)
+	@$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re:	fclean all
 
