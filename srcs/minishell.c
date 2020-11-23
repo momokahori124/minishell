@@ -34,7 +34,6 @@ void		ft_putenv(char *s)
 		s++;
 	s++;
 	ft_putstr(s);
-	ft_putstr("\n");
 }
 
 void		execute_cmd(char *line, char *envp[])
@@ -43,24 +42,35 @@ void		execute_cmd(char *line, char *envp[])
 	if (ft_memcmp(line, "pwd", 3) == 0)
 	{
 		ft_putenv(envp[search_env(envp, "PWD")]);
+		ft_putstr("\n");
 	}
+}
+
+void		put_prompt(char *envp[])
+{
+	char *s;
+
+	s = envp[search_env(envp, "USER")];
+	ft_putenv(s);
+	ft_putstr(" ❤️ > ");
 }
 
 void		console_loop(char *envp[])
 {
 	char *line;
 
-	ft_putstr("❤️ ");
+	put_prompt(envp);
 	while (get_next_line(0, &line) > 0)
 	{
 		execute_cmd(line, envp);//コマンドを実行する
 		free(line);
-		ft_putstr("❤️ ");
+		put_prompt(envp);
 	}
 }
 
 int		main(int argc, char *argv[], char *envp[])
 {
+	ft_putstr("\n\n❤️ ❤️ ❤️ Welcome to minishell ❤️ ❤️ ❤️\n\n");
 	console_loop(envp);
 	(void)argc;
 	(void)argv;
