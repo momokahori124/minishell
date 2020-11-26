@@ -60,7 +60,7 @@ void		perror_exit(char *s)
 	exit(0);
 }
 
-char		*console_loop(char *envp[])
+char		*read_command_line(char *envp[])
 {
 	char	*command;
 	char	*tmp;
@@ -95,7 +95,7 @@ int		main(int argc, char *argv[], char *envp[])
 	ft_putstr("\n\n❤️ ❤️ ❤️ Welcome to minishell ❤️ ❤️ ❤️\n\n");
 	while (1)
 	{
-		command = console_loop(envp);
+		command = read_command_line(envp);
 		execute_cmd(command, envp);
 	}
 	(void)argc;
