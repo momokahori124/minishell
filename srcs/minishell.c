@@ -30,9 +30,8 @@ int			search_env(char *envp[], char *env_name)
 
 void		ft_putenv(char *s)
 {
-	while (*s != '=')
-		s++;
-	s++;
+	while (*s++ != '=')
+		;
 	ft_putstr(s);
 }
 
@@ -55,24 +54,50 @@ void		put_prompt(char *envp[])
 	ft_putstr(" ❤️ > ");
 }
 
-void		console_loop(char *envp[])
+void		perror_exit(char *s)
 {
-	char *line;
+	ft_putstr(s);
+	exit(0);
+}
+
+char		*console_loop(char *envp[])
+{
+	char	*command;
+	char	*tmp;
+	char	buf;
+	ssize_t	rc;
 
 	put_prompt(envp);
-	while (get_next_line(0, &line) > 0)
+	command = ft_strdup("");
+	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
 	{
-		execute_cmd(line, envp);//コマンドを実行する
-		free(line);
-		put_prompt(envp);
+		if (rc == 0)
+		{
+			write(0, "\033[0K", 4);
+			continue ;
+		}
+		tmp = command;
+		command = ft_strjoinch(command, buf);
+		free(tmp);
 	}
+	if (rc == -1)
+	{
+		free(command);
+		perror_exit("ERROR_Message");
+	}
+	return (command);
 }
 
 int		main(int argc, char *argv[], char *envp[])
 {
+	char	*command;
+
 	ft_putstr("\n\n❤️ ❤️ ❤️ Welcome to minishell ❤️ ❤️ ❤️\n\n");
-	console_loop(envp);
+	while (1)
+	{
+		command = console_loop(envp);
+		execute_cmd(command, envp);
+	}
 	(void)argc;
 	(void)argv;
 }
-
