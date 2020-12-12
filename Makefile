@@ -3,16 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: momoka <momoka@student.42.fr>              +#+  +:+       +#+         #
+#    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/11/23 13:35:29 by momoka           ###   ########.fr        #
+#    Updated: 2020/12/12 04:52:50 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRCFILE = minishell.c
+SRCFILE =	minishell.c \
+			minishell_utils.c \
+			error.c \
+			parse_command.c \
+			cute_message.c \
+			signal.c \
 
 SRCDIR = srcs/
 
@@ -27,9 +32,16 @@ CFLAGS = -Wall -Werror -Wextra
 LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a
 
-$(NAME): $(OBJS)
-	@make -C $(LIBS)
+SHELL=/bin/bash
+COUNT = `expr $C '*' 30 / $T`
+PRINT_BAR = $(shell export COUNT=$(COUNT); ./a.sh)
+
+$(NAME): $(OBJS) $(LIBFT)
+	$(PRINT_BAR)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+
+$(LIBFT): FORCE
+	@$(MAKE) -C $(LIBS)
 
 all: $(NAME)
 
@@ -43,4 +55,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re FORCE

@@ -1,0 +1,8 @@
+Makefile
+README.md
+a.txt
+includes
+minishell
+minishell.dSYM
+srcs
+utils
