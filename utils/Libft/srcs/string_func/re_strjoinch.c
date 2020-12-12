@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:21:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 04:28:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/13 04:04:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*re_strjoinch(char **s, char c)
 	}
 	res[i++] = c;
 	res[i] = '\0';
-	free(*s);
-	*s = NULL;
+	ptr_free((void**)s);
 	return (res);
 }

@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/12 04:52:50 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/12/13 04:09:07 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,10 +34,8 @@ LIBFT = ./utils/Libft/libft.a
 
 SHELL=/bin/bash
 COUNT = `expr $C '*' 30 / $T`
-PRINT_BAR = $(shell export COUNT=$(COUNT); ./a.sh)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(PRINT_BAR)
+$(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 $(LIBFT): FORCE

@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   re_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 03:58:24 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/13 04:01:34 by tjinichi          #+#    #+#             */
+/*   Updated: 2020/12/13 04:04:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "../../includes/string_func.h"
 
-# include "minishell.h"
-# define ERR_READ "Failed to read at the above location. "
+char	*re_strdup(char **s1)
+{
+	char	*res;
+	size_t	len;
 
-void		perror_exit(char *error_message, int state);
-void		free_perror_exit(char *ptr, char *error_message, int state);
-void		free_exit(char *ptr, int state);
-
-#endif
+	if (*s1 == NULL)
+		return (ft_strdup(""));
+	len = ft_strlen(*s1) + 1;
+	if (!(res = malloc(sizeof(char) * (len))))
+		return (NULL);
+	ft_memcpy(res, *s1, len);
+	ptr_free((void**)s1);
+	return (res);
+}

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 03:54:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/13 04:07:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ char		*read_command_line(void)
 	}
 	if (rc == -1)
 		free_perror_exit(command, ERR_READ, EXIT_FAILURE);
-	return (command);
+	return (re_strdup(&command));
 }
