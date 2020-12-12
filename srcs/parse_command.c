@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 19:19:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/13 03:54:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ char		*read_command_line(void)
 	command = ft_strdup("");
 	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
 	{
-		if (rc == 0)
+		if (rc != 0)
+			command = re_strjoinch(&command, buf);
+		else
 		{
 			if (command[0] == '\0')
 			{
@@ -30,7 +32,6 @@ char		*read_command_line(void)
 			}
 			write(0, "\033[0K", 4);
 		}
-		command = re_strjoinch(&command, buf);
 	}
 	if (rc == -1)
 		free_perror_exit(command, ERR_READ, EXIT_FAILURE);
