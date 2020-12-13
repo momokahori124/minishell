@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 22:15:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:24:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 void		perror_exit(char *error_message, int state);
 void		free_perror_exit(char *ptr, char *error_message, int state);
 void		free_exit(char *ptr, int state);
+void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
+					int state);
 
 void		ctrl_d_exit(char *ptr);
 

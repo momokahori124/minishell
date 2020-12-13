@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:19:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:25:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ bool		add_pwd_to_lst(t_minishell_info *info, char **command)
 	t_cmdlst	*pwd;
 
 	if (!(pwd = malloc(sizeof(t_cmdlst))))
-	{
-		free(info->cmd_lst); // 本当はリスト全部
-		free_perror_exit(*command, ERR_MALLOC, EXIT_FAILURE);
-	}
+		all_free_perror_exit(info, ERR_MALLOC, EXIT_FAILURE);
 	pwd->command = NULL;
 	pwd->type = PWD;
 	pwd->pipe[0] = 0; // わかりやすく書いてるだけであとで消す

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:10:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:24:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,19 @@ void		perror_exit(char *error_message, int state)
 void		free_perror_exit(char *ptr, char *error_message, int state)
 {
 	free(ptr);
+	perror_exit(error_message, state);
+}
+
+/*
+** perror_exit関数 + 構造体の全てをfreeする関数
+*/
+
+void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
+					int state)
+{
+	free(info->command);
+	free(info->current_dir_path);
+	free(info->cmd_lst);
 	perror_exit(error_message, state);
 }
 
