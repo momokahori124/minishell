@@ -6,11 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 19:10:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:11:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cute_message.h"
+
+/*
+** ほりももちゃんが作ったput系の関数群
+** writeを何回も呼ぶの嫌だったのでput_welcome_messageみたいにするか迷い中。
+*/
 
 static char		*get_working_dir(char *pwd)
 {

@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   skip_space.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 22:15:54 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/13 18:24:32 by tjinichi          #+#    #+#             */
+/*   Updated: 2020/12/13 18:28:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "../../includes/convert_func.h"
 
-# include "minishell.h"
-# define ERR_READ "Failed to read at the above location. "
-# define ERR_MALLOC "Failed to malloc at the above location. "
-
-void		perror_exit(char *error_message, int state);
-void		free_perror_exit(char *ptr, char *error_message, int state);
-void		free_exit(char *ptr, int state);
-
-void		ctrl_d_exit(char *ptr);
-
-#endif
+char	*skip_space(char *s)
+{
+	while (*s == ' ')
+		s++;
+	return (s);
+}

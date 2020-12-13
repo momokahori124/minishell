@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   command_pwd.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 22:15:54 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/13 21:00:34 by tjinichi          #+#    #+#             */
+/*   Updated: 2020/12/13 21:21:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef COMMAND_PWD_H
+# define COMMAND_PWD_H
 
-# include "minishell.h"
-# define ERR_READ "Failed to read at the above location. "
-# define ERR_MALLOC "Failed to malloc at the above location. "
+# include "command.h"
 
-void		perror_exit(char *error_message, int state);
-void		free_perror_exit(char *ptr, char *error_message, int state);
-void		free_exit(char *ptr, int state);
-
-void		ctrl_d_exit(char *ptr);
+int		add_pwd_to_lst(t_cmdlst *info, char *command);
 
 #endif

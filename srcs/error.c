@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 04:39:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:10:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,14 @@ void		free_exit(char *ptr, int state)
 {
 	free(ptr);
 	exit(state);
+}
+
+/*
+** Ctrl +Dが押された時にfree_exitを使って抜ける関数
+*/
+
+void		ctrl_d_exit(char *ptr)
+{
+	ft_putstr_fd("\033[0Kexit\n", 1);
+	free_exit(ptr, EXIT_FAILURE);
 }

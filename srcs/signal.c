@@ -6,11 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 04:53:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:02:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/signal.h"
+
+/*
+** このファイルにある関数はコピペなので無視で良い
+** Ctrl + C や Ctrl + Dを押した時の処理を書いてるだけ
+*/
 
 # define STDERR 2
 
@@ -56,5 +61,6 @@ void	sig_int(int code)
 		ft_putstr_fd("\n", STDERR);
 		g_sig.exit_status = 130;
 	}
+	exit(0);
 	g_sig.sigint = 1;
 }

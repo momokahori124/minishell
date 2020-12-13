@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/13 04:09:07 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/12/13 23:42:15 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,12 @@ NAME = minishell
 SRCFILE =	minishell.c \
 			minishell_utils.c \
 			error.c \
-			parse_command.c \
+			treat_command_line.c \
 			cute_message.c \
 			signal.c \
+			pwd_command.c \
+			command_utils.c \
+			exec_command.c \
 
 SRCDIR = srcs/
 
