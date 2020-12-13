@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/14 00:44:15 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/12/14 02:42:36 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,11 @@ CFLAGS = -Wall -Werror -Wextra
 LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a
 
-SHELL=/bin/bash
-COUNT = `expr $C '*' 30 / $T`
-
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 $(LIBFT): FORCE
-	@$(MAKE) -C $(LIBS)
+	@make -C $(LIBS)
 
 all: $(NAME)
 

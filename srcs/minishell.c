@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:08:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 01:18:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int		main(int argc, char *argv[], char *envp[])
 	{
 		put_prompt(envp);
 		info.command = read_command_line();
-		if (info.command[0] == '\0')
-			continue ;
+		// if (info.command[0] == '\0')
+		// 	continue ;
 		parse_command_line(&info, envp);
 		execute_command(&info);
 		free(info.cmd_lst); // リスト全部
