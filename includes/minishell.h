@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 23:49:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:18:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define MAX(x, y) ((x) > (y) ? (x) : (y))
 # define SUCCESS 0
 # define ERROR 1
+# define STDOUT 1
 
 // typedef struct		s_minishell_info
 // {
