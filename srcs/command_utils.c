@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:14:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:38:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,25 @@
 
 /*
 ** parseする時に(add_pwd_to_lst等)、コマンドを'|'とか'>>'とかまで持っていく
-** まだ'|'しか対応してない。
 ** 見つからなかった場合はもうコマンドとして終わりなのでreturn ("");する
 */
 
 char	*next_command(char *command)
 {
-	char	*res;
+	size_t	i;
 
-	res = ft_strchr(command, '|');
-	if (res == NULL)
-		return ("");
-	return (res);
+	i = 0;
+	while (command[i])
+	{
+		if (command[i] == ';' || \
+				(command[i] == '>' && command[i + 1] == '>'))
+			return (command + i + 1);
+		else if (command[i] == '|' || command[i] == '<' || \
+					command[i] == '>')
+			return (command + i);
+		i++;
+	}
+	return ("");
 }
 
 /*

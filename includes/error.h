@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:24:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:38:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define ERROR_H
 
 # include "minishell.h"
+# include "struct_etc.h"
 # define ERR_READ "Failed to read at the above location. "
 # define ERR_MALLOC "Failed to malloc at the above location. "
 

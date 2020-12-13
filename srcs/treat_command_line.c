@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:04:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:47:15 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 static bool	parsing(t_minishell_info *info, char **command)
 {
 	if (ft_strncmp((*command), "pwd", 3) == 0 && \
-			((*command)[3] == ' ' || (*command)[3] == '\0'))
+			((*command)[3] == ' ' || (*command)[3] == '\0' || \
+			(*command)[3] == ';'))
 		return (add_pwd_to_lst(info, command));
 	else
 		put_cmd_not_found((*command));
