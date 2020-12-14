@@ -5,55 +5,46 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/14 00:44:15 by tjinichi         ###   ########.fr        #
+#    Created: 2020/10/23 15:04:22 by tjinichi          #+#    #+#              #
+#    Updated: 2020/11/30 22:20:13 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
-
-SRCFILE =	minishell.c \
-			minishell_utils.c \
-			error.c \
-			treat_command_line.c \
-			cute_message.c \
-			signal.c \
-			pwd_command.c \
-			command_utils.c \
-			exec_command.c \
-
-SRCDIR = srcs/
-
-SRCS = $(addprefix $(SRCDIR), $(SRCFILE))
-
-OBJS = $(SRCS:.c=.o)
+NAME = libvec.a
 
 CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra
 
-LIBS = ./utils/Libft/
-LIBFT = ./utils/Libft/libft.a
+SRCS =	add_vec.c \
+		crossproduct.c \
+		distance_vec.c \
+		dotproduct.c \
+		intersect_point.c \
+		length_vec.c \
+		new_vec.c \
+		normalize_vec.c \
+		scal_times_vec.c \
+		substruct_vec.c \
+		cos_vec.c \
+		scal_sub_vec.c \
 
-SHELL=/bin/bash
-COUNT = `expr $C '*' 30 / $T`
+OBJS = ${SRCS:.c=.o}
 
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
-$(LIBFT): FORCE
-	@$(MAKE) -C $(LIBS)
+$(NAME): $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 
-all: $(NAME)
+all:	$(NAME)
 
 clean:
-	@make clean -C $(LIBS)
-	rm -f $(OBJS)
+	@$(RM) $(OBJS)
 
 fclean: clean
-	@make fclean -C $(LIBS)
-	rm -f $(NAME)
+	@$(RM) $(NAME)
 
-re: fclean all
+re:	fclean all
 
-.PHONY: all clean fclean re FORCE
+.PHONY:	all clean fclean re bonus
