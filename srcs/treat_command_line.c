@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 23:06:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/17 00:14:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char		*read_command_line(void)
 	{
 		write(0, "\033[0K", 4);
 		if (rc != 0)
-			command = re_strjoinch(&command, ft_tolower(buf));
+			command = re_strjoinch(&command, buf);
 		else
 		{
 			if (command[0] == '\0' && buf != '\n')

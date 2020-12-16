@@ -6,11 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 23:05:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/17 00:13:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipe_redirect.h"
+
+/*
+** "pwd|"の後に"|"を打つとエラーで"aaa|"を打つと続行なのでこんな再帰を使ってる
+** もしかしたらもっとわかりやすいやり方あるかも
+*/
 
 static bool	error_or_recursive(char buf, char *tmp, int cnt, \
 		t_minishell_info *info)
@@ -36,6 +41,7 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	{
 		if (buf == '\n')
 			ft_putstr_fd("> ", 1);
+		write(0, "\033[0K", 4);
 		if (rc != 0)
 		{
 			command_tmp = re_strjoinch(&command_tmp, ft_tolower(buf));
