@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 02:57:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/16 02:59:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,8 @@ void ft_putenv(char *s)
 ** pwd ; pwdみたいな時に二回getcwd呼ぶの嫌だったのでそうした
 */
 
-int		main(int argc, char *argv[], char *envp[])
+int		console_loop(t_minishell_info info, char *envp[])
 {
-	t_minishell_info	info;
-
-	put_welcome_message();
-	signal(SIGQUIT, &sig_quit);
-	signal(SIGINT, &sig_int);
-	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
-	info.current_dir_path = getcwd(NULL, 0);
 	while (1)
 	{
 		put_prompt(envp);
@@ -75,6 +68,30 @@ int		main(int argc, char *argv[], char *envp[])
 		free(info.current_dir_path);
 		exit(0);
 	}
+}
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }
+
+int		main(int argc, char *argv[], char *envp[])
+{
+	t_minishell_info	info;
+
+	if (argc != 1)
+	{
+		red_error();
+		ft_putendl_fd("Usage : ./minishell", 2);
+		return (1);
+	}
+	put_welcome_message();
+	signal(SIGQUIT, &sig_quit);
+	signal(SIGINT, &sig_int);
+	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
+	info.current_dir_path = getcwd(NULL, 0);
+	console_loop(info, envp);
 	(void)argc;
 	(void)argv;
 }

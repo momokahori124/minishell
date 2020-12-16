@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 03:21:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:06:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ static bool	parsing(t_minishell_info *info, char **command)
 			((*command)[3] == ' ' || (*command)[3] == '\0' || \
 			(*command)[3] == ';'))
 		return (add_pwd_to_lst(info, command));
+	// // else if ()
 	else
-		put_cmd_not_found((*command));
-	exit(0);
+		info->prev_rc = put_cmd_not_found((command));
+	exit(1);
 	return (1);
 }
 
@@ -35,14 +36,19 @@ static bool	parsing(t_minishell_info *info, char **command)
 bool		parse_command_line(t_minishell_info *info, char *envp[])
 {
 	char	*command;
+	bool	rc;
 
+	rc = rm_quotation(info);
+	if (rc == true)
+		rc = wait_pipe_or_redirect_next_cmd(info);
 	command = info->command;
 	info->cmd_lst = NULL;
-	while (*command)
+	while (rc == true && *command)
 	{
 		parsing(info, &command);
 	}
 	(void)envp;
+	exit(0);
 	return (1);
 }
 
@@ -61,17 +67,17 @@ char		*read_command_line(void)
 	command = ft_strdup("");
 	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
 	{
+		write(0, "\033[0K", 4);
 		if (rc != 0)
 			command = re_strjoinch(&command, ft_tolower(buf));
 		else
 		{
 			if (command[0] == '\0' && buf != '\n')
 				ctrl_d_exit(command);
-			write(0, "\033[0K", 4);
 		}
 	}
 	if (rc == -1)
-		free_perror_exit(command, ERR_READ, EXIT_FAILURE);
+		free_perror_exit(command, ERR_READ);
 	return_command = ft_strdup(skip_space(command));
 	ptr_free((void **)&command);
 	return (return_command);

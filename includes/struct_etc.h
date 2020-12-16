@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 23:45:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/15 00:28:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ typedef struct		s_minishell_info
 {
 	char			*command;
 	char			*current_dir_path;
+	int				prev_rc;
 	struct s_cmdlst	*cmd_lst;
 }					t_minishell_info;
 

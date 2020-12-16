@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/14 00:19:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/16 22:45:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // # include "command_pwd.h"
 # include "cute_message.h"
 # include "signal.h"
+# include "is_what.h"
 # define MAX(x, y) ((x) > (y) ? (x) : (y))
 # define SUCCESS 0
 # define ERROR 1
