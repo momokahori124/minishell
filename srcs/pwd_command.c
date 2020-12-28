@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 03:03:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/29 03:44:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ void		exec_pwd(t_minishell_info *info)
 ** この関数を出た時はパイプなどまでcommandが進むようにしていく(今はパイプしか対応していない)
 */
 
-bool		add_pwd_to_lst(t_minishell_info *info, char **command)
+bool		add_pwd_to_lst(t_minishell_info *info, char *command)
 {
 	t_cmdlst	*pwd;
 
+	(void)command;
 	if (!(pwd = malloc(sizeof(t_cmdlst))))
 		all_free_perror_exit(info, ERR_MALLOC);
 	pwd->command = NULL;
@@ -39,6 +40,5 @@ bool		add_pwd_to_lst(t_minishell_info *info, char **command)
 	pwd->arg = NULL;
 	pwd->next = NULL;
 	cmd_lstadd_back(&(info->cmd_lst), pwd);
-	*command = next_command((*command) + 3);
 	return (true);
 }

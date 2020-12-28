@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/15 00:28:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/17 06:56:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct		s_cmdlst
 enum	e_type
 {
 	PWD,
+	ECHO,
 	TYPE_NUM,
 };
 

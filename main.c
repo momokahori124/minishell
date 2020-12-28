@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ptr_2d_free.c                                      :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 17:51:36 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:44:51 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/23 14:39:57 by tjinichi          #+#    #+#             */
+/*   Updated: 2020/12/23 14:40:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/free_func.h"
+#include "includes/minishell.h"
 
-void		*ptr_2d_free(void ***ptr, size_t cur)
+void	is_command(char *cmd, char *cmd_line)
 {
-	size_t		i;
+	const char *s = cmd;
 
-	i = 0;
-	while ((*ptr)[i] && i < cur)
-	{
-		free((*ptr)[i]);
-		(*ptr)[i] = NULL;
-		i++;
-	}
-	free(*ptr);
-	*ptr = NULL;
-	return (NULL);
+	printf("%s\n", s);
 }

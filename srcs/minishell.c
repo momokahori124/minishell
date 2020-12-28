@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 02:59:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/29 03:35:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int		main(int argc, char *argv[], char *envp[])
 	signal(SIGINT, &sig_int);
 	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
 	info.current_dir_path = getcwd(NULL, 0);
+	info.cmd_lst = NULL; // リスト初期化
 	console_loop(info, envp);
 	(void)argc;
 	(void)argv;

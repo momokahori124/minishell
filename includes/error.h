@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 23:10:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/17 22:17:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # define ERR_MANDATORY "That command is not supported by mandatory."
 
 
-void	red_error(void);
 void	perror_exit(char *error_message);
 void	free_perror_exit(char *ptr, char *error_message);
 void	free_exit(char *ptr, int state);

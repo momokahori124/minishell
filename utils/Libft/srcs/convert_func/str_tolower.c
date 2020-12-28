@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ptr_2d_free.c                                      :+:      :+:    :+:   */
+/*   str_tolower.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 17:51:36 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:44:51 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/17 05:58:27 by tjinichi          #+#    #+#             */
+/*   Updated: 2020/12/17 06:37:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/free_func.h"
+#include "../../includes/convert_func.h"
 
-void		*ptr_2d_free(void ***ptr, size_t cur)
+/*
+** Returns allocate.
+*/
+
+char	*str_tolower(char *s)
 {
-	size_t		i;
+	char	*tmp;
+	size_t	i;
 
 	i = 0;
-	while ((*ptr)[i] && i < cur)
+	if (!(tmp = malloc(ft_strlen(s) + 1)))
+		return (NULL);
+	while (s[i])
 	{
-		free((*ptr)[i]);
-		(*ptr)[i] = NULL;
+		tmp[i] = ft_tolower(s[i]);
 		i++;
 	}
-	free(*ptr);
-	*ptr = NULL;
-	return (NULL);
+	tmp[i] = '\0';
+	return (tmp);
 }

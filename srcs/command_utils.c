@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/16 22:01:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/29 03:55:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,23 @@ char	*next_command(char *command)
 	i = 0;
 	while (command[i])
 	{
-		if (command[i] == ';' || \
-				(command[i] == '>' && command[i + 1] == '>'))
+		if (command[i] == '>' && command[i + 1] == '>')
 			return (command + i + 1);
-		else if (command[i] == '|' || command[i] == '<' || \
-					command[i] == '>')
+		else if (command[i] == ';' || command[i] == '|' || \
+			command[i] == '<' || command[i] == '>')
 			return (command + i);
 		i++;
 	}
 	return ("");
+}
+
+static t_cmdlst	*cmd_lstlast(t_cmdlst *lst)
+{
+	while (lst->next)
+	{
+		lst = lst->next;
+	}
+	return (lst);
 }
 
 /*
@@ -41,14 +49,15 @@ char	*next_command(char *command)
 
 void	cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new)
 {
+	t_cmdlst *last;
+
 	if (!*begin)
 	{
 		*begin = new;
 		return ;
 	}
-	while (*begin)
-		*begin = (*begin)->next;
-	*begin = new;
+	last = cmd_lstlast(*begin);
+	last->next = new;
 }
 
 static bool wait_quotation(char first_appear, t_minishell_info *info)
@@ -73,11 +82,11 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 	if (rc == 0 && buf != '\n')
 	{
 		// minishell:にする
-		ft_putstr_fd("bash: unexpected EOF while looking for matching `", 1);
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 1);
 		ft_putchar_fd(first_appear, 1);
 		ft_putendl_fd("\'", 1);
 	}
-	return (false);
+	return (true);
 }
 
 static void	removing(t_minishell_info *info, char first_appear)
@@ -143,5 +152,6 @@ bool		rm_quotation(t_minishell_info *info)
 	// 	*command = info->command;
 	// else
 	// 	;
+	fflush(stdout);
 	return (rc);
 }

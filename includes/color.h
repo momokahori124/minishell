@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:29:11 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/12 03:34:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/23 14:36:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # define B_YELLOW "\033[43m"
 # define B_CYAAN "\033[46m"
 # define BOLD 	"\033[1m"
-# define REDBOLD 	"\033[31m\033[1m"
 
 void	putstr_red(char *s);
 void	putstr_blue(char *s);

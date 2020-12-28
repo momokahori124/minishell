@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/15 03:11:42 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/12/17 22:18:54 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,9 @@ CONVERT_SRCS = $(addprefix $(CONVERT_DIR)/, \
 				ft_stoi.c \
 				ft_stov.c \
 				skip_space.c \
+				str_tolower.c \
+				ft_split.c \
+				split_by_str.c \
 )
 #========== count function =====================================================
 COUNT_DIR = $(SRCDIR)/count_func
@@ -100,7 +103,6 @@ SORT_SRCS = $(addprefix $(SORT_DIR)/, \
 STRING_DIR = $(SRCDIR)/string_func
 STRING_SRCS = $(addprefix $(STRING_DIR)/, \
 				check_strtail.c \
-				ft_split.c \
 				ft_str3join.c \
 				ft_strchr.c \
 				ft_strcmp.c \
@@ -144,6 +146,8 @@ WRITE_SRCS = $(addprefix $(WRITE_DIR)/, \
 				ft_putstr_fd.c \
 				ft_putnbr_fd.c \
 				ft_putendl_fd.c \
+				red_error.c \
+				yellow_warning.c \
 )
 #========== Srcs and Objs ======================================================
 SRCS = \

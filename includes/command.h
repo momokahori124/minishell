@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/15 21:37:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/29 03:26:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 char	*read_command_line(void);
 bool	parse_command_line(t_minishell_info *info, char *envp[]);
 
-bool	add_pwd_to_lst(t_minishell_info *info, char **command);
+bool	add_pwd_to_lst(t_minishell_info *info, char *command);
 void	exec_pwd(t_minishell_info *info);
 
 char	*next_command(char *command);
