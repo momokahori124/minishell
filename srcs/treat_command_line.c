@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/29 03:58:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 04:53:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@
 
 int		is_command(char *cmd_check, char *cmd, t_minishell_info *info)
 {
-	// const char	*s = cmd_check;
 	char		**split;
 
 	(void)info;
@@ -90,6 +89,24 @@ static bool	parsing(t_minishell_info *info, char *command)
 	exit(1);
 	return (1);
 }
+
+// /*
+// ** 入力された文字列から各コマンドをparseする関数
+// */
+
+// static bool	parsing(t_minishell_info *info, char *command)
+// {
+// 	int	rc;
+
+// 	if ((rc = is_command("pwd", skip_space(command), info)) == 1 ||
+// 		(rc = is_command("echo", skip_space(command), info)) == 1)
+// 		return (add_pwd_to_lst(info, command));
+// 	// // else if ()
+// 	else
+// 		info->prev_rc = put_cmd_not_found((&(info->command)));
+// 	exit(1);
+// 	return (1);
+// }
 
 /*
 ** parsing関数でparseするためにwhileを回す関数(envpは構造体に入れると思う)
