@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/29 03:44:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 22:07:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,22 @@ void		exec_pwd(t_minishell_info *info)
 
 /*
 ** 各commandをリストで持つのでこれはpwdの情報をリストに繋げる関数
-** この関数を出た時はパイプなどまでcommandが進むようにしていく(今はパイプしか対応していない)
 */
 
-bool		add_pwd_to_lst(t_minishell_info *info, char *command)
+bool		add_cmd_to_lst(t_minishell_info *info, char **command, int type)
 {
-	t_cmdlst	*pwd;
+	t_cmdlst	*cmd;
 
-	(void)command;
-	if (!(pwd = malloc(sizeof(t_cmdlst))))
+	if (!(cmd = malloc(sizeof(t_cmdlst))))
 		all_free_perror_exit(info, ERR_MALLOC);
-	pwd->command = NULL;
-	pwd->type = PWD;
-	pwd->pipe[0] = 0; // わかりやすく書いてるだけであとで消す
-	pwd->pipe[1] = 0;
-	pwd->arg = NULL;
-	pwd->next = NULL;
-	cmd_lstadd_back(&(info->cmd_lst), pwd);
+	if (type == CMD_NUM)
+		cmd->type = NOT_CMD;
+	else
+		cmd->type = type;
+	cmd->pipe[0] = 0; // わかりやすく書いてるだけであとで消す
+	cmd->pipe[1] = 0;
+	cmd->arg = command;
+	cmd->next = NULL;
+	cmd_lstadd_back(&(info->cmd_lst), cmd);
 	return (true);
 }

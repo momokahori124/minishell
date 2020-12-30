@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 04:53:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 22:11:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,27 @@
 // }
 
 
-int		is_command(char *cmd_check, char *cmd, t_minishell_info *info)
+int		is_command(char *cmd, t_minishell_info *info)
 {
 	char		**split;
+	const char	*base[CMD_NUM] = {"cd", "echo", "env", "exit",
+									"export", "pwd", "unset"};
 
 	(void)info;
 	split = ft_split(cmd, ' ');
-	// if (split == NULL)
-	// 	error ;
-
-	if (split[0] != NULL)
+	if (split == NULL)
+		all_free_perror_exit(info, ERR_MALLOC);
+	char *tmp = split[0];
+	while (*tmp)
 	{
-		while (*cmd_check && *cmd_check == ft_tolower(*cmd))
-		{
-			cmd++;
-			cmd_check++;
-		}
-		if (*cmd == ' ')
-			*cmd = '\0';
-		if (*cmd_check == *cmd)
-			return (1);
-		return (0);
+		*tmp = ft_tolower(*tmp);
+		tmp++;
 	}
-	return (2);
+	int	type = str_bsearch(split[0], base, CMD_NUM);
+	info->cmd_split = split;
+	split++;
+	add_cmd_to_lst(info, split, type);
+	return (type);
 }
 
 
@@ -79,14 +77,27 @@ int		is_command(char *cmd_check, char *cmd, t_minishell_info *info)
 
 static bool	parsing(t_minishell_info *info, char *command)
 {
-	int	rc;
+	int			type;
+	char		**split;
+	const char	*base[CMD_NUM] = {"cd", "echo", "env", "exit",
+									"export", "pwd", "unset"};
 
-	if ((rc = is_command("pwd", skip_space(command), info)) == 1)
-		return (add_pwd_to_lst(info, command));
-	// // else if ()
-	else
-		info->prev_rc = put_cmd_not_found((&(info->command)));
-	exit(1);
+	command = skip_space(command);
+	split = ft_split(command, ' ');
+	if (split == NULL)
+		all_free_perror_exit(info, ERR_MALLOC);
+	str_tolower(&(split[0]));
+	char *tmp = split[0];
+	while (*tmp)
+	{
+		*tmp = ft_tolower(*tmp);
+		tmp++;
+	}
+	type = str_bsearch(split[0], base, CMD_NUM);
+	info->cmd_split = split;
+	split++;
+	add_cmd_to_lst(info, split, type);
+	// exit(1);
 	return (1);
 }
 
@@ -119,7 +130,6 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	bool	rc;
 
 	rc = rm_quotation(info);
-	// printf("[%s]\n", info->command);
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)

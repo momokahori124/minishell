@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/29 03:35:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 21:50:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ void ft_putenv(char *s)
 ** pwd ; pwdみたいな時に二回getcwd呼ぶの嫌だったのでそうした
 */
 
-int		console_loop(t_minishell_info info, char *envp[])
+int		console_loop(t_minishell_info *info, char *envp[])
 {
 	while (1)
 	{
 		put_prompt(envp);
-		info.command = read_command_line();
-		if (info.command[0] == '\0')
+		info->command = read_command_line();
+		if (info->command[0] == '\0')
 			continue ;
-		parse_command_line(&info, envp);
-		execute_command(&info);
-		free(info.cmd_lst); // リスト全部
-		free(info.command);
-		free(info.current_dir_path);
+		parse_command_line(info, envp);
+		execute_command(info);
+		free(info->cmd_lst); // リスト全部
+		free(info->command);
+		free(info->current_dir_path);
 		exit(0);
 	}
 }
@@ -92,7 +92,7 @@ int		main(int argc, char *argv[], char *envp[])
 	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
 	info.current_dir_path = getcwd(NULL, 0);
 	info.cmd_lst = NULL; // リスト初期化
-	console_loop(info, envp);
+	console_loop(&info, envp);
 	(void)argc;
 	(void)argv;
 }

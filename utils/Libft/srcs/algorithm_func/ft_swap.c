@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:32:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:28:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 20:06:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sort_func.h"
+#include "../../includes/algorithm_func.h"
 
 void	ft_swap(void **a, void **b)
 {

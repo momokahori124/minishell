@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 06:56:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 21:54:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,29 @@ typedef struct		s_minishell_info
 	char			*command;
 	char			*current_dir_path;
 	int				prev_rc;
+	char			**cmd_split;
 	struct s_cmdlst	*cmd_lst;
 }					t_minishell_info;
 
 typedef struct		s_cmdlst
 {
-	char			*command;
 	int				type;
 	int				pipe[2];
-	char			*arg;
+	char			**arg;
 	struct s_cmdlst	*next;
 }					t_cmdlst;
 
-enum	e_type
+enum	e_cmd
 {
-	PWD,
+	CD,
 	ECHO,
-	TYPE_NUM,
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET,
+	CMD_NUM,
 };
+# define NOT_CMD CMD_NUM
 
 #endif

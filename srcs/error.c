@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:22:19 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/30 21:55:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,19 @@ void		free_perror_exit(char *ptr, char *error_message)
 
 void		all_free_perror_exit(t_minishell_info *info, char *error_message)
 {
+	size_t		i;
+
+	i = 0;
+	if (info->cmd_split[i] == NULL)
+	{
+		while (info->cmd_split[i])
+			i++;
+	}
 	free(info->command);
 	free(info->current_dir_path);
 	free(info->cmd_lst);
+	if (info->cmd_split != NULL)
+		ptr_2d_free((void ***)&(info->cmd_split), i);
 	perror_exit(error_message);
 }
 
