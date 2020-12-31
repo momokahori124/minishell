@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_utils.c                                    :+:      :+:    :+:   */
+/*   command_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 22:06:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 16:17:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,5 @@ bool		rm_quotation(t_minishell_info *info)
 	// 	*command = info->command;
 	// else
 	// 	;
-	fflush(stdout);
 	return (rc);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 21:22:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 16:22:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,7 @@ bool	wait_pipe_or_redirect_next_cmd(t_minishell_info *info);
 
 
 bool	execute_command(t_minishell_info *info);
+
+char	**split_by_chrs_contain_delimiters(char *str, char *charset);
 
 #endif

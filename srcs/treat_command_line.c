@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 22:11:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 16:34:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ static bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
-	const char	*base[CMD_NUM] = {"cd", "echo", "env", "exit",
-									"export", "pwd", "unset"};
+	const char	*base[CMD_NUM] = {";", "<", ">", "cd", "echo", "env", "exit",
+									"export", "pwd", "unset", "|"};
 
 	command = skip_space(command);
 	split = ft_split(command, ' ');
@@ -97,7 +97,6 @@ static bool	parsing(t_minishell_info *info, char *command)
 	info->cmd_split = split;
 	split++;
 	add_cmd_to_lst(info, split, type);
-	// exit(1);
 	return (1);
 }
 
@@ -133,7 +132,7 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)
-		cmd_grp = split_by_str(info->command, "|;><");
+		cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
 	int i = 0;
 	while (cmd_grp[i])
 	{
@@ -141,12 +140,32 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 		parsing(info, cmd_grp[i]);
 		i++;
 	}
-	// command = str_tolower(info->command);
-	// info->cmd_lst = NULL;
-	// while (rc == true && *command)
+
+	// int i = 0;
+	// char *tmp = info->command;
+	// // int	f = 0;
+	// char *a;
+	// int j = i;
+	// while (tmp[i])
 	// {
-	// 	parsing(info, &command);
+	// 	// if (f == 0 && tmp[i] == ' ')
+	// 	// 	continue ;
+	// 	if (tmp[i] == '|' || tmp[i] == ';' || tmp[i] == '>' || tmp[i] == '<')
+	// 	{
+	// 		a = ft_substr(tmp, j, i);
+	// 		j = i + 1;
+	// 		// tmp += i;
+	// 	printf("%s\n", a);
+	// 	printf("[%c]\n", tmp[i]);
+	// 	i++;
+	// 	// continue ;
+	// 	}
+	// 	i++;
+	// 	// tmp++;
 	// }
+	// a = ft_substr(tmp, j, i);
+	// printf("%s\n", a);
+
 	(void)envp;
 	(void)rc;
 	// exit(0);
@@ -161,7 +180,6 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 char		*read_command_line(void)
 {
 	char	*command;
-	// char	*return_command;
 	char	buf;
 	ssize_t	rc;
 
@@ -179,8 +197,5 @@ char		*read_command_line(void)
 	}
 	if (rc == -1)
 		free_perror_exit(command, ERR_READ);
-	// return_command = ft_strdup(skip_space(command));
-	// ptr_free((void **)&command);
-	// return (return_command);
 	return (command);
 }

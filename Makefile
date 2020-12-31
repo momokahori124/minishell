@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/16 22:44:46 by tjinichi         ###   ########.fr        #
+#    Updated: 2020/12/31 16:17:34 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ SRCFILE =	minishell.c \
 			cute_message.c \
 			signal.c \
 			pwd_command.c \
-			command_utils.c \
+			command_utils_1.c \
+			command_utils_2.c \
 			exec_command.c \
 			pipe_redirect_utils.c \
 			is_what.c \

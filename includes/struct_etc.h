@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/30 21:54:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 16:34:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ typedef struct		s_cmdlst
 
 enum	e_cmd
 {
+	SEMICOLON,
+	LESS,
+	GREATER,
 	CD,
 	ECHO,
 	ENV,
@@ -39,6 +42,7 @@ enum	e_cmd
 	EXPORT,
 	PWD,
 	UNSET,
+	PIPE,
 	CMD_NUM,
 };
 # define NOT_CMD CMD_NUM
