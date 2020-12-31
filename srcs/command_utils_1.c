@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 16:17:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 17:05:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 		if (info->command == NULL)
 			all_free_perror_exit(info, ERR_MALLOC);
 	}
-	if (rc == 0 && buf != '\n')
+	if (rc == 0)
 	{
-		// minishell:にする
-		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 1);
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `\n\
+minishell: syntax error: unexpected end of file", 1);
 		ft_putchar_fd(first_appear, 1);
 		ft_putendl_fd("\'", 1);
 	}
@@ -152,5 +152,6 @@ bool		rm_quotation(t_minishell_info *info)
 	// 	*command = info->command;
 	// else
 	// 	;
+	printf("%d\n", rc);
 	return (rc);
 }
