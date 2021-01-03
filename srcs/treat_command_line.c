@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 16:34:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2020/12/31 17:27:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ int		is_command(char *cmd, t_minishell_info *info)
 	return (type);
 }
 
+static bool	cmd_exit_check(char *cmd)
+{
+	if ((cmd[0] == 'e' || cmd[0] == 'E') && \
+		(cmd[1] == 'x' || cmd[1] == 'X') && \
+		(cmd[2] == 'i' || cmd[2] == 'I') && \
+		(cmd[3] == 't' || cmd[3] == 'T'))
+		return (true);
+	return (false);
+}
 
 /*
 ** 入力された文字列から各コマンドをparseする関数
@@ -86,13 +95,9 @@ static bool	parsing(t_minishell_info *info, char *command)
 	split = ft_split(command, ' ');
 	if (split == NULL)
 		all_free_perror_exit(info, ERR_MALLOC);
-	str_tolower(&(split[0]));
-	char *tmp = split[0];
-	while (*tmp)
-	{
-		*tmp = ft_tolower(*tmp);
-		tmp++;
-	}
+	if (cmd_exit_check(split[0]) == false)
+		str_tolower(&(split[0]));
+	printf("{{{%s}}}\n", split[0]);
 	type = str_bsearch(split[0], base, CMD_NUM);
 	info->cmd_split = split;
 	split++;
