@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:52:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 04:25:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ enum	e_cmd
 };
 # define NOT_CMD CMD_NUM
 
-# define SEMICOLON SEMICOLON
-# define INPUT INPUT
-# define OUTPUT OUTPUT
-# define DB_OUTPUT DB_OUTPUT
-# define PIPE PIPE
+// # define SEMICOLON SEMICOLON
+// # define INPUT INPUT
+// # define OUTPUT OUTPUT
+// # define DB_OUTPUT DB_OUTPUT
+// # define PIPE PIPE
 # define NOT_FOUND -1
 
 

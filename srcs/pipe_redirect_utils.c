@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:41:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 05:45:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,67 +58,103 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	return (true);
 }
 
-static bool	check_next_cmd(char *tmp, t_minishell_info *info, int is_rc)
+static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
-	char	*command;
+	// char	*command;
+	int	separator_count;
 
-	command = (skip_space(tmp));
+	// command = (skip_space(tmp));
 	// printf("[%s]\n", command);
 	// printf("[%d]\n", is_rc);
-	if (*command || is_rc != NOT_FOUND)
+	separator_count = 0;
+	while (*cmd && *cmd == separator)
 	{
-		if (is_rc != SEMICOLON && command[0] == '\0')
-			return (wait_next_cmd(info, 0));
-		else if (is_rc == PIPE && ispipe(*command))
-			warning_message(ERR_MANDATORY, info); // warningをどうするか
-		if (isdouble_output_redirect(*command, *(command + 1)))
-			return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
-		else if (isoutput_redirect(*command, *(command + 1)) && \
-				ispipe(*(command + 1)))
-			return (syntax_error(ERR_SYNTAX, "token `>|\'", info));
-		else if (isoutput_redirect(*command, *(command + 1)))
-			return (syntax_error(ERR_SYNTAX, "token `>\'", info));
-		else if (is_rc == 3 && ispipe(*command))
-			return (syntax_error(ERR_SYNTAX, "token `|\'", info));
-		else if (is_rc == 2 && ispipe(*command))
-			return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-		else if (isdouble_semicolon(*command, *(command + 1)))
-			return (syntax_error(ERR_SYNTAX, "token `;;\'", info));
-		else if (issemicolon(*command, *(command + 1)))
-			return (syntax_error(ERR_SYNTAX, "token `;\'", info));
-		else if (*command == ' ' && skip_space(command)[0] == '\0')
-				return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-		else
-			return (true);
+		separator_count++;
+		cmd++;
 	}
-	return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+	printf("count = %d\n", separator_count);
+	cmd = skip_space(cmd);
+	if (separator == '>')
+	{
+		if (*cmd == '\0')
+		{
+			puts("1");
+			if (separator_count == 1 || separator_count == 2)
+				return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+			if ((separator_count & 1) == 1)
+				return (syntax_error(ERR_SYNTAX, "token `>\'", info));
+			else
+				return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
+
+		}
+		else
+		{
+			puts("2");
+			if ((separator_count & 1) == 1)
+				return (syntax_error(ERR_SYNTAX, "token `>\'", info));
+			else
+				return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
+		}
+	}
+	// printf("count = %d\n", separator_count);
+
+	// if (*command || is_rc != NOT_FOUND)
+	// {
+	// 	if (is_rc != SEMICOLON && command[0] == '\0')
+	// 		return (wait_next_cmd(info, 0));
+	// 	else if (is_rc == PIPE && ispipe(*command))
+	// 		warning_message(ERR_MANDATORY, info); // warningをどうするか
+	// 	if (isdouble_output_redirect(*command, *(command + 1)))
+	// 		return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
+	// 	else if (isoutput_redirect(*command, *(command + 1)) &&
+	// 			ispipe(*(command + 1)))
+	// 		return (syntax_error(ERR_SYNTAX, "token `>|\'", info));
+	// 	else if (isoutput_redirect(*command, *(command + 1)))
+	// 		return (syntax_error(ERR_SYNTAX, "token `>\'", info));
+	// 	else if (is_rc == 3 && ispipe(*command))
+	// 		return (syntax_error(ERR_SYNTAX, "token `|\'", info));
+	// 	else if (is_rc == 2 && ispipe(*command))
+	// 		return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+	// 	else if (isdouble_semicolon(*command, *(command + 1)))
+	// 		return (syntax_error(ERR_SYNTAX, "token `;;\'", info));
+	// 	else if (issemicolon(*command, *(command + 1)))
+	// 		return (syntax_error(ERR_SYNTAX, "token `;\'", info));
+	// 	else if (*command == ' ' && skip_space(command)[0] == '\0')
+	// 			return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+	// 	else
+	// 		return (true);
+	// }
+	// return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+	return (false);
+	(void)info;
 }
 
 static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 {
-	char			*tmp;
-	int				is_rc;
+	// char			*tmp;
+	// int				is_rc;
 	bool			return_value;
 	unsigned int	i;
-	int				plus_index;
+	// char			separator;
 
 	return_value = true;
 	i = -1;
 	while (command[++i])
 	{
-		is_rc = ispipe_or_redirect(command[i], command[i + 1]);
-		if (is_rc != NOT_FOUND)
-		{
-			if (is_rc == SEMICOLON || is_rc == PIPE || is_rc == INPUT || \
-					is_rc == OUTPUT)
-				plus_index = 1;
-			else if (is_rc == DB_OUTPUT)
-				plus_index = 2;
-			tmp = command + i + plus_index;
-			if ((return_value = check_next_cmd(tmp, info, is_rc)) == false)
+		if (command[i] == ';' || command[i] == '<' || command[i] == '>' || \
+				command[i] == '|')
+			if ((return_value = check_next_chrs(command + i, info, command[i])) \
+					== false)
 				return (false);
-			command = info->command + i + plus_index;
-		}
+		// if (is_rc == SEMICOLON || is_rc == PIPE || is_rc == INPUT ||
+		// 		is_rc == OUTPUT)
+		// 	plus_index = 1;
+		// else if (is_rc == DB_OUTPUT)
+		// 	plus_index = 2;
+		// tmp = command + i + plus_index;
+		// if ((return_value = check_next_cmd(tmp, info, is_rc)) == false)
+		// 	return (false);
+		// command = info->command + i + plus_index;
 	}
 	return (return_value);
 }

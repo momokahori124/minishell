@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 22:00:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:57:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 04:09:01 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	isdouble_output_redirect(int c1, int c2)
 // 		return (0);
 // }
 
-int		ispipe_or_redirect(int c1, int c2)
+int		is_separator(int c1, int c2)
 {
 	if (isdouble_output_redirect(c1, c2))
 		return (DB_OUTPUT);

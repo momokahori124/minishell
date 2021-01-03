@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:15:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 05:42:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
 	char	*bin_path;
 
 	bin_path = ft_strjoin("/bin/", command);
+	// bin_path = ft_strjoin("/usr/bin/", command); // makeとかのため
 	if (bin_path == NULL)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
@@ -163,7 +164,9 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	if (rc == true)
 		cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
 	if (rc == false)
-		all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__); // ERR_EXECVEかえる
+		return (false);
+	// if (rc == false)
+	// 	all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__); // ERR_EXECVEかえる
 	i = 0;
 	while (cmd_grp[i])
 	{
@@ -173,7 +176,7 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	}
 	(void)envp;
 	// exit(0);
-	return (1);
+	return (true);
 }
 
 /*

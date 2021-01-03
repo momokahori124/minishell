@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:21:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 04:45:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		info->command = read_command_line();
 		if (info->command[0] == '\0')
 			continue ;
-		parse_command_line(info, envp);
-		execute_command(info);
+		if (parse_command_line(info, envp) != false)
+			execute_command(info);
 		// free(info->cmd_lst); // リスト全部
 		ptr_free((void **)&(info->command));
 		// free(info->current_dir_path);
