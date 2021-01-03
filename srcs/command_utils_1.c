@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 17:05:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:32:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 	ft_putstr_fd("> ", 1);
 	info->command = re_strjoinch(&(info->command), '\n');
 	if (info->command == NULL)
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	while ((rc = read(0, &buf, 1)) > 0)
 	{
 		if (buf == '\n')
@@ -77,7 +77,7 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 			break ;
 		info->command = re_strjoinch(&(info->command), buf);
 		if (info->command == NULL)
-			all_free_perror_exit(info, ERR_MALLOC);
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	if (rc == 0)
 	{
@@ -96,7 +96,7 @@ static void	removing(t_minishell_info *info, char first_appear)
 	unsigned int	j;
 
 	if (!(new = malloc(sizeof(char) * (ft_strlen(info->command)))))
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = 0;
 	j = 0;
 	while ((info->command)[i])

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 19:28:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:21:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		console_loop(t_minishell_info *info, char *envp[])
 // {
 // 	system("leaks minishell");
 // }
-
+pid_t		g_pid;
 int		main(int argc, char *argv[], char *envp[])
 {
 	t_minishell_info	info;
@@ -87,13 +87,29 @@ int		main(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	put_welcome_message();
-	signal(SIGQUIT, &sig_quit);
-	signal(SIGINT, &sig_int);
-	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
+	// signal(SIGQUIT, &sig_quit);
+	// signal(SIGINT, &sig_int);
 	info.current_dir_path = getcwd(NULL, 0);
 	info.cmd_lst = NULL; // リスト初期化
 	info.envp = envp;
-	console_loop(&info, envp);
+	if (!(g_pid = fork()))
+	{
+		console_loop(&info, envp);
+		exit(-1);
+	}
+	else
+	{
+		signal(SIGINT, &sig_int);
+	}
+	pid_t		wpid;
+	int			status;
+	while ((wpid = wait(&status)) > 0)
+		NULL;
+	// set_env_info(info); //ここでinfoの中にenv情報入れるかも
+	// info.current_dir_path = getcwd(NULL, 0);
+	// info.cmd_lst = NULL; // リスト初期化
+	// info.envp = envp;
+	// console_loop(&info, envp);
 	(void)argc;
 	(void)argv;
 }

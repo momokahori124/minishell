@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 00:13:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:32:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	info->command = re_strjoin(&(info->command), command_tmp);
 	ptr_free((void **)&command_tmp);
 	if (rc == -1)
-		all_free_perror_exit(info, ERR_READ);
+		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
 	return (true);
 }
 

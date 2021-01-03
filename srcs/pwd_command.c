@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 17:10:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:32:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool		add_cmd_to_lst(t_minishell_info *info, char **command, int type)
 	t_cmdlst	*cmd;
 
 	if (!(cmd = malloc(sizeof(t_cmdlst))))
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (type == CMD_NUM)
 		cmd->type = NOT_CMD;
 	else

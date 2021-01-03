@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 23:55:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:32:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@ void		exec_bin(t_minishell_info *info)
 	char	**cmd_grp;
 	int		return_val;
 
-	cmd_grp = info->cmd_split;
+	cmd_grp = info->cmd_lst->arg;
 	return_val = 0;
 	errno = 0;
 	return_val = execve(cmd_grp[0], cmd_grp, info->envp);
-	return_val = -1;
 	if (return_val == -1)
 	{
 		puts("aaaaaaaa");
 		perror("==============");
-		all_free_perror_exit(info, ERR_EXECVE);
+		all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__);
 	}
 }
 
@@ -37,10 +36,7 @@ void		exec_bin(t_minishell_info *info)
 static bool	execute(t_minishell_info *info)
 {
 	if (info->cmd_lst->type == BIN)
-	{
 		exec_bin(info);
-		puts("11111111111111111");
-	}
 	if (info->cmd_lst->type == PWD)
 		exec_pwd(info);
 	else if (info->cmd_lst->type == NOT_CMD)
@@ -56,6 +52,7 @@ bool		execute_command(t_minishell_info *info)
 {
 	while (info->cmd_lst)
 	{
+		printf(">>>>%d\n", info->cmd_lst->type);
 		execute(info);
 		info->cmd_lst = info->cmd_lst->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 23:52:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:33:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		is_command(char *cmd, t_minishell_info *info)
 	(void)info;
 	split = ft_split(cmd, ' ');
 	if (split == NULL)
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	char *tmp = split[0];
 	while (*tmp)
 	{
@@ -87,7 +87,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
 
 	bin_path = ft_strjoin("/bin/", command);
 	if (bin_path == NULL)
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
 		ptr_free((void **)&(info->cmd_split[0]));
@@ -112,7 +112,7 @@ static bool	parsing(t_minishell_info *info, char *command)
 	// command = skip_space(command);
 	split = ft_split(command, ' ');
 	if (split == NULL)
-		all_free_perror_exit(info, ERR_MALLOC);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return (1);
 	if (cmd_exit_check(split[0]) == false)
@@ -199,6 +199,6 @@ char		*read_command_line(void)
 		}
 	}
 	if (rc == -1)
-		free_perror_exit(command, ERR_READ);
+		free_perror_exit(command, ERR_READ, __LINE__, __FILE__);
 	return (command);
 }

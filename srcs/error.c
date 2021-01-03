@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 20:47:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 00:31:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 ** エラーメッセージとエラーが起きた場所をを出力してexitする関数。
 */
 
-void		perror_exit(char *error_message)
+void		perror_exit(char *error_message, int line_num, char *file_name)
 {
 	char	*location_message;
 	char	*tmp;
 
 	red_error();
-	location_message = ft_strjoin(__FILE__, " -> line:");
+	location_message = ft_strjoin(file_name, " -> line:");
 	tmp = location_message;
-	location_message = strjoin_num(location_message, __LINE__);
+	location_message = strjoin_num(location_message, line_num);
 	ft_putendl_fd(location_message, 2);
 	free(tmp);
 	free(location_message);
@@ -36,17 +36,19 @@ void		perror_exit(char *error_message)
 ** perror_exit関数 + freeする関数
 */
 
-void		free_perror_exit(char *ptr, char *error_message)
+void		free_perror_exit(char *ptr, char *error_message, int line_num, \
+				char *file_name)
 {
 	free(ptr);
-	perror_exit(error_message);
+	perror_exit(error_message, line_num, file_name);
 }
 
 /*
 ** perror_exit関数 + 構造体の全てをfreeする関数
 */
 
-void		all_free_perror_exit(t_minishell_info *info, char *error_message)
+void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
+					int line_num, char *file_name)
 {
 	size_t		i;
 
@@ -61,7 +63,7 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message)
 	free(info->cmd_lst);
 	if (info->cmd_split != NULL)  // 先にNULL埋めておく
 		ptr_2d_free((void ***)&(info->cmd_split), i);
-	perror_exit(error_message);
+	perror_exit(error_message, line_num, file_name);
 }
 
 /*
