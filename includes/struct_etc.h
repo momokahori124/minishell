@@ -6,12 +6,14 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 20:44:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 02:52:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_ETC_H
 # define STRUCT_ETC_H
+
+typedef struct stat t_stat;
 
 typedef struct		s_minishell_info
 {
@@ -35,8 +37,9 @@ enum	e_cmd
 {
 	BIN,
 	SEMICOLON,
-	LESS,
-	GREATER,
+	INPUT,
+	OUTPUT,
+	DB_OUTPUT,
 	CD,
 	ECHO,
 	ENV,
@@ -49,6 +52,12 @@ enum	e_cmd
 };
 # define NOT_CMD CMD_NUM
 
-typedef struct stat t_stat;
+# define SEMICOLON SEMICOLON
+# define INPUT INPUT
+# define OUTPUT OUTPUT
+# define DB_OUTPUT DB_OUTPUT
+# define PIPE PIPE
+# define NOT_FOUND -1
+
 
 #endif

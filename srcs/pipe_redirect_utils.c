@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:25:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 03:41:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,19 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	return (true);
 }
 
-static bool	check_next_cmd(char *command, t_minishell_info *info, int is_rc)
+static bool	check_next_cmd(char *tmp, t_minishell_info *info, int is_rc)
 {
-	printf("==%s\n", command);
-	printf("==%s\n",  (skip_space(command)));
-	printf("==%d\n",  ispipe(*command));
-	printf("==%d\n", is_rc);
-	if (*command || is_rc == 1)
+	char	*command;
+
+	command = (skip_space(tmp));
+	// printf("[%s]\n", command);
+	// printf("[%d]\n", is_rc);
+	if (*command || is_rc != NOT_FOUND)
 	{
-		if (is_rc == 1 && (skip_space(command))[0] == '\0')
+		if (is_rc != SEMICOLON && command[0] == '\0')
 			return (wait_next_cmd(info, 0));
-		else if (is_rc == 1 && ispipe(*command))
-			return (error_message(ERR_MANDATORY, info));
+		else if (is_rc == PIPE && ispipe(*command))
+			warning_message(ERR_MANDATORY, info); // warningをどうするか
 		if (isdouble_output_redirect(*command, *(command + 1)))
 			return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
 		else if (isoutput_redirect(*command, *(command + 1)) && \
@@ -99,26 +100,25 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 	int				is_rc;
 	bool			return_value;
 	unsigned int	i;
+	int				plus_index;
 
 	return_value = true;
-	i = 0;
-	while (command[i])
+	i = -1;
+	while (command[++i])
 	{
-		is_rc = ispipe_or_redirect(command[i], *(command + i + 1));
-		if (is_rc != 0)
+		is_rc = ispipe_or_redirect(command[i], command[i + 1]);
+		if (is_rc != NOT_FOUND)
 		{
-			int ttt = is_rc;
-			if (is_rc >= 2)
-				is_rc--;
-			tmp = command + i + is_rc;
-			if ((return_value = check_next_cmd(tmp, info, ttt)) == false)
+			if (is_rc == SEMICOLON || is_rc == PIPE || is_rc == INPUT || \
+					is_rc == OUTPUT)
+				plus_index = 1;
+			else if (is_rc == DB_OUTPUT)
+				plus_index = 2;
+			tmp = command + i + plus_index;
+			if ((return_value = check_next_cmd(tmp, info, is_rc)) == false)
 				return (false);
-			command = info->command + i + is_rc;
-			command = ft_strrchr(command, '|');
-			if (command == NULL)
-				break ;
+			command = info->command + i + plus_index;
 		}
-		i++;
 	}
 	return (return_value);
 }

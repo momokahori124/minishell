@@ -1,0 +1,47 @@
+bash-3.2$ pwd >>> pwd
+bash: syntax error near unexpected token `>'
+
+bash-3.2$ pwd >>>> pwd
+bash: syntax error near unexpected token `>>'
+
+bash-3.2$ pwd >>>>>>>> pwd
+bash: syntax error near unexpected token `>>'
+
+bash-3.2$ pwd ||| pwd
+bash: syntax error near unexpected token `|'
+
+bash-3.2$ pwd |||| pwd
+bash: syntax error near unexpected token `||'
+
+bash-3.2$ pwd ||||| pwd
+bash: syntax error near unexpected token `||'
+
+bash-3.2$ pwd ;; pwd
+bash: syntax error near unexpected token `;;'
+
+bash-3.2$ pwd ;;;;; pwd
+bash: syntax error near unexpected token `;;'
+
+bash-3.2$ pwd >>; pwd
+bash: syntax error near unexpected token `;'
+
+bash-3.2$ pwd >>;; pwd
+bash: syntax error near unexpected token `;;'
+
+bash-3.2$ pwd >>>;; pwd
+bash: syntax error near unexpected token `>'
+
+bash-3.2$ pwd ;> pwd
+/Users/jinichiro/Desktop/tmp/minishell
+bash-3.2$ pwd ;>> pwd
+/Users/jinichiro/Desktop/tmp/minishell
+
+bash-3.2$ pwd >>| pwd
+bash: syntax error near unexpected token `|'
+bash-3.2$ pwd >>|| pwd
+bash: syntax error near unexpected token `||'
+
+bash-3.2$ pwd <<< pwd
+/Users/jinichiro/Desktop/tmp/minishell
+bash-3.2$ pwd <<<< pwd
+bash: syntax error near unexpected token `<'

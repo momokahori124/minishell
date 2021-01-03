@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:12:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 03:13:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	execute(t_minishell_info *info)
 {
 	if (info->cmd_lst->type == BIN)
 		exec_bin(info);
-	if (info->cmd_lst->type == PWD)
+	else if (info->cmd_lst->type == PWD)
 		exec_pwd(info);
 	else if (info->cmd_lst->type == NOT_CMD)
 		info->prev_rc = put_cmd_not_found(info->cmd_split[0]);

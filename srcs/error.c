@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:29:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 03:34:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,6 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 	if (errno == 0)
 		exit(1);
 	perror_exit(error_message, line_num, file_name);
-
-
-
-
-
 }
 
 /*
@@ -106,13 +101,14 @@ bool	syntax_error(char *error_message, char *word, t_minishell_info *info)
 }
 
 /*
-** error文シンタックスエラーを返して$?様に終了ステータスを入れる関数
+** 関数
 */
 
-bool	error_message(char *error_message, t_minishell_info *info)
+bool	warning_message(char *error_message, t_minishell_info *info)
 {
 	yellow_warning();
 	ft_putendl_fd(error_message, 2);
-	info->prev_rc = 258;
+	errno = 0;
+	all_free_perror_exit(info, NULL, 0, 0);
 	return (false);
 }
