@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 00:33:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 02:26:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,8 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)
 		cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
+	if (rc == false)
+		all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__); // ERR_EXECVEかえる
 	i = 0;
 	while (cmd_grp[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 00:31:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 02:08:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 
 # include "minishell.h"
 # include "struct_etc.h"
-# define ERR_READ "Failed to read at the above location. "
-# define ERR_MALLOC "Failed to malloc at the above location. "
-# define ERR_EXECVE "Failed to execve at the above location. "
+# define ERR_READ "Failed to \033[4mread\033[0m at the above location. "
+# define ERR_MALLOC "Failed to \033[4mmalloc\033[0m at the above location. "
+# define ERR_EXECVE "Failed to \033[4mexecve\033[0m at the above location. "
+# define ERR_FORK "Failed to \033[4mfork\033[0m at the above location. "
+# define ERR_FAIL_CHILD "The child process did not terminate successfully. "
+# define ERR_WAIT_PID "Failed to \033[4mwait_pid\033[0m at the above location. "
 # define ERR_SYNTAX "minishell: syntax error near unexpected "
 # define ERR_SYNTAX2 "minishell: syntax error: unexpected "
 # define ERR_MANDATORY "That command is not supported by mandatory."

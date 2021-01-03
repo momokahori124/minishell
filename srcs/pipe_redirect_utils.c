@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 00:32:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 02:25:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,13 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 
 static bool	check_next_cmd(char *command, t_minishell_info *info, int is_rc)
 {
+	printf("==%s\n", command);
+	printf("==%s\n",  (skip_space(command)));
+	printf("==%d\n",  ispipe(*command));
+	printf("==%d\n", is_rc);
 	if (*command || is_rc == 1)
 	{
-		if (is_rc == 1 && skip_space(command)[0] == '\0')
+		if (is_rc == 1 && (skip_space(command))[0] == '\0')
 			return (wait_next_cmd(info, 0));
 		else if (is_rc == 1 && ispipe(*command))
 			return (error_message(ERR_MANDATORY, info));
@@ -107,7 +111,6 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 			if (is_rc >= 2)
 				is_rc--;
 			tmp = command + i + is_rc;
-			// printf("[%s]\n", tmp);
 			if ((return_value = check_next_cmd(tmp, info, ttt)) == false)
 				return (false);
 			command = info->command + i + is_rc;
@@ -133,6 +136,5 @@ bool		wait_pipe_or_redirect_next_cmd(t_minishell_info *info)
 	// printf("===[%s]\n", info->command);
 	// printf("===[%d]\n", rc);
 	// fflush(stdout);
-
 	return (rc);
 }

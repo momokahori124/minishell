@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/23 14:39:57 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 19:57:51 by tjinichi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 # include <stdio.h>
 # include <string.h>
 # include <stdlib.h>
@@ -18,27 +6,36 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
-#include <string.h>
+#include <sys/wait.h>
+int main()
+{
+	pid_t pid = fork();
+	if (pid < 0) {
+		perror("fork");
+		exit(-1);
+	} else if (pid == 0) {
+		// 子プロセスで別プログラムを実行
+		puts("Failed to \033[4mread\033[0m aaaa");
+		puts("Failed to \033[1mread\033[0m aaaa");
+		execlp("echo", "echo", "abc", "def", NULL);
+		// perror("echo");
+		// exit(-1);
+	}
 
-int main(){
-  errno = 0;
-  execl("/bin/echo", "/bin/echo", "hoge", "fuga", NULL);
-
-  if(errno != 0)
-    perror(strerror(errno));
-
-  return -1;
+	// 親プロセス
+	int status;
+	pid_t r = waitpid(pid, &status, 0); //子プロセスの終了待ち
+	if (r < 0) {
+		perror("waitpid");
+		exit(-1);
+	}
+	if (WIFEXITED(status)) {
+		// 子プロセスが正常終了の場合
+		printf("child exit-code=%d\n", WEXITSTATUS(status));
+	} else {
+		printf("child status=%04x\n", status);
+	}
+	return 0;
 }
-
-// int main(){
-//   errno = 0;
-//   char *a[] = {"/bin/ls", "hoge", "fuga", NULL};
-//   execve("/bin/ls", a, NULL);
-
-//   if(errno != 0)
-//     perror(strerror(errno));
-
-//   return -1;
-// }
