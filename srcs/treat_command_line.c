@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 17:27:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/03 23:52:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,24 @@ static bool	cmd_exit_check(char *cmd)
 	return (false);
 }
 
+static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
+{
+	t_stat	stat_buf;
+	char	*bin_path;
+
+	bin_path = ft_strjoin("/bin/", command);
+	if (bin_path == NULL)
+		all_free_perror_exit(info, ERR_MALLOC);
+	if (lstat(bin_path, &stat_buf) == 0)
+	{
+		ptr_free((void **)&(info->cmd_split[0]));
+		info->cmd_split[0] = bin_path;
+		return (true);
+	}
+	ptr_free((void **)&bin_path);
+	return (false);
+}
+
 /*
 ** 入力された文字列から各コマンドをparseする関数
 */
@@ -88,18 +106,24 @@ static bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
-	const char	*base[CMD_NUM] = {";", "<", ">", "cd", "echo", "env", "exit",
-									"export", "pwd", "unset", "|"};
+	const char	*base[CMD_NUM] = {"\0", ";", "<", ">", "cd", "echo", "env",
+									"exit", "export", "pwd", "unset", "|"};
 
-	command = skip_space(command);
+	// command = skip_space(command);
 	split = ft_split(command, ' ');
 	if (split == NULL)
 		all_free_perror_exit(info, ERR_MALLOC);
+	if (split[0] == NULL)
+		return (1);
 	if (cmd_exit_check(split[0]) == false)
 		str_tolower(&(split[0]));
-	printf("{{{%s}}}\n", split[0]);
 	type = str_bsearch(split[0], base, CMD_NUM);
 	info->cmd_split = split;
+	if (type == NOT_CMD)
+	{
+		if (check_bash_standard_commands(info, split[0]) == true)
+			return (add_cmd_to_lst(info, split, BIN));
+	}
 	split++;
 	add_cmd_to_lst(info, split, type);
 	return (1);
@@ -132,47 +156,21 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 {
 	char	**cmd_grp;
 	bool	rc;
+	int		i;
 
 	rc = rm_quotation(info);
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)
 		cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
-	int i = 0;
+	i = 0;
 	while (cmd_grp[i])
 	{
 		printf("%d : %s\n", i, cmd_grp[i]);
 		parsing(info, cmd_grp[i]);
 		i++;
 	}
-
-	// int i = 0;
-	// char *tmp = info->command;
-	// // int	f = 0;
-	// char *a;
-	// int j = i;
-	// while (tmp[i])
-	// {
-	// 	// if (f == 0 && tmp[i] == ' ')
-	// 	// 	continue ;
-	// 	if (tmp[i] == '|' || tmp[i] == ';' || tmp[i] == '>' || tmp[i] == '<')
-	// 	{
-	// 		a = ft_substr(tmp, j, i);
-	// 		j = i + 1;
-	// 		// tmp += i;
-	// 	printf("%s\n", a);
-	// 	printf("[%c]\n", tmp[i]);
-	// 	i++;
-	// 	// continue ;
-	// 	}
-	// 	i++;
-	// 	// tmp++;
-	// }
-	// a = ft_substr(tmp, j, i);
-	// printf("%s\n", a);
-
 	(void)envp;
-	(void)rc;
 	// exit(0);
 	return (1);
 }

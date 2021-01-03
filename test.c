@@ -101,15 +101,10 @@ char			**split_by_chrs_contain_delimiters(char *str, char *charset)
 
 int main()
 {
-	char **res = split_by_chrs_contain_delimiters("pwd | aaa;bbb;", "|;><");
-	int i = 0;
-	while (res[i])
-	{
-		printf("%s\n", res[i]);
-		free(res[i]);
-		i++;
-	}
-	free(res);
+	int i = ft_strcmp("jin", "じん");
+	printf("%d\n", i);
+	i = ft_strcmp("じん", "じん");
+	printf("%d\n", i);
 }
 
 // #define NUM_DATA 7

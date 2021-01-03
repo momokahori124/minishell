@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/17 22:17:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/03 20:57:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "struct_etc.h"
 # define ERR_READ "Failed to read at the above location. "
 # define ERR_MALLOC "Failed to malloc at the above location. "
+# define ERR_EXECVE "Failed to execve at the above location. "
 # define ERR_SYNTAX "minishell: syntax error near unexpected "
 # define ERR_SYNTAX2 "minishell: syntax error: unexpected "
 # define ERR_MANDATORY "That command is not supported by mandatory."
