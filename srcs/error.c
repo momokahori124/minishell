@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 02:26:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 02:29:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 	if (errno == 0)
 		exit(1);
 	perror_exit(error_message, line_num, file_name);
+
+
+
+
+
 }
 
 /*
