@@ -1,151 +1,214 @@
 
 <!-- output -->
-bash-3.2$ pwd >>> pwd
+pwd >>> pwd
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>> pwd
+pwd >>>> pwd
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>> pwd
+pwd >>>>> pwd
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>>>> pwd
+pwd >>>>>>>> pwd
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- newline -->
-bash-3.2$ pwd >
+pwd >
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd >>
+pwd >>
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd >>>
+pwd >>>
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>>
+pwd >>>>
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- single_semicolon -->
-bash-3.2$ pwd >; pwd
+pwd >; pwd
 bash: syntax error near unexpected token `;'
-bash-3.2$ pwd >>; pwd
+pwd >>; pwd
 bash: syntax error near unexpected token `;'
-bash-3.2$ pwd >>>; pwd
+pwd >>>; pwd
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>>; pwd
+pwd >>>>; pwd
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>; pwd
+pwd >>>>>; pwd
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- double_semicolon -->
-bash-3.2$ pwd >;; pwd
+pwd >;; pwd
 bash: syntax error near unexpected token `;;'
-bash-3.2$ pwd >>;; pwd
+pwd >>;; pwd
 bash: syntax error near unexpected token `;;'
-bash-3.2$ pwd >>>;; pwd
+pwd >>>;; pwd
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>>;; pwd
+pwd >>>>;; pwd
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>;; pwd
+pwd >>>>>;; pwd
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- single pipe -->
-bash-3.2$ pwd >| a
+pwd >| a
 pwdの内容がpwdファイルに入る
-
-bash-3.2$ pwd > | a
+pwd > | a
 bash: syntax error near unexpected token `|'
-
-bash-3.2$ pwd >>| a
+pwd >>| a
 bash: syntax error near unexpected token `|'
-bash-3.2$ pwd >>>| a
+pwd >>>| a
 bash: syntax error near unexpected token `>|'
-bash-3.2$ pwd >>>>| a
+pwd >>>>| a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>| a
+pwd >>>>>| a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- double pipe -->
-bash-3.2$ pwd >|| a
+pwd >|| a
 bash: syntax error near unexpected token `|'
-
-bash-3.2$ pwd > || a
+pwd > || a
 bash: syntax error near unexpected token `||'
-
-bash-3.2$ pwd >>|| a
+pwd >>|| a
 bash: syntax error near unexpected token `||'
-bash-3.2$ pwd >> || a
+pwd >> || a
 bash: syntax error near unexpected token `||'
-bash-3.2$ pwd >>>|| a
+pwd >>>|| a
 bash: syntax error near unexpected token `>|'
-bash-3.2$ pwd >>>>|| a
+pwd >>>>|| a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>|| a
+pwd >>>>>|| a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- single_input -->
-bash-3.2$ pwd >< a
+pwd >< a
 bash: syntax error near unexpected token `<'
-bash-3.2$ pwd >>< a
+pwd >>< a
 bash: syntax error near unexpected token `<'
-bash-3.2$ pwd >>>< a
+pwd >>>< a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>>< a
+pwd >>>>< a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>>< a
+pwd >>>>>< a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- double_input -->
-bash-3.2$ pwd ><< a
+pwd ><< a
 bash: syntax error near unexpected token `<<'
-bash-3.2$ pwd >><< a
+pwd >><< a
 bash: syntax error near unexpected token `<<'
-bash-3.2$ pwd >>><< a
+pwd >>><< a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>><< a
+pwd >>>><< a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>><< a
+pwd >>>>><< a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- space output-->
-bash-3.2$ pwd > > a
+pwd > > a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >> > a
+pwd >> > a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>> > a
+pwd >>> > a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>> > a
+pwd >>>> > a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>> > a
+pwd >>>>> > a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- space DB_output-->
-bash-3.2$ pwd > >> a
+pwd > >> a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >> >> a
+pwd >> >> a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>> >> a
+pwd >>> >> a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>> >> a
+pwd >>>> >> a
 bash: syntax error near unexpected token `>>'
-bash-3.2$ pwd >>>>> >> a
+pwd >>>>> >> a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- space pipe-->
-bash-3.2$ pwd > |  a a
+pwd > |  a a
 bash: syntax error near unexpected token `|'
-bash-3.2$ pwd >> |  a
+pwd >> |  a
 bash: syntax error near unexpected token `|'
-bash-3.2$ pwd >>> |  a
+pwd >>> |  a
 bash: syntax error near unexpected token `>'
-bash-3.2$ pwd >>>> | a
+pwd >>>> | a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
 <!-- space DB_pipe-->
+pwd > || ls
+bash: syntax error near unexpected token `||'
+pwd >> || ls
+bash: syntax error near unexpected token `||'
+pwd >>> || ls
+bash: syntax error near unexpected token `>'
+pwd >>>> || ls
+bash: syntax error near unexpected token `>>'
+pwd >>>>> || ls
+bash: syntax error near unexpected token `>>'
+<!------------------>
 
+<!-- space semicolon-->
+pwd > ;
+bash: syntax error near unexpected token `;'
+pwd > ; ls
+bash: syntax error near unexpected token `;'
+pwd >> ; ls
+bash: syntax error near unexpected token `;'
+pwd >>> ; ls
+bash: syntax error near unexpected token `>'
+pwd >>>> ; ls
+bash: syntax error near unexpected token `>>'
+pwd >>>>> ; ls
+bash: syntax error near unexpected token `>>'
+<!------------------>
+
+<!-- space DB_semicolon-->
+pwd > ;;
+bash: syntax error near unexpected token `;;'
+pwd > ;; ls
+bash: syntax error near unexpected token `;;'
+pwd >> ;; ls
+bash: syntax error near unexpected token `;;'
+pwd >>> ;; ls
+bash: syntax error near unexpected token `>'
+pwd >>>> ;; ls
+bash: syntax error near unexpected token `>>'
+<!------------------>
+
+<!-- space input-->
+pwd > <
+bash: syntax error near unexpected token `<'
+pwd > < ls
+bash: syntax error near unexpected token `<'
+pwd >> < ls
+bash: syntax error near unexpected token `<'
+pwd >>> < ls
+bash: syntax error near unexpected token `>'
+pwd >>>> < ls
+bash: syntax error near unexpected token `>>'
+pwd >>>>> < ls
+bash: syntax error near unexpected token `>>'
+<!------------------>
+
+<!-- space DB_input-->
+pwd > <<
+bash: syntax error near unexpected token `<<'
+pwd > << ls
+bash: syntax error near unexpected token `<<'
+pwd >> << ls
+bash: syntax error near unexpected token `<<'
+pwd >>> << ls
+bash: syntax error near unexpected token `>'
+pwd >>>> << ls
+bash: syntax error near unexpected token `>>'
+pwd >>>>> << ls
+bash: syntax error near unexpected token `>>'
 <!------------------>

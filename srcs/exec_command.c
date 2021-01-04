@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:13:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 02:59:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ void		exec_bin(t_minishell_info *info)
 		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
+void		exec_exit(t_minishell_info *info)
+{
+	ft_putstr_fd("\033[0Kexit\n", 2);
+	errno = 0;
+	all_free_perror_exit(info, NULL, 0, NULL);
+}
+
 /*
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数
 */
@@ -47,6 +54,8 @@ static bool	execute(t_minishell_info *info)
 {
 	if (info->cmd_lst->type == BIN)
 		exec_bin(info);
+	else if (info->cmd_lst->type == EXIT)
+		exec_exit(info);
 	else if (info->cmd_lst->type == PWD)
 		exec_pwd(info);
 	else if (info->cmd_lst->type == NOT_CMD)

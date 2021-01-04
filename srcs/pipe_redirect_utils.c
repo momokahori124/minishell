@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 22:46:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 04:19:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,35 +89,45 @@ bool	check_single_semicolon_error(int separator_count, int type, \
 }
 
 bool	check_double_pipe_error(int separator_count, int type, \
-			t_minishell_info *info)
+			bool flag, t_minishell_info *info)
 {
 	if (separator_count == 1)
-		return (syntax_error(PIPE, info));
+		if (flag == false)
+			return (syntax_error(PIPE, info));
+		else
+			return (syntax_error(NOT_CMD, info));
+	// else if (separator_count == 2)
+	// 	return (syntax_error(NOT_CMD, info));
 	else if (separator_count == 2 || separator_count == 3)
-		return (syntax_error(NOT_CMD, info));
+		if (separator_count == 2 || flag == false)
+			return (syntax_error(NOT_CMD, info));
+		else
+			return (syntax_error(OUTPUT, info));
 	else
-	{
 		if (type == OUTPUT)
 			return (syntax_error(DB_OUTPUT, info));
-	}
 	return (true);
 }
 
 bool	check_single_pipe_error(int separator_count, int type, \
-			t_minishell_info *info)
+			bool flag, t_minishell_info *info)
 {
 	if (separator_count == 1)
-		// return (true);
-		return (syntax_warning(WARNING));
+		if (flag == false)
+			// return (true);
+			return (syntax_warning(WARNING));
+		else
+			return (syntax_error(PIPE, info));
 	else if (separator_count == 2)
 		return (syntax_error(PIPE, info));
 	else if (separator_count == 3)
-		return (syntax_error(NOT_CMD, info));
+		if (flag == false)
+			return (syntax_error(NOT_CMD, info));
+		else
+			return (syntax_error(OUTPUT, info));
 	else
-	{
 		if (type == OUTPUT)
 			return (syntax_error(DB_OUTPUT, info));
-	}
 	return (true);
 }
 
@@ -192,6 +202,31 @@ bool	check_same_separator_error(int separator_count, int separator, \
 	return (syntax_error(DB_OUTPUT, info));
 }
 
+bool	inspect_single_output_pattern(char *cmd, int separator_count,
+			bool space_flag, t_minishell_info *info)
+{
+	if (*cmd == ';' && *(cmd + 1) == ';')
+		return (check_double_semicolon_error(separator_count, OUTPUT, info));
+	else if (*cmd == ';')
+		return (check_single_semicolon_error(separator_count, OUTPUT, info));
+	else if (*cmd == '|' && *(cmd + 1) == '|')
+		return (check_double_pipe_error(separator_count, OUTPUT, space_flag, info));
+	else if (*cmd == '|')
+		return (check_single_pipe_error(separator_count, OUTPUT, space_flag, info));
+	else if (*cmd == '<' && *(cmd + 1) == '<')
+		return (check_double_input_error(separator_count, OUTPUT, info));
+	else if (*cmd == '<')
+		return (check_single_input_error(separator_count, OUTPUT, info));
+	else if (*cmd == '\0')
+		return (check_nothing_back_error(separator_count, OUTPUT, info));
+	else if (separator_count >= 3)
+		return (check_separator_count_error(separator_count, OUTPUT, info));
+	else if (*cmd == '>')
+		return (check_same_separator_error(separator_count, '>', cmd, info));
+	else
+		return (true);
+}
+
 static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
 	int		separator_count;
@@ -199,100 +234,39 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 
 	separator_count = 0;
 	space_flag = false;
-	while (*cmd && *cmd == separator)
-	{
+	while (cmd[separator_count] && cmd[separator_count] == separator)
 		separator_count++;
-		cmd++;
-	}
 	printf("separator_count = %d\n", separator_count);
-	if (*cmd == ' ')
+	printf("chr = %c\n", separator);
+	if (cmd[separator_count] == ' ')
 		space_flag = true;
-	(void)space_flag;
-	cmd = skip_space(cmd);
+	cmd = skip_space(cmd + separator_count);
 	if (separator == '>')
+		return (inspect_single_output_pattern(cmd, separator_count, space_flag, info));
+	else if (separator == ';')
 	{
-		// if (space_flag == true)
-		// {
-		// 	// if (*cmd == '\0')
-		// 	// {
-		// 	// 	if (separator_count == 1 || separator_count == 2)
-		// 	// 		return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-		// 	// 	if (separator_count == 3)
-		// 	// 		return (syntax_error(ERR_SYNTAX, "token `>\'", info));
-		// 	// 	else
-		// 	// 		return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
+		if (separator_count >= 2)
+			return (syntax_error(NOT_CMD, info));
+		else if (*cmd == '\0')
+			return (true);
+		else if (*cmd == '>')
+		{
+			int ttt = 0;
+			while (cmd[ttt] && cmd[ttt] == '>')
+				ttt++;
+			cmd = skip_space(cmd + ttt);
+				return (inspect_single_output_pattern(cmd, separator_count, space_flag, info));
+			return (check_nothing_back_error(ttt, OUTPUT, info));
 
-		// 	// }
-		// 	// else if (*cmd == ';' || *cmd == '|' || *cmd == '>' || *cmd == '<')
-		// 	// {
-
-		// 	// }
-		// 	;
-		// }
-		// else
-		// {
-			if (*cmd == ';' && *(cmd + 1) == ';')
-				return (check_double_semicolon_error(separator_count, OUTPUT, info));
-			else if (*cmd == ';')
-				return (check_single_semicolon_error(separator_count, OUTPUT, info));
-			else if (*cmd == '|' && *(cmd + 1) == '|')
-				return (check_double_pipe_error(separator_count, OUTPUT, info));
-			else if (*cmd == '|')
-				return (check_single_pipe_error(separator_count, OUTPUT, info));
-			else if (*cmd == '<' && *(cmd + 1) == '<')
-				return (check_double_input_error(separator_count, OUTPUT, info));
-			else if (*cmd == '<')
-				return (check_single_input_error(separator_count, OUTPUT, info));
-			else if (*cmd == '\0')
-				return (check_nothing_back_error(separator_count, OUTPUT, info));
-			else if (separator_count >= 3)
-				return (check_separator_count_error(separator_count, OUTPUT, info));
-			else if (*cmd == separator)
-				return (check_same_separator_error(separator_count, separator, cmd, info));
-			else
-				return (true);
-		// }
+		}
 	}
-	// printf("count = %d\n", separator_count);
-
-	// if (*command || is_rc != NOT_FOUND)
-	// {
-	// 	if (is_rc != SEMICOLON && command[0] == '\0')
-	// 		return (wait_next_cmd(info, 0));
-	// 	else if (is_rc == PIPE && ispipe(*command))
-	// 		warning_message(ERR_MANDATORY, info); // warningをどうするか
-	// 	if (isdouble_output_redirect(*command, *(command + 1)))
-	// 		return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
-	// 	else if (isoutput_redirect(*command, *(command + 1)) &&
-	// 			ispipe(*(command + 1)))
-	// 		return (syntax_error(ERR_SYNTAX, "token `>|\'", info));
-	// 	else if (isoutput_redirect(*command, *(command + 1)))
-	// 		return (syntax_error(ERR_SYNTAX, "token `>\'", info));
-	// 	else if (is_rc == 3 && ispipe(*command))
-	// 		return (syntax_error(ERR_SYNTAX, "token `|\'", info));
-	// 	else if (is_rc == 2 && ispipe(*command))
-	// 		return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-	// 	else if (isdouble_semicolon(*command, *(command + 1)))
-	// 		return (syntax_error(ERR_SYNTAX, "token `;;\'", info));
-	// 	else if (issemicolon(*command, *(command + 1)))
-	// 		return (syntax_error(ERR_SYNTAX, "token `;\'", info));
-	// 	else if (*command == ' ' && skip_space(command)[0] == '\0')
-	// 			return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-	// 	else
-	// 		return (true);
-	// }
-	// return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
 	return (false);
-	(void)info;
 }
 
 static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 {
-	// char			*tmp;
-	// int				is_rc;
 	bool			return_value;
 	unsigned int	i;
-	// char			separator;
 
 	return_value = true;
 	i = -1;
