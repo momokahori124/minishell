@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 03:34:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 22:32:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,34 @@ void		ctrl_d_exit(char *ptr)
 ** error文シンタックスエラーを返して$?様に終了ステータスを入れる関数
 */
 
-bool	syntax_error(char *error_message, char *word, t_minishell_info *info)
+bool	syntax_error(int type, t_minishell_info *info)
 {
 	red_error();
-	ft_putstr_fd(error_message, 2);
-	ft_putendl_fd(word, 2);
+	if (type == OUTPUT)
+		write(2, SYNTAX_OP, 50);
+	else if (type == DB_OUTPUT)
+		write(2, SYNTAX_DB_OP, 51);
+	else if (type == SEMICOLON)
+		write(2, SYNTAX_SEMICOLON, 50);
+	else if (type == PIPE)
+		write(2, SYNTAX_PIPE, 50);
+	else if (type == INPUT)
+		write(2, SYNTAX_INPUT, 50);
+	else if (type == SYNTAX_EOL_NUM)
+		write(2, SYNTAX_EOL, 48);
+	else if (type == NEWLINE)
+		write(2, SYNTAX_NL, 56);
+	else if (type == NOT_CMD)
+		write(2, ERR_MANDATORY, 44);
 	info->prev_rc = 258;
+	return (false);
+}
+
+bool	syntax_warning(int type)
+{
+	yellow_warning();
+	if (type == WARNING)
+		write(2, ERR_MANDATORY, 44);
 	return (false);
 }
 

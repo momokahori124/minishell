@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 00:32:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 19:10:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ bool		add_cmd_to_lst(t_minishell_info *info, char **command, int type)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (type == CMD_NUM)
 		cmd->type = NOT_CMD;
+	else if (type == OUTPUT_PIPE)
+		cmd->type = OUTPUT;
 	else
 		cmd->type = type;
 	cmd->pipe[0] = 0; // わかりやすく書いてるだけであとで消す

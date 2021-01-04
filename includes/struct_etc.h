@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 04:25:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 21:20:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ enum	e_cmd
 	INPUT,
 	OUTPUT,
 	DB_OUTPUT,
+	OUTPUT_PIPE,
 	CD,
 	ECHO,
 	ENV,
@@ -57,6 +58,7 @@ enum	e_cmd
 // # define OUTPUT OUTPUT
 // # define DB_OUTPUT DB_OUTPUT
 // # define PIPE PIPE
+# define NOT_FOUND -1
 # define NOT_FOUND -1
 
 

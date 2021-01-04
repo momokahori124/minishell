@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 05:45:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/04 22:46:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	error_or_recursive(char buf, char *tmp, int cnt, \
 	if (buf == '|')
 	{
 		if (tmp[0] == buf && cnt == 0)
-			return (syntax_error(ERR_SYNTAX, "token `|\'", info));
+			return (syntax_error(PIPE, info));
 		wait_next_cmd(info, 1);
 	}
 	return (true);
@@ -49,7 +49,7 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 				return (false);
 		}
 		else if (command_tmp[0] == '\0' && buf != '\n')
-			return (syntax_error(ERR_SYNTAX2, "end of file", info));
+			return (syntax_error(SYNTAX_EOL_NUM, info));
 	}
 	info->command = re_strjoin(&(info->command), command_tmp);
 	ptr_free((void **)&command_tmp);
@@ -58,43 +58,200 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	return (true);
 }
 
+bool	check_double_semicolon_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+		return (syntax_error(NOT_CMD, info));
+	else if (separator_count == 3)
+		return (syntax_error(type, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_single_semicolon_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+		return (syntax_error(SEMICOLON, info));
+	else if (separator_count == 3)
+		return (syntax_error(type, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_double_pipe_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1)
+		return (syntax_error(PIPE, info));
+	else if (separator_count == 2 || separator_count == 3)
+		return (syntax_error(NOT_CMD, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_single_pipe_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1)
+		// return (true);
+		return (syntax_warning(WARNING));
+	else if (separator_count == 2)
+		return (syntax_error(PIPE, info));
+	else if (separator_count == 3)
+		return (syntax_error(NOT_CMD, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_double_input_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+		return (syntax_error(NOT_CMD, info));
+	else if (separator_count == 3)
+		return (syntax_error(OUTPUT, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_single_input_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+		return (syntax_error(INPUT, info));
+	else if (separator_count == 3)
+		return (syntax_error(OUTPUT, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_nothing_back_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+		return (syntax_error(NEWLINE, info));
+	else if (separator_count == 3)
+		return (syntax_error(OUTPUT, info));
+	else
+	{
+		if (type == OUTPUT)
+			return (syntax_error(DB_OUTPUT, info));
+	}
+	return (true);
+}
+
+bool	check_separator_count_error(int separator_count, int type, \
+			t_minishell_info *info)
+{
+	(void)type;
+	if (separator_count == 3)
+		return (syntax_error(OUTPUT, info));
+	return (syntax_error(DB_OUTPUT, info));
+}
+
+bool	check_same_separator_error(int separator_count, int separator, \
+			char *cmd, t_minishell_info *info)
+{
+	if (separator_count == 1 || separator_count == 2)
+	{
+		separator_count = 0;
+		while (*cmd && *cmd == separator)
+		{
+			separator_count++;
+			cmd++;
+		}
+	}
+	if (separator_count == 1)
+		return (syntax_error(OUTPUT, info));
+	return (syntax_error(DB_OUTPUT, info));
+}
+
 static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
-	// char	*command;
-	int	separator_count;
+	int		separator_count;
+	bool	space_flag;
 
-	// command = (skip_space(tmp));
-	// printf("[%s]\n", command);
-	// printf("[%d]\n", is_rc);
 	separator_count = 0;
+	space_flag = false;
 	while (*cmd && *cmd == separator)
 	{
 		separator_count++;
 		cmd++;
 	}
-	printf("count = %d\n", separator_count);
+	printf("separator_count = %d\n", separator_count);
+	if (*cmd == ' ')
+		space_flag = true;
+	(void)space_flag;
 	cmd = skip_space(cmd);
 	if (separator == '>')
 	{
-		if (*cmd == '\0')
-		{
-			puts("1");
-			if (separator_count == 1 || separator_count == 2)
-				return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
-			if ((separator_count & 1) == 1)
-				return (syntax_error(ERR_SYNTAX, "token `>\'", info));
-			else
-				return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
+		// if (space_flag == true)
+		// {
+		// 	// if (*cmd == '\0')
+		// 	// {
+		// 	// 	if (separator_count == 1 || separator_count == 2)
+		// 	// 		return (syntax_error(ERR_SYNTAX, "token `newline\'", info));
+		// 	// 	if (separator_count == 3)
+		// 	// 		return (syntax_error(ERR_SYNTAX, "token `>\'", info));
+		// 	// 	else
+		// 	// 		return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
 
-		}
-		else
-		{
-			puts("2");
-			if ((separator_count & 1) == 1)
-				return (syntax_error(ERR_SYNTAX, "token `>\'", info));
+		// 	// }
+		// 	// else if (*cmd == ';' || *cmd == '|' || *cmd == '>' || *cmd == '<')
+		// 	// {
+
+		// 	// }
+		// 	;
+		// }
+		// else
+		// {
+			if (*cmd == ';' && *(cmd + 1) == ';')
+				return (check_double_semicolon_error(separator_count, OUTPUT, info));
+			else if (*cmd == ';')
+				return (check_single_semicolon_error(separator_count, OUTPUT, info));
+			else if (*cmd == '|' && *(cmd + 1) == '|')
+				return (check_double_pipe_error(separator_count, OUTPUT, info));
+			else if (*cmd == '|')
+				return (check_single_pipe_error(separator_count, OUTPUT, info));
+			else if (*cmd == '<' && *(cmd + 1) == '<')
+				return (check_double_input_error(separator_count, OUTPUT, info));
+			else if (*cmd == '<')
+				return (check_single_input_error(separator_count, OUTPUT, info));
+			else if (*cmd == '\0')
+				return (check_nothing_back_error(separator_count, OUTPUT, info));
+			else if (separator_count >= 3)
+				return (check_separator_count_error(separator_count, OUTPUT, info));
+			else if (*cmd == separator)
+				return (check_same_separator_error(separator_count, separator, cmd, info));
 			else
-				return (syntax_error(ERR_SYNTAX, "token `>>\'", info));
-		}
+				return (true);
+		// }
 	}
 	// printf("count = %d\n", separator_count);
 
@@ -172,5 +329,6 @@ bool		wait_pipe_or_redirect_next_cmd(t_minishell_info *info)
 	// printf("===[%s]\n", info->command);
 	// printf("===[%d]\n", rc);
 	// fflush(stdout);
+	// rc = true;
 	return (rc);
 }
