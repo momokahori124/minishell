@@ -212,3 +212,8 @@ bash: syntax error near unexpected token `>>'
 pwd >>>>> << ls
 bash: syntax error near unexpected token `>>'
 <!------------------>
+
+<!-- add-->
+pwd >|||| a
+bash: syntax error near unexpected token `||'
+<!------------------>

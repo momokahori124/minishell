@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 04:19:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 05:09:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,9 @@ bool	check_single_semicolon_error(int separator_count, int type, \
 bool	check_double_pipe_error(int separator_count, int type, \
 			bool flag, t_minishell_info *info)
 {
+	printf("cnt : {%d}\n", separator_count);
+	printf("type : {%d}\n", type);
+	printf("flag : {%d}\n", flag);
 	if (separator_count == 1)
 		if (flag == false)
 			return (syntax_error(PIPE, info));
@@ -205,6 +208,8 @@ bool	check_same_separator_error(int separator_count, int separator, \
 bool	inspect_single_output_pattern(char *cmd, int separator_count,
 			bool space_flag, t_minishell_info *info)
 {
+	printf("[%c] : [%c]\n", *cmd, *(cmd + 1));
+	printf("[%d]\n", space_flag);
 	if (*cmd == ';' && *(cmd + 1) == ';')
 		return (check_double_semicolon_error(separator_count, OUTPUT, info));
 	else if (*cmd == ';')
@@ -227,15 +232,25 @@ bool	inspect_single_output_pattern(char *cmd, int separator_count,
 		return (true);
 }
 
+size_t		char_num_in_str(char *s, char c)
+{
+	size_t		i;
+
+	i = 0;
+	while (s[i] && s[i] == c)
+		i++;
+	return (i);
+}
+
 static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
 	int		separator_count;
 	bool	space_flag;
 
-	separator_count = 0;
+	separator_count = char_num_in_str(cmd, separator);
 	space_flag = false;
-	while (cmd[separator_count] && cmd[separator_count] == separator)
-		separator_count++;
+	// while (cmd[separator_count] && cmd[separator_count] == separator)
+	// 	separator_count++;
 	printf("separator_count = %d\n", separator_count);
 	printf("chr = %c\n", separator);
 	if (cmd[separator_count] == ' ')
@@ -249,16 +264,10 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 			return (syntax_error(NOT_CMD, info));
 		else if (*cmd == '\0')
 			return (true);
-		else if (*cmd == '>')
-		{
-			int ttt = 0;
-			while (cmd[ttt] && cmd[ttt] == '>')
-				ttt++;
-			cmd = skip_space(cmd + ttt);
-				return (inspect_single_output_pattern(cmd, separator_count, space_flag, info));
-			return (check_nothing_back_error(ttt, OUTPUT, info));
-
-		}
+		else if (*cmd == '>' && (separator_count = char_num_in_str(cmd, '>')))
+			return (inspect_single_output_pattern(skip_space(cmd + separator_count), separator_count, space_flag, info));
+		// else if (*cmd == '|')
+		// 	return (check_double_pipe_error);
 	}
 	return (false);
 }
