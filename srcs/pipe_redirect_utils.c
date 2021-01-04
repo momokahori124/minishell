@@ -6,11 +6,21 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 05:09:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 05:35:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipe_redirect.h"
+
+size_t		char_num_in_str(char *s, char c)
+{
+	size_t		i;
+
+	i = 0;
+	while (s[i] && s[i] == c)
+		i++;
+	return (i);
+}
 
 /*
 ** "pwd|"の後に"|"を打つとエラーで"aaa|"を打つと続行なのでこんな再帰を使ってる
@@ -206,18 +216,18 @@ bool	check_same_separator_error(int separator_count, int separator, \
 }
 
 bool	inspect_single_output_pattern(char *cmd, int separator_count,
-			bool space_flag, t_minishell_info *info)
+			bool flag, t_minishell_info *info)
 {
-	printf("[%c] : [%c]\n", *cmd, *(cmd + 1));
-	printf("[%d]\n", space_flag);
+	if (char_num_in_str(cmd, '|') >= 3)
+		flag = true;
 	if (*cmd == ';' && *(cmd + 1) == ';')
 		return (check_double_semicolon_error(separator_count, OUTPUT, info));
 	else if (*cmd == ';')
 		return (check_single_semicolon_error(separator_count, OUTPUT, info));
 	else if (*cmd == '|' && *(cmd + 1) == '|')
-		return (check_double_pipe_error(separator_count, OUTPUT, space_flag, info));
+		return (check_double_pipe_error(separator_count, OUTPUT, flag + *(cmd + 2), info));
 	else if (*cmd == '|')
-		return (check_single_pipe_error(separator_count, OUTPUT, space_flag, info));
+		return (check_single_pipe_error(separator_count, OUTPUT, flag, info));
 	else if (*cmd == '<' && *(cmd + 1) == '<')
 		return (check_double_input_error(separator_count, OUTPUT, info));
 	else if (*cmd == '<')
@@ -230,16 +240,6 @@ bool	inspect_single_output_pattern(char *cmd, int separator_count,
 		return (check_same_separator_error(separator_count, '>', cmd, info));
 	else
 		return (true);
-}
-
-size_t		char_num_in_str(char *s, char c)
-{
-	size_t		i;
-
-	i = 0;
-	while (s[i] && s[i] == c)
-		i++;
-	return (i);
 }
 
 static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)

@@ -7,6 +7,9 @@ int main()
 {
 	int i = 1;
 	printf("%d\n", ~i);
+	bool s = 2;
+	printf("%d\n", s);
+
 }
 
 // #define NUM_DATA 7
