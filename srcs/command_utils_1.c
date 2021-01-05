@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 21:43:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 03:41:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	while ((rc = read(0, &buf, 1)) > 0)
 	{
-		// write(0, "\033[0K", 4);
 		if (buf == '\n')
 			ft_putstr_fd("> ", 1);
 		if (buf == first_appear)
@@ -88,7 +87,7 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 		ft_putstr_fd("\nminishell: syntax error: unexpected end of file", 1);
 		return (true);
 	}
-	info->prev_rc = put_cmd_not_found(info->command);
+	// info->prev_rc = put_cmd_not_found(info->command);
 	return (true);
 }
 
@@ -116,7 +115,24 @@ static void	removing(t_minishell_info *info, char first_appear)
 	info->command = new;
 }
 
-// void	rm_chrs_in_str(char **str, char chr1)
+static void	rm_chr_in_str(char **str, char chr)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while ((*str)[i])
+	{
+		if ((*str)[i] != chr)
+		{
+			(*str)[j] = (*str)[i];
+			j++;
+		}
+		i++;
+	}
+	(*str)[j] = '\0';
+}
 
 static bool	check_quotation(char *command, t_minishell_info *info)
 {
@@ -131,21 +147,36 @@ static bool	check_quotation(char *command, t_minishell_info *info)
 	rc = true;
 	while (*command)
 	{
-		if (first_appear == '\0' && (*command == '\'' || *command == '\"'))
+		if (rc == true && (*command == '\'' || *command == '\"'))
+		{
 			first_appear = *command;
+			rc = false;
+		}
 		if (*command == '\'')
 			single_quo++;
-		if (*command == '\"')
+		else if (*command == '\"')
 			double_quo++;
+		if (rc == false && first_appear == '\'')
+			if (single_quo == 2)
+				rc = true;
+		if (rc == false && first_appear == '\"')
+			if (double_quo == 2)
+				rc = true;
 		command++;
 	}
-	if ((single_quo & 1) == 1 && (double_quo & 1) == 1)
+	if (rc == false && ((single_quo & 1) == 1 && (double_quo & 1) == 1))
 	{
 		rc = wait_quotation(first_appear, info);
 		removing(info, first_appear);
 		return (rc);
 	}
-
+	if ((single_quo & 1) == 1 || (double_quo & 1) == 1)
+	{
+		puts("IN");
+		// removing(info, first_appear);
+		return (true);
+	}
+	rm_chr_in_str(&(info->command), first_appear);
 	return (rc);
 }
 

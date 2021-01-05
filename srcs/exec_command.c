@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 02:59:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 05:33:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,5 @@ bool		execute_command(t_minishell_info *info)
 		execute(info);
 		info->cmd_lst = info->cmd_lst->next;
 	}
-	return (1);
+	return (true);
 }

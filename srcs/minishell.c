@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 21:50:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 05:43:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,27 @@ int		console_loop(t_minishell_info *info, char *envp[])
 	put_prompt(envp);
 	while (1)
 	{
-		// read_command(info, envp);
+	// 	printf("command = [%s]\n", info->command);
+	// fflush(stdout);
 		read_command_line(info);
+		// if (p == false)
+		// {
+		// 	ptr_free((void **)&(info->command));
+		// 	write(1, "\033[0K", 4);
+		// 	// put_prompt(envp);
+		// 	// printf("innnnnnnnnnn\n");
+		// 	// fflush(stdout);
+		// 	continue ;
+		// }
 		if (info->command[0] == '\0')
 		{
-			write(0, "\033[0K", 4);
+			ptr_free((void **)&(info->command));
+			// printf("[%s]\n", info->command);
+			// fflush(stdout);
+			write(1, "\033[0K", 4);
+			put_prompt(envp);
+			// printf("innnnnnnnnnn\n");
+			// fflush(stdout);
 			continue ;
 		}
 		if (parse_command_line(info, envp) != false)
@@ -74,11 +90,14 @@ int		console_loop(t_minishell_info *info, char *envp[])
 			free(info->cmd_lst);
 			info->cmd_lst = tmp;
 		}
+		printf("command = [%s]\n", info->command);
+	fflush(stdout);
 		ptr_free((void **)&(info->command));
-		put_prompt(envp);
 		// free(info->current_dir_path);
 		// exit(0);
+		put_prompt(envp);
 	}
+	return (1);
 }
 
 // __attribute__((destructor))

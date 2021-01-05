@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 20:45:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 05:13:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ void		put_prompt(char *envp[])
 
 	s = envp[search_env(envp, "USER")];
 	ft_putenv(s);
-	ft_putstr_fd("\033[1m\x1b[35m ❤️ \x1b[0m", 1);
+	// ft_putstr_fd("\033[1m\x1b[35m ❤️ \x1b[0m", 1);
+	write(1, "\033[1m\x1b[35m ❤️ \x1b[0m", 21);
 	s = get_working_dir(envp[search_env(envp, "PWD")]);
 	ft_putstr_fd(s, 1);
 	free(s);
-	ft_putstr_fd("\033[1m\x1b[35m ❤️ > \x1b[0m", 1);
+	// ft_putstr_fd("\033[1m\x1b[35m ❤️ > \x1b[0m", 1);
+	write(1, "\033[1m\x1b[35m ❤️ > \x1b[0m", 23);
 }
 
 void	put_welcome_message(void)

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 21:43:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 05:40:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,30 +190,121 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	return (true);
 }
 
+void	rm_chr_in_str(char **str, char chr)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while ((*str)[i])
+	{
+		if ((*str)[i] != chr)
+		{
+			(*str)[j] = (*str)[i];
+			j++;
+		}
+		i++;
+	}
+	(*str)[j] = '\0';
+}
+
+// void	remove_quotation(char quo, char **command)
+// {
+
+// }
+
+
+
+static bool wait_quo(char first_appear, char **command)
+{
+	int		rc;
+	char	buf;
+
+	write(1, "> ", 2);
+	*command = re_strjoinch(command, '\n');
+	if (*command == NULL)
+		// all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		return (false);
+	while ((rc = read(0, &buf, 1)) > 0 && buf != first_appear)
+	{
+		// if (rc == 1 && buf == '\n')
+		// 	continue ;
+		// printf("->%d\n", rc);
+		// fflush(stdout);
+		write(0, "\033[0K", 4);
+		if (rc != 0 && buf == '\n')
+			write(1, "> ", 2);
+		// if (buf == first_appear)
+		// 	break ;
+		else
+			*command = re_strjoinch(command, buf);
+		if (*command == NULL)
+			// all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+			return (false);
+	}
+	if (rc == 0)
+	{
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 1);
+		ft_putchar_fd(first_appear, 1);
+		ft_putstr_fd("`", 1);
+		ft_putstr_fd("\nminishell: syntax error: unexpected end of file\n", 1);
+		return (false);
+	}
+	*command = re_strjoinch(command, first_appear);
+	return (true);
+}
+
+
 /*
 ** 入力待ちをする関数
 ** (write(0, "\033[0K", 4);はCtrl + Dを押した時に^Dみたいなのが出るのを防いでいる)
 */
 
-char		*read_command_line(t_minishell_info *info)
+bool		read_command_line(t_minishell_info *info)
 {
 	char	*command;
-	char	buf;
+	char	buf[2];
+	int	flag;
 	ssize_t	rc;
 
 	command = ft_strdup("");
-	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
+	buf[0] = '\0';
+	buf[1] = '\0';
+	flag = true;
+	while ((rc = read(0, &(buf[0]), 1)) >= 0 && buf[0] != '\n')
 	{
+		// puts("+");
 		write(0, "\033[0K", 4);
-		write(STDOUT_FILENO, "  \b\b", 4);
+		// write(STDOUT_FILENO, "  \b\b", 4);
+		if (buf[1] == buf[0] && buf[0] != '\0')
+		{
+			rm_chr_in_str(&command, buf[1]);
+			buf[1] = '\0';
+			continue ;
+		}
+		else if (buf[0] == '\'' || buf[0] == '\"')
+			buf[1] = buf[0];
 		if (rc != 0)
-			command = re_strjoinch(&command, buf);
+			command = re_strjoinch(&command, buf[0]);
 		else
-			if (command[0] == '\0' && buf != '\n')
+			// if (command[0] == '\0' && buf[0] != '\n')
+			if (buf[0] == '\0')
 				ctrl_d_exit(command, info);
 	}
+	if (buf[1] == '\'' || buf[1] == '\"')
+		flag = wait_quo(buf[1], &command);
 	info->command = command;
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	return (command);
+	// printf("command = [%s]\n", info->command);
+	// fflush(stdout);
+	// printf("flag = %d\n", flag);
+	// fflush(stdout);
+	// printf("rc = %ld\n", rc);
+	// fflush(stdout);
+	// printf("buf[0] = [%c]\n", buf[0]);
+	// fflush(stdout);
+
+	return (flag);
 }
