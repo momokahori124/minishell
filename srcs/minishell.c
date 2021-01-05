@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:03:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:43:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,19 @@ int		console_loop(t_minishell_info *info, char *envp[])
 	{
 	// 	printf("command = [%s]\n", info->command);
 	// fflush(stdout);
-		bool p = read_command_line(info);
-		// if (p == false)
-		// {
-		// 	ptr_free((void **)&(info->command));
-		// 	write(1, "\033[0K", 4);
-		// 	// put_prompt(envp);
-		// 	// printf("innnnnnnnnnn\n");
-		// 	// fflush(stdout);
-		// 	continue ;
-		// }
-		if (p && info->command[0] == '\0')
+		int i = read_command_line(info);
+	// 		printf("i = [%d]\n", i);
+	// fflush(stdout);
+		if (i == 1)
+		{
+			ptr_free((void **)&(info->command));
+			write(1, "\033[0K", 4);
+			put_prompt(envp);
+			// printf("innnnnnnnnnn\n");
+			// fflush(stdout);
+			continue ;
+		}
+		else if (info->command[0] == '\0')
 		{
 			ptr_free((void **)&(info->command));
 			// printf("[%s]\n", info->command);
@@ -81,6 +83,17 @@ int		console_loop(t_minishell_info *info, char *envp[])
 			fflush(stdout);
 			// continue ;
 		}
+		// else if (info->command[0] == '\n')
+		// {
+		// 	ptr_free((void **)&(info->command));
+		// 	// printf("[%s]\n", info->command);
+		// 	// fflush(stdout);
+		// 	write(1, "\033[0K", 4);
+		// 	// put_prompt(envp);
+		// 	// printf("innnnnnnnnnn\n");
+		// 	// fflush(stdout);
+		// 	// continue ;
+		// }
 		else
 		{
 			// puts("======");
@@ -118,6 +131,8 @@ void	set_env_info(t_minishell_info *info, char **envp)
 	info->current_dir_path = getcwd(NULL, 0);
 	info->cmd_lst = NULL; // リスト初期化
 	info->envp = envp;
+	info->command = NULL;
+
 }
 
 

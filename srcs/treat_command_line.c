@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:08:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:43:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,8 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	int		i;
 
 	rc = true;
-	// if (info->command[0] == '\0')
-	// 	return (false);
+	if (info->command[0] == '\0')
+		return (false);
 
 	// rc = rm_quotation(info);
 	// if (rc == false)
@@ -256,7 +256,8 @@ static bool wait_quo(char first_appear, char **command)
 		return (false);
 	}
 	*command = re_strjoinch(command, first_appear);
-	return (true);
+		return (false);
+	// return (true);
 }
 
 
@@ -275,11 +276,11 @@ bool		read_command_line(t_minishell_info *info)
 	command = ft_strdup("");
 	buf[0] = '\0';
 	buf[1] = '\0';
-	flag = false;
+	flag = true;
+	// printf("command = [%s]\n", info->command);
+	// fflush(stdout);
 	while ((rc = read(0, &(buf[0]), 1)) >= 0 && buf[0] != '\n')
 	{
-		// puts("+");
-		flag = true;
 		write(0, "\033[0K", 4);
 		// write(STDOUT_FILENO, "  \b\b", 4);
 		if (buf[1] == buf[0] && buf[0] != '\0')
@@ -302,14 +303,15 @@ bool		read_command_line(t_minishell_info *info)
 	info->command = command;
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	// printf("command = [%s]\n", info->command);
-	// fflush(stdout);
-	// printf("flag = %d\n", flag);
-	// fflush(stdout);
-	// printf("rc = %ld\n", rc);
-	// fflush(stdout);
-	// printf("buf[0] = [%c]\n", buf[0]);
-	// fflush(stdout);
-
+	printf("command = [%s]\n", info->command);
+	fflush(stdout);
+	printf("flag = %d\n", flag);
+	fflush(stdout);
+	printf("rc = %ld\n", rc);
+	fflush(stdout);
+	printf("buf[0] = [%c]\n", buf[0]);
+	fflush(stdout);
+	printf("command = [%s]\n", info->command);
+	fflush(stdout);
 	return (flag);
 }
