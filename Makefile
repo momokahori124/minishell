@@ -6,11 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/31 16:17:34 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/06 06:07:53 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
+CC = gcc
+
+CFLAGS = -g -Wall -Werror -Wextra
 
 SRCFILE =	minishell.c \
 			minishell_utils.c \
@@ -31,10 +34,8 @@ SRCDIR = srcs/
 SRCS = $(addprefix $(SRCDIR), $(SRCFILE))
 
 OBJS = $(SRCS:.c=.o)
-
-CC = gcc
-
-CFLAGS = -g -Wall -Werror -Wextra
+%.o : %.c
+	$(CC) $(CFLAGS) -fsanitize=address -c -o $@ $<
 
 LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a

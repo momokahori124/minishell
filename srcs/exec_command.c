@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 05:33:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:05:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static bool	execute(t_minishell_info *info)
 
 bool		execute_command(t_minishell_info *info)
 {
+	printf("%p\n", info->cmd_lst);
 	while (info->cmd_lst)
 	{
 		execute(info);

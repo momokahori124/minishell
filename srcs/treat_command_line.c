@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 05:40:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:08:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,13 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	bool	rc;
 	int		i;
 
-	rc = rm_quotation(info);
-	if (rc == false)
-		return (false);
+	rc = true;
+	// if (info->command[0] == '\0')
+	// 	return (false);
+
+	// rc = rm_quotation(info);
+	// if (rc == false)
+	// 	return (false);
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)
@@ -245,7 +249,7 @@ static bool wait_quo(char first_appear, char **command)
 	}
 	if (rc == 0)
 	{
-		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 1);
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 0);
 		ft_putchar_fd(first_appear, 1);
 		ft_putstr_fd("`", 1);
 		ft_putstr_fd("\nminishell: syntax error: unexpected end of file\n", 1);
@@ -271,10 +275,11 @@ bool		read_command_line(t_minishell_info *info)
 	command = ft_strdup("");
 	buf[0] = '\0';
 	buf[1] = '\0';
-	flag = true;
+	flag = false;
 	while ((rc = read(0, &(buf[0]), 1)) >= 0 && buf[0] != '\n')
 	{
 		// puts("+");
+		flag = true;
 		write(0, "\033[0K", 4);
 		// write(STDOUT_FILENO, "  \b\b", 4);
 		if (buf[1] == buf[0] && buf[0] != '\0')

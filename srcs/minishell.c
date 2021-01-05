@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 05:43:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:03:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		console_loop(t_minishell_info *info, char *envp[])
 	{
 	// 	printf("command = [%s]\n", info->command);
 	// fflush(stdout);
-		read_command_line(info);
+		bool p = read_command_line(info);
 		// if (p == false)
 		// {
 		// 	ptr_free((void **)&(info->command));
@@ -70,29 +70,36 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		// 	// fflush(stdout);
 		// 	continue ;
 		// }
-		if (info->command[0] == '\0')
+		if (p && info->command[0] == '\0')
 		{
 			ptr_free((void **)&(info->command));
 			// printf("[%s]\n", info->command);
 			// fflush(stdout);
 			write(1, "\033[0K", 4);
-			put_prompt(envp);
-			// printf("innnnnnnnnnn\n");
-			// fflush(stdout);
-			continue ;
+			// put_prompt(envp);
+			printf("innnnnnnnnnn\n");
+			fflush(stdout);
+			// continue ;
 		}
-		if (parse_command_line(info, envp) != false)
-			execute_command(info);
-		while (info->cmd_lst)
+		else
 		{
-			t_cmdlst *tmp;
-			tmp = info->cmd_lst->next;
-			free(info->cmd_lst);
-			info->cmd_lst = tmp;
+			// puts("======");
+			bool ppp;
+			if ((ppp = parse_command_line(info, envp)) != false)
+				execute_command(info);
+			while (info->cmd_lst)
+			{
+				t_cmdlst *tmp;
+				tmp = info->cmd_lst->next;
+				free(info->cmd_lst);
+				info->cmd_lst = tmp;
+			}
+		// 	printf("command = [%s]\n", info->command);
+		// fflush(stdout);
+			ptr_free((void **)&(info->command));
+			if (ppp == false)
+				continue ;
 		}
-		printf("command = [%s]\n", info->command);
-	fflush(stdout);
-		ptr_free((void **)&(info->command));
 		// free(info->current_dir_path);
 		// exit(0);
 		put_prompt(envp);

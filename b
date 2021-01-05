@@ -48,3 +48,7 @@ bash-3.2$ echo "a |
 a |
 
 bash-3.2$
+
+
+bash-3.2$ ''
+bash: : command not found
