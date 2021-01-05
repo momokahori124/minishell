@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:43:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:51:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,28 +60,27 @@ int		console_loop(t_minishell_info *info, char *envp[])
 	{
 	// 	printf("command = [%s]\n", info->command);
 	// fflush(stdout);
-		int i = read_command_line(info);
+		read_command_line(info);
 	// 		printf("i = [%d]\n", i);
 	// fflush(stdout);
-		if (i == 1)
+	printf("prev_rc = %d\n", info->prev_rc);
+	fflush(stdout);
+
+		if (info->prev_rc != 2000 && info->command[0] == '\0')
 		{
 			ptr_free((void **)&(info->command));
+			// printf("[%s]\n", info->command);
+			// fflush(stdout);
 			write(1, "\033[0K", 4);
 			put_prompt(envp);
 			// printf("innnnnnnnnnn\n");
 			// fflush(stdout);
 			continue ;
 		}
-		else if (info->command[0] == '\0')
+		else if (info->prev_rc == 2000)
 		{
-			ptr_free((void **)&(info->command));
-			// printf("[%s]\n", info->command);
-			// fflush(stdout);
-			write(1, "\033[0K", 4);
-			// put_prompt(envp);
-			printf("innnnnnnnnnn\n");
-			fflush(stdout);
-			// continue ;
+			info->prev_rc = 0;
+			continue ;
 		}
 		// else if (info->command[0] == '\n')
 		// {
@@ -132,7 +131,7 @@ void	set_env_info(t_minishell_info *info, char **envp)
 	info->cmd_lst = NULL; // リスト初期化
 	info->envp = envp;
 	info->command = NULL;
-
+	info->prev_rc = 0;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:43:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/06 06:51:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,8 +256,8 @@ static bool wait_quo(char first_appear, char **command)
 		return (false);
 	}
 	*command = re_strjoinch(command, first_appear);
-		return (false);
-	// return (true);
+	// return (false);
+	return (true);
 }
 
 
@@ -273,6 +273,8 @@ bool		read_command_line(t_minishell_info *info)
 	int	flag;
 	ssize_t	rc;
 
+	if (info->prev_rc == 2000)
+		return (1);
 	command = ft_strdup("");
 	buf[0] = '\0';
 	buf[1] = '\0';
@@ -299,19 +301,22 @@ bool		read_command_line(t_minishell_info *info)
 				ctrl_d_exit(command, info);
 	}
 	if (buf[1] == '\'' || buf[1] == '\"')
+	{
 		flag = wait_quo(buf[1], &command);
+		info->prev_rc = 2000;
+	}
 	info->command = command;
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	printf("command = [%s]\n", info->command);
-	fflush(stdout);
-	printf("flag = %d\n", flag);
-	fflush(stdout);
-	printf("rc = %ld\n", rc);
-	fflush(stdout);
-	printf("buf[0] = [%c]\n", buf[0]);
-	fflush(stdout);
-	printf("command = [%s]\n", info->command);
-	fflush(stdout);
+	// printf("\ncommand = [%s]\n", info->command);
+	// fflush(stdout);
+	// printf("flag = %d\n", flag);
+	// fflush(stdout);
+	// printf("rc = %ld\n", rc);
+	// fflush(stdout);
+	// printf("buf[0] = [%c]\n", buf[0]);
+	// fflush(stdout);
+	// printf("command = [%s]\n", info->command);
+	// fflush(stdout);
 	return (flag);
 }
