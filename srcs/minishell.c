@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 23:05:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 21:50:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,16 @@ void ft_putenv(char *s)
 
 int		console_loop(t_minishell_info *info, char *envp[])
 {
+	put_prompt(envp);
 	while (1)
 	{
-		put_prompt(envp);
-		info->command = read_command_line();
+		// read_command(info, envp);
+		read_command_line(info);
 		if (info->command[0] == '\0')
+		{
+			write(0, "\033[0K", 4);
 			continue ;
+		}
 		if (parse_command_line(info, envp) != false)
 			execute_command(info);
 		while (info->cmd_lst)
@@ -71,6 +75,7 @@ int		console_loop(t_minishell_info *info, char *envp[])
 			info->cmd_lst = tmp;
 		}
 		ptr_free((void **)&(info->command));
+		put_prompt(envp);
 		// free(info->current_dir_path);
 		// exit(0);
 	}
@@ -100,7 +105,7 @@ int		main(int argc, char *argv[], char *envp[])
 		ft_putendl_fd("Usage : ./minishell", 2);
 		return (1);
 	}
-	put_welcome_message();
+	// put_welcome_message();
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
 	set_env_info(&info, envp); //ここでinfoの中にenv情報入れる

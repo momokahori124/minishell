@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 05:35:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 20:02:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ bool	check_double_semicolon_error(int separator_count, int type, \
 bool	check_single_semicolon_error(int separator_count, int type, \
 			t_minishell_info *info)
 {
+	printf("cnt : {%d}\n", separator_count);
+	printf("type : {%d}\n", type);
 	if (separator_count == 1 || separator_count == 2)
 		return (syntax_error(SEMICOLON, info));
 	else if (separator_count == 3)
@@ -147,14 +149,18 @@ bool	check_single_pipe_error(int separator_count, int type, \
 bool	check_double_input_error(int separator_count, int type, \
 			t_minishell_info *info)
 {
-	if (separator_count == 1 || separator_count == 2)
+	if (separator_count == 0)
+		return (true);
+	else if (separator_count == 1 || separator_count == 2)
 		return (syntax_error(NOT_CMD, info));
 	else if (separator_count == 3)
-		return (syntax_error(OUTPUT, info));
+		return (syntax_error(type, info));
 	else
 	{
 		if (type == OUTPUT)
 			return (syntax_error(DB_OUTPUT, info));
+		if (type == INPUT)
+			return (syntax_error(NOT_CMD, info));
 	}
 	return (true);
 }
@@ -215,7 +221,7 @@ bool	check_same_separator_error(int separator_count, int separator, \
 	return (syntax_error(DB_OUTPUT, info));
 }
 
-bool	inspect_single_output_pattern(char *cmd, int separator_count,
+bool	inspect_output_pattern(char *cmd, int separator_count,
 			bool flag, t_minishell_info *info)
 {
 	if (char_num_in_str(cmd, '|') >= 3)
@@ -225,7 +231,7 @@ bool	inspect_single_output_pattern(char *cmd, int separator_count,
 	else if (*cmd == ';')
 		return (check_single_semicolon_error(separator_count, OUTPUT, info));
 	else if (*cmd == '|' && *(cmd + 1) == '|')
-		return (check_double_pipe_error(separator_count, OUTPUT, flag + *(cmd + 2), info));
+		return (check_double_pipe_error(separator_count, OUTPUT, flag, info));
 	else if (*cmd == '|')
 		return (check_single_pipe_error(separator_count, OUTPUT, flag, info));
 	else if (*cmd == '<' && *(cmd + 1) == '<')
@@ -238,6 +244,25 @@ bool	inspect_single_output_pattern(char *cmd, int separator_count,
 		return (check_separator_count_error(separator_count, OUTPUT, info));
 	else if (*cmd == '>')
 		return (check_same_separator_error(separator_count, '>', cmd, info));
+	else
+		return (true);
+}
+
+bool	inspect_semicolon_pattern(char *cmd, int separator_count,
+			bool flag, t_minishell_info *info)
+{
+	if (separator_count >= 2)
+		return (syntax_error(NOT_CMD, info));
+	else if (*cmd == '\0')
+		return (true);
+	else if (*cmd == '>' && (separator_count = char_num_in_str(cmd, '>')))
+		return (inspect_output_pattern(skip_space(cmd + separator_count), separator_count, flag, info));
+	else if (*cmd == '|' && (separator_count = char_num_in_str(cmd, '|')))
+		return (check_double_pipe_error(1, OUTPUT, separator_count - 1, info));
+	else if (*cmd == '<' && (separator_count = char_num_in_str(cmd, '<')))
+		return (check_double_input_error(separator_count - 1, INPUT, info));
+	else if (*cmd == ';' && (separator_count = char_num_in_str(cmd, ';')))
+		return (check_single_semicolon_error(separator_count + 1, NOT_CMD, info));
 	else
 		return (true);
 }
@@ -257,18 +282,14 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 		space_flag = true;
 	cmd = skip_space(cmd + separator_count);
 	if (separator == '>')
-		return (inspect_single_output_pattern(cmd, separator_count, space_flag, info));
+		return (inspect_output_pattern(cmd, separator_count, space_flag, info));
 	else if (separator == ';')
+		return (inspect_semicolon_pattern(cmd, separator_count, space_flag, info));
+	else if (separator == '|')
 	{
-		if (separator_count >= 2)
-			return (syntax_error(NOT_CMD, info));
-		else if (*cmd == '\0')
-			return (true);
-		else if (*cmd == '>' && (separator_count = char_num_in_str(cmd, '>')))
-			return (inspect_single_output_pattern(skip_space(cmd + separator_count), separator_count, space_flag, info));
-		// else if (*cmd == '|')
-		// 	return (check_double_pipe_error);
+
 	}
+	return (true);
 	return (false);
 }
 

@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2020/12/31 16:08:00 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/05 21:15:37 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,9 +71,6 @@ ISWHAT_SRCS = $(addprefix $(ISWHAT_DIR)/, \
 				ft_isdigit.c \
 				ft_isprint.c \
 				ft_isspace.c \
-				isdouble_quotation.c \
-				issingle_quotation.c \
-				isquotation.c \
 )
 #========== lst function =======================================================
 LST_DIR = $(SRCDIR)/lst_func

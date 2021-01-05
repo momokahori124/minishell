@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 04:52:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 21:43:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	while ((rc = read(0, &buf, 1)) > 0)
 	{
+		// write(0, "\033[0K", 4);
 		if (buf == '\n')
 			ft_putstr_fd("> ", 1);
 		if (buf == first_appear)
@@ -81,18 +82,21 @@ static bool wait_quotation(char first_appear, t_minishell_info *info)
 	}
 	if (rc == 0)
 	{
-		ft_putstr_fd("minishell: unexpected EOF while looking for matching ``", 1);
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 1);
 		ft_putchar_fd(first_appear, 1);
+		ft_putstr_fd("`", 1);
 		ft_putstr_fd("\nminishell: syntax error: unexpected end of file", 1);
+		return (true);
 	}
+	info->prev_rc = put_cmd_not_found(info->command);
 	return (true);
 }
 
 static void	removing(t_minishell_info *info, char first_appear)
 {
 	char		*new;
-	unsigned int	i;
-	unsigned int	j;
+	size_t		i;
+	size_t		j;
 
 	if (!(new = malloc(sizeof(char) * (ft_strlen(info->command)))))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -112,6 +116,8 @@ static void	removing(t_minishell_info *info, char first_appear)
 	info->command = new;
 }
 
+// void	rm_chrs_in_str(char **str, char chr1)
+
 static bool	check_quotation(char *command, t_minishell_info *info)
 {
 	unsigned int	single_quo;
@@ -125,19 +131,21 @@ static bool	check_quotation(char *command, t_minishell_info *info)
 	rc = true;
 	while (*command)
 	{
-		if (first_appear == '\0' && isquotation(*command))
+		if (first_appear == '\0' && (*command == '\'' || *command == '\"'))
 			first_appear = *command;
-		if (issingle_quotation(*command))
+		if (*command == '\'')
 			single_quo++;
-		if (isdouble_quotation(*command))
+		if (*command == '\"')
 			double_quo++;
 		command++;
 	}
-	if ((single_quo & 1) == 1 || (double_quo & 1) == 1)
+	if ((single_quo & 1) == 1 && (double_quo & 1) == 1)
 	{
 		rc = wait_quotation(first_appear, info);
 		removing(info, first_appear);
+		return (rc);
 	}
+
 	return (rc);
 }
 

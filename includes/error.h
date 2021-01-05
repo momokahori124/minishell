@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 22:31:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 20:21:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_exit(char *ptr, int state);
 void	all_free_perror_exit(t_minishell_info *info, char *error_message, \
 				int line_num, char *file_name);
 
-void	ctrl_d_exit(char *ptr);
+void	ctrl_d_exit(char *ptr, t_minishell_info *info);
 bool	syntax_error(int type, t_minishell_info *info);
 bool	syntax_warning(int type);
 bool	warning_message(char *error_message, t_minishell_info *info);

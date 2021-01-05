@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/31 16:22:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 20:17:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "struct_etc.h"
 # include "minishell.h"
 
-char	*read_command_line(void);
+char	*read_command_line(t_minishell_info *info);
 bool	parse_command_line(t_minishell_info *info, char *envp[]);
 
 bool	add_cmd_to_lst(t_minishell_info *info, char **command, int type);

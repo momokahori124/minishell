@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 19:10:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/05 21:43:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	int		i;
 
 	rc = rm_quotation(info);
+	if (rc == false)
+		return (false);
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
 	if (rc == true)
@@ -193,7 +195,7 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 ** (write(0, "\033[0K", 4);はCtrl + Dを押した時に^Dみたいなのが出るのを防いでいる)
 */
 
-char		*read_command_line(void)
+char		*read_command_line(t_minishell_info *info)
 {
 	char	*command;
 	char	buf;
@@ -203,15 +205,15 @@ char		*read_command_line(void)
 	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
 	{
 		write(0, "\033[0K", 4);
+		write(STDOUT_FILENO, "  \b\b", 4);
 		if (rc != 0)
 			command = re_strjoinch(&command, buf);
 		else
-		{
 			if (command[0] == '\0' && buf != '\n')
-				ctrl_d_exit(command);
-		}
+				ctrl_d_exit(command, info);
 	}
+	info->command = command;
 	if (rc == -1)
-		free_perror_exit(command, ERR_READ, __LINE__, __FILE__);
+		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
 	return (command);
 }
