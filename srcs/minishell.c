@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/07 01:50:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/07 03:02:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,47 +55,28 @@ void ft_putenv(char *s)
 
 int		console_loop(t_minishell_info *info, char *envp[])
 {
-	put_prompt(envp);
+	// put_prompt(envp);
 	while (1)
 	{
-	// 	printf("command = [%s]\n", info->command);
-	// fflush(stdout);
 		read_command_line(info);
-	// 		printf("i = [%d]\n", i);
-	// fflush(stdout);
-	// printf("prev_rc = %d\n", info->prev_rc);
-	// fflush(stdout);
-
-		if (info->prev_rc != 2000 && info->command[0] == '\0')
+		// ptr_free((void **)&(info->command));
+		// free(info->command);
+		// info->command = NULL;
+		// continue ;
+		if (info->command[0] == '\0')
 		{
 			ptr_free((void **)&(info->command));
 			// printf("[%s]\n", info->command);
 			// fflush(stdout);
 			write(1, "\033[0K", 4);
-			put_prompt(envp);
+			// put_prompt(envp);
 			// printf("innnnnnnnnnn\n");
 			// fflush(stdout);
 			continue ;
 		}
-		else if (info->prev_rc == 2000)
-		{
-			info->prev_rc = 0;
-			continue ;
-		}
-		// else if (info->command[0] == '\n')
-		// {
-		// 	ptr_free((void **)&(info->command));
-		// 	// printf("[%s]\n", info->command);
-		// 	// fflush(stdout);
-		// 	write(1, "\033[0K", 4);
-		// 	// put_prompt(envp);
-		// 	// printf("innnnnnnnnnn\n");
-		// 	// fflush(stdout);
-		// 	// continue ;
-		// }
 		else
 		{
-			// puts("======");
+			puts("======");
 			bool ppp;
 			if ((ppp = parse_command_line(info, envp)) != false)
 				execute_command(info);
@@ -114,7 +95,7 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		}
 		// free(info->current_dir_path);
 		// exit(0);
-		put_prompt(envp);
+		// put_prompt(envp);
 	}
 	return (1);
 }

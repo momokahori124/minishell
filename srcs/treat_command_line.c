@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/07 01:49:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/07 03:26:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,30 +223,43 @@ void	rm_chr_in_str(char **str, char chr)
 static bool wait_quo(char first_appear, char **command)
 {
 	int		rc;
-	char	buf;
+	char	buf = '\0';
+	int		quotation_num = 0;
+	(void)quotation_num;
 
 	write(1, "> ", 2);
 	*command = re_strjoinch(command, '\n');
 	if (*command == NULL)
 		// all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 		return (false);
-	while ((rc = read(0, &buf, 1)) > 0 && buf != first_appear)
+	while (buf != first_appear && (rc = read(0, &buf, 1)) > 0)
+	// while ((rc = read(0, &buf, 1)) > 0 && !(quotation_num != 0 && quotation_num % 2 == 0))
 	{
 		// if (rc == 1 && buf == '\n')
 		// 	continue ;
 		// printf("->%d\n", rc);
 		// fflush(stdout);
+		// puts("+");
 		write(0, "\033[0K", 4);
-		if (rc != 0 && buf == '\n')
+		// if (rc != 0 && buf == '\n')
+		if (buf == '\n')
 			write(1, "> ", 2);
-		// if (buf == first_appear)
-		// 	break ;
-		else
-			*command = re_strjoinch(command, buf);
+		if (buf == first_appear)
+			quotation_num++;
+		// if (quotation_num == 1)
+		// 	exit(9);
+		*command = re_strjoinch(command, buf);
 		if (*command == NULL)
 			// all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 			return (false);
 	}
+	char a = 'a';
+	// // if (quotation_num % 2 == 0 && quotation_num != 0)
+	// // 	if (a == '\n')
+	while (a != '\n')
+		read(0, &a, 1);
+	printf("[%d]\n", quotation_num);
+	// rc = read(0, &buf, 1);
 	if (rc == 0)
 	{
 		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 0);
@@ -255,8 +268,8 @@ static bool wait_quo(char first_appear, char **command)
 		ft_putstr_fd("\nminishell: syntax error: unexpected end of file\n", 1);
 		return (false);
 	}
-	*command = re_strjoinch(command, first_appear);
-	// return (false);
+	// *command = re_strjoinch(command, first_appear);
+	printf("[%s]\n", *command);
 	return (true);
 }
 
@@ -273,18 +286,15 @@ bool		read_command_line(t_minishell_info *info)
 	int	flag;
 	ssize_t	rc;
 
-	if (info->prev_rc == 2000)
-		return (1);
+	put_prompt(info->envp);
 	command = ft_strdup("");
+	// printf("{%p}\n", info->command);
 	buf[0] = '\0';
 	buf[1] = '\0';
 	flag = true;
-	// printf("command = [%s]\n", info->command);
-	// fflush(stdout);
 	while ((rc = read(0, &(buf[0]), 1)) >= 0 && buf[0] != '\n')
 	{
 		write(0, "\033[0K", 4);
-		// write(STDOUT_FILENO, "  \b\b", 4);
 		if (buf[1] == buf[0] && buf[0] != '\0')
 		{
 			rm_chr_in_str(&command, buf[1]);
@@ -303,9 +313,10 @@ bool		read_command_line(t_minishell_info *info)
 	if (buf[1] == '\'' || buf[1] == '\"')
 	{
 		flag = wait_quo(buf[1], &command);
-		info->prev_rc = 2000;
+		// printf("{%s}\n", command);
 	}
 	info->command = command;
+	printf("+%p+\n", info->command);
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
 	// printf("\ncommand = [%s]\n", info->command);
