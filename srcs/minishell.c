@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:51:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/07 01:50:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		read_command_line(info);
 	// 		printf("i = [%d]\n", i);
 	// fflush(stdout);
-	printf("prev_rc = %d\n", info->prev_rc);
-	fflush(stdout);
+	// printf("prev_rc = %d\n", info->prev_rc);
+	// fflush(stdout);
 
 		if (info->prev_rc != 2000 && info->command[0] == '\0')
 		{
