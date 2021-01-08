@@ -33,6 +33,16 @@ echo "a" |>>> pwd
 bash: syntax error near unexpected token `>'
 echo "a" |>>>> pwd
 bash: syntax error near unexpected token `>>'
+pwd |  >>
+bash: syntax error near unexpected token `newline'
+pwd |  >
+bash: syntax error near unexpected token `newline'
+pwd |  ;
+bash: syntax error near unexpected token `;'
+pwd |  ;;
+bash: syntax error near unexpected token `;;'
+pwd |  <
+bash: syntax error near unexpected token `newline'
 <!-- ------- -->
 
 <!-- semicolon -->
@@ -57,3 +67,22 @@ bash: syntax error near unexpected token `<'
 echo "a" |<<<<< pwd
 bash: syntax error near unexpected token `<<'
 <!-- ------- -->
+
+
+
+bash-3.2$ pwd | |
+bash: syntax error near unexpected token `|'
+bash-3.2$ pwd | >>
+bash: syntax error near unexpected token `newline'
+bash-3.2$ pwd | >
+bash: syntax error near unexpected token `newline'
+bash-3.2$ pwd | <<
+bash: syntax error near unexpected token `newline'
+bash-3.2$ pwd | <
+bash: syntax error near unexpected token `newline'
+bash-3.2$ pwd | ;
+bash: syntax error near unexpected token `;'
+bash-3.2$ pwd | ;;
+bash: syntax error near unexpected token `;;'
+bash-3.2$ pwd | ||
+bash: syntax error near unexpected token `||'

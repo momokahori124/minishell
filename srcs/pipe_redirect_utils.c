@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 04:06:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/09 02:35:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,15 +226,56 @@ bool	inspect_semicolon_pattern(char *cmd, int separator_count,
 ** もしかしたらもっとわかりやすいやり方あるかも
 */
 
-static bool	error_or_recursive(char buf, char *tmp, int cnt, \
-		t_minishell_info *info)
+// bool	error_or_recursive(char buf, char **inputs, t_minishell_info *info)
+// {
+// 	bool	res;
+
+// 	res = true;
+// 	if (buf == '|')
+// 		res = syntax_error(PIPE, info);
+// 	else if (buf == '>')
+// 	return (true);
+// }
+
+bool		wait_more_next_cmd(char **inputs, t_minishell_info *info)
 {
-	if (buf == '|')
+	size_t	i;
+
+	i = 0;
+	while ((*inputs)[i])
 	{
-		if (tmp[0] == buf && cnt == 0)
-			return (false);
-		wait_next_cmd(info, 1);
+		if ((*inputs)[i] == '|')
+		{
+			while ((*inputs)[i] && (*inputs)[i] == ' ')
+				i++;
+			if ((*inputs)[i] == '\0')
+			{
+				return (syntax_error(PIPE, info));
+			}
+			if ((*inputs)[i] == '|')
+			{
+				return (syntax_error(NOT_CMD, info));
+			}
+			if ((*inputs)[i] == ';' && (*inputs)[i + 1] == ';')
+			{
+				return (syntax_error(NOT_CMD, info));
+			}
+			if ((*inputs)[i] == ';')
+			{
+				return (syntax_error(SEMICOLON, info));
+			}
+			if ((*inputs)[i] == '<' || (*inputs)[i] == '>')
+			{
+				while ((*inputs)[i] && (*inputs)[i] == ' ')
+					i++;
+				if ((*inputs)[i] == '\0')
+					return (syntax_error(NEWLINE, info));
+			}
+		}
+		i++;
 	}
+	*inputs = re_strdup(inputs, "");
+	info->command = re_strjoin(&(info->command), inputs);
 	return (true);
 }
 
@@ -243,12 +284,16 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 	ssize_t		rc;
 	char		buf;
 	char		*inputs;
+	// int			count = 0;
 
+	(void)cnt;
+	// bool aaaa = false;
 	write(1, "> ", 2);
 	if (!(inputs = ft_strdup("")))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
 	{
+		printf("[%c]\n", buf);
 		if (write(0, "\033[0K", 4) < 0)
 		{
 			ptr_free((void **)&inputs);
@@ -256,23 +301,43 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 		}
 		if (rc != 0)
 		{
-			inputs = re_strjoinch(&inputs, buf);
-			error_or_recursive(buf, inputs, cnt, info);
-				// return (false);
+			// if (buf == '|' && aaaa == false)
+			// {
+			// 	// info->command = re_strjoin(&(info->command), inputs);
+			// 	// printf("commnad = [%s]\n", info->command);
+			// 	return (syntax_error(PIPE, info));
+			// }
+			// if (buf == '|' && aaaa == true)
+			// {
+			// 	// info->command = re_strjoin(&(info->command), inputs);
+			// 	// printf("commnad = [%s]\n", info->command);
+			// 	count++;
+			// 	// return (syntax_error(PIPE, info));
+			// }
+			if (buf != ' ' && buf != '\n')
+			{
+				inputs = re_strjoinch(&inputs, buf);
+			}
+			// // error_or_recursive(buf, inputs, cnt, info);
+			// 	// return (false);
+			// inputs = re_strjoinch(&inputs, buf);
 		}
-		else if (rc == 0 && buf == '\0')
+		if (rc == 0 && buf == '\0')
 			return (syntax_error(SYNTAX_EOL_NUM, info));
 		if (buf == '\n')
 		{
-			puts("in");
+			wait_more_next_cmd(&inputs, info);
+			printf("inputs = [%s]\n", inputs);
 			write(1, "> ", 2);
+			// break ;
 		}
 	}
 	info->command = re_strjoin(&(info->command), inputs);
+	printf("commnad = [%s]\n", info->command);
 	ptr_free((void **)&inputs);
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	return (false);
+	return (true);
 }
 
 static bool	check_pipe_num(int count, t_minishell_info *info)
@@ -329,7 +394,10 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 				command[i] == '|')
 			if ((return_value = check_next_chrs(command + i, info, command[i])) \
 					== false)
+			{
+				ptr_free((void **)&command);
 				return (false);
+			}
 	}
 	return (return_value);
 }
@@ -337,9 +405,11 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 bool		wait_pipe_or_redirect_next_cmd(t_minishell_info *info)
 {
 	bool	rc;
+	char	*command;
 
 	rc = true;
-	rc = check_pipe_or_redirect(info->command, info);
+	command = ft_strdup(info->command);
+	rc = check_pipe_or_redirect(command, info);
 	// (void)rc;
 	// free(info->command);
 	// free(info->current_dir_path);
