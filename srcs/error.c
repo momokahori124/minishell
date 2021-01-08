@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 20:21:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 01:30:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 ** freeしてexitする関数
 */
 
-void		free_exit(char *ptr, int state)
+void		free_exit(char **ptr, int state)
 {
-	free(ptr);
+	ptr_free((void **)ptr);
 	exit(state);
 }
 
@@ -81,7 +81,7 @@ void		free_exit(char *ptr, int state)
 ** Ctrl +Dが押された時にfree_exitを使って抜ける関数
 */
 
-void		ctrl_d_exit(char *ptr, t_minishell_info *info)
+void		ctrl_d_exit(char **ptr, t_minishell_info *info)
 {
 	ft_putstr_fd("\033[0Kexit\n", 2);
 	free(info->command);

@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/06 06:07:53 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/08 01:01:03 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRCFILE =	minishell.c \
 			pipe_redirect_utils.c \
 			is_what.c \
 			is_what2.c \
+			wait_quotation.c \
+			read_command_line.c \
 
 SRCDIR = srcs/
 

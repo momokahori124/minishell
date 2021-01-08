@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 05:13:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 00:50:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,20 @@ static char		*get_working_dir(char *pwd)
 	return (ret);
 }
 
-void		put_prompt(char *envp[])
+void		put_prompt(char *envp[], t_minishell_info *info)
 {
 	char *s;
 
 	s = envp[search_env(envp, "USER")];
-	ft_putenv(s);
-	// ft_putstr_fd("\033[1m\x1b[35m ❤️ \x1b[0m", 1);
-	write(1, "\033[1m\x1b[35m ❤️ \x1b[0m", 21);
+	ft_putenv(s, info);
+	if (write(1, "\033[1m\x1b[35m ❤️ \x1b[0m", 21) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	s = get_working_dir(envp[search_env(envp, "PWD")]);
-	ft_putstr_fd(s, 1);
+	if (ft_putstr_fd(s, 1) == false)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	free(s);
-	// ft_putstr_fd("\033[1m\x1b[35m ❤️ > \x1b[0m", 1);
-	write(1, "\033[1m\x1b[35m ❤️ > \x1b[0m", 23);
+	if (write(1, "\033[1m\x1b[35m ❤️ > \x1b[0m", 23) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
 void	put_welcome_message(void)

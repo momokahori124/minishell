@@ -49,58 +49,142 @@ static int	count_quotation(char *tmp, char quo)
 	exit(puts("ここ"));
 }
 
-static bool wait_quo(char first_appear, char **command)
+void	rm_chr_in_str(char **str, char chr)
 {
-	int		rc;
-	char	buf = '\0';
-	char	*tmp;
+	size_t	i;
+	size_t	j;
 
-	write(1, "> ", 2);
-	// *command = re_strjoinch(command, '\n');
-	tmp = ft_strdup("\n");
-	while ((rc = read(0, &buf, 1)) > 0)
-	// while ((rc = read(0, &buf, 1)) > 0 && !(quotation_num != 0 && quotation_num % 2 == 0))
+	i = 0;
+	j = 0;
+	while ((*str)[i])
 	{
-		write(0, "\033[0K", 4);
-		// if (buf == '\n')
-			write(1, "> ", 2);
-		// if (rc != 0 && buf == '\n')
-		tmp = re_strjoinch(&tmp, buf);
-		// *command = re_strjoinch(command, buf);
-		int k;
-		if ((k = count_quotation(tmp, first_appear)) == true)
+		if ((*str)[i] != chr)
 		{
-			printf("k = %s\n", k == 1 ? "true" : "false");
-			printf("tmp = %s\n", tmp);
-			exit(puts("exit"));
+			(*str)[j] = (*str)[i];
+			j++;
+		}
+		i++;
+	}
+	(*str)[j] = '\0';
+}
+
+static bool	press_eof_while_looking(char match, char **inputs, t_minishell_info *info)
+{
+	ptr_free((void **)inputs);
+	if (write(1, "minishell: unexpected EOF while looking for matching `", 54) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (write(1, &match, 1) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (write(1, "`\nminishell: syntax error: unexpected end of file\n", 50)
+				< 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	return (false);
+}
+
+static bool	do_when_input_char_equal_newline(int *first_quo_cnt, int *other_quo_cnt, \
+		char **inputs, char first_appear)
+{
+	if ((*first_quo_cnt & 1) == 1)
+	{
+		if ((*other_quo_cnt & 1) == 0)
+		{
+			*first_quo_cnt = 0;
+			*other_quo_cnt = 0;
+			return (true);
 		}
 	}
-	// char a = 'a';
-	// // // if (quotation_num % 2 == 0 && quotation_num != 0)
-	// // // 	if (a == '\n')
-	// while (a != '\n')
-	// 	read(0, &a, 1);
-	// rc = read(0, &buf, 1);
-	if (rc == 0)
+	else
 	{
-		ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 0);
-		ft_putchar_fd(first_appear, 1);
-		ft_putstr_fd("`", 1);
-		ft_putstr_fd("\nminishell: syntax error: unexpected end of file\n", 1);
-	printf("command = [%s]\n", *command);
-	printf("[%s]\n",tmp);
-		return (false);
+		rm_chr_in_str(inputs, first_appear);
+		*first_quo_cnt = 0;
+		*other_quo_cnt = 0;
 	}
-	// *command = re_strjoinch(command, first_appear);
-	printf("command = [%s]\n", *command);
-	printf("[%s]\n", tmp);
+	write(1, "> ", 2);
+	return (false);
+}
+
+static char	*prepare_in_advance(int *num1, int *num2, t_minishell_info *info)
+{
+	char	*res;
+
+	if (write(1, "> ", 2) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (!(res = ft_strdup("\n")))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	*num1 = 0;
+	*num2 = 0;
+	return (res);
+}
+
+static bool	check_buf_and_return_value(ssize_t rc, char buf, int count[2], char first_appear)
+{
+	char	other_quo;
+
+	if (first_appear == '\'')
+		other_quo = '\"';
+	else if (first_appear == '\"')
+		other_quo = '\'';
+	if (rc == 0 && buf == '\0')
+		return (true);
+	else if (rc != 0 && buf == first_appear)
+		count[0]++;
+	else if (rc != 0 && buf == other_quo)
+		count[1]++;
+	return (false);
+}
+
+
+bool wait_quotation(char first_appear, char **command, t_minishell_info *info)
+{
+	ssize_t		rc;
+	char		buf;
+	char		*inputs;
+	int			count[2];
+
+	inputs = prepare_in_advance(&count[0], &count[1], info);
+	while ((rc = read(0, &buf, 1)) >= 0)
+	{
+		if (write(0, "\033[0K", 4) < 0)
+		{
+			ptr_free((void **)&inputs);
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		}
+		if (check_buf_and_return_value(rc, buf, count, first_appear) == true)
+				return (press_eof_while_looking(first_appear, &inputs, info));
+		if (buf == '\n')
+			if (do_when_input_char_equal_newline(&count[0], &count[1],
+						&inputs, first_appear) == true)
+				break;
+		if (!(inputs = re_strjoinch(&inputs, buf)))
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	*command = re_strjoin(command, inputs);
+	ptr_free((void **)&inputs);
 	return (true);
+}
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks a.out");
+// }
+
+
+void ff()
+{
+	return ;
+}
+void f()
+{
+	return ff();
 }
 
 int main()
 {
-	char *s = strdup("abc");
-	wait_quo('\'', &s);
+	t_minishell_info *info;
+	char *s = strdup("\'");
+	bool a = wait_quotation('\'', &s, info);
+	free(s);
+	printf("bool = %s\n", a == true ? "true" : "false");
 }
 
 // #define NUM_DATA 7

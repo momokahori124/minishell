@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 20:02:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 04:06:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,52 +20,6 @@ size_t		char_num_in_str(char *s, char c)
 	while (s[i] && s[i] == c)
 		i++;
 	return (i);
-}
-
-/*
-** "pwd|"の後に"|"を打つとエラーで"aaa|"を打つと続行なのでこんな再帰を使ってる
-** もしかしたらもっとわかりやすいやり方あるかも
-*/
-
-static bool	error_or_recursive(char buf, char *tmp, int cnt, \
-		t_minishell_info *info)
-{
-	if (buf == '|')
-	{
-		if (tmp[0] == buf && cnt == 0)
-			return (syntax_error(PIPE, info));
-		wait_next_cmd(info, 1);
-	}
-	return (true);
-}
-
-bool		wait_next_cmd(t_minishell_info *info, int cnt)
-{
-	int		rc;
-	char	buf;
-	char	*command_tmp;
-
-	ft_putstr_fd("> ", 1);
-	command_tmp = ft_strdup("");
-	while ((rc = read(0, &buf, 1)) >= 0 && buf != '\n')
-	{
-		if (buf == '\n')
-			ft_putstr_fd("> ", 1);
-		write(0, "\033[0K", 4);
-		if (rc != 0)
-		{
-			command_tmp = re_strjoinch(&command_tmp, ft_tolower(buf));
-			if (error_or_recursive(buf, command_tmp, cnt, info) == false)
-				return (false);
-		}
-		else if (command_tmp[0] == '\0' && buf != '\n')
-			return (syntax_error(SYNTAX_EOL_NUM, info));
-	}
-	info->command = re_strjoin(&(info->command), command_tmp);
-	ptr_free((void **)&command_tmp);
-	if (rc == -1)
-		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	return (true);
 }
 
 bool	check_double_semicolon_error(int separator_count, int type, \
@@ -267,6 +221,68 @@ bool	inspect_semicolon_pattern(char *cmd, int separator_count,
 		return (true);
 }
 
+/*
+** "pwd|"の後に"|"を打つとエラーで"aaa|"を打つと続行なのでこんな再帰を使ってる
+** もしかしたらもっとわかりやすいやり方あるかも
+*/
+
+static bool	error_or_recursive(char buf, char *tmp, int cnt, \
+		t_minishell_info *info)
+{
+	if (buf == '|')
+	{
+		if (tmp[0] == buf && cnt == 0)
+			return (false);
+		wait_next_cmd(info, 1);
+	}
+	return (true);
+}
+
+bool		wait_next_cmd(t_minishell_info *info, int cnt)
+{
+	ssize_t		rc;
+	char		buf;
+	char		*inputs;
+
+	write(1, "> ", 2);
+	if (!(inputs = ft_strdup("")))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
+	{
+		if (write(0, "\033[0K", 4) < 0)
+		{
+			ptr_free((void **)&inputs);
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		}
+		if (rc != 0)
+		{
+			inputs = re_strjoinch(&inputs, buf);
+			error_or_recursive(buf, inputs, cnt, info);
+				// return (false);
+		}
+		else if (rc == 0 && buf == '\0')
+			return (syntax_error(SYNTAX_EOL_NUM, info));
+		if (buf == '\n')
+		{
+			puts("in");
+			write(1, "> ", 2);
+		}
+	}
+	info->command = re_strjoin(&(info->command), inputs);
+	ptr_free((void **)&inputs);
+	if (rc == -1)
+		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
+	return (false);
+}
+
+static bool	check_pipe_num(int count, t_minishell_info *info)
+{
+	puts("++++");
+	if (count == 1)
+		return (wait_next_cmd(info, 0));
+	return (false);
+}
+
 static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
 	int		separator_count;
@@ -274,8 +290,6 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 
 	separator_count = char_num_in_str(cmd, separator);
 	space_flag = false;
-	// while (cmd[separator_count] && cmd[separator_count] == separator)
-	// 	separator_count++;
 	printf("separator_count = %d\n", separator_count);
 	printf("chr = %c\n", separator);
 	if (cmd[separator_count] == ' ')
@@ -287,7 +301,16 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 		return (inspect_semicolon_pattern(cmd, separator_count, space_flag, info));
 	else if (separator == '|')
 	{
-
+		if (separator_count == 2)
+			return (syntax_error(NOT_CMD, info));
+		else if (separator_count == 3)
+			return (syntax_error(PIPE, info));
+		else if (separator_count == 4)
+			return (syntax_error(NOT_CMD, info));
+		else if (*cmd == '\0')
+			return (check_pipe_num(separator_count, info));
+		else
+			return (true);
 	}
 	return (true);
 	return (false);
@@ -307,15 +330,6 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 			if ((return_value = check_next_chrs(command + i, info, command[i])) \
 					== false)
 				return (false);
-		// if (is_rc == SEMICOLON || is_rc == PIPE || is_rc == INPUT ||
-		// 		is_rc == OUTPUT)
-		// 	plus_index = 1;
-		// else if (is_rc == DB_OUTPUT)
-		// 	plus_index = 2;
-		// tmp = command + i + plus_index;
-		// if ((return_value = check_next_cmd(tmp, info, is_rc)) == false)
-		// 	return (false);
-		// command = info->command + i + plus_index;
 	}
 	return (return_value);
 }

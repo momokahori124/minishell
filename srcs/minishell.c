@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/07 03:02:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 03:59:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ int			search_env(char *envp[], char *env_name)
 	exit(0);
 }
 
-void ft_putenv(char *s)
+void ft_putenv(char *s, t_minishell_info *info)
 {
 	while (*s++ != '=')
 		;
-	ft_putstr_fd(s, 1);
+	if (ft_putstr_fd(s, 1) == false)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
 /*
@@ -55,31 +56,17 @@ void ft_putenv(char *s)
 
 int		console_loop(t_minishell_info *info, char *envp[])
 {
-	// put_prompt(envp);
+	put_prompt(envp, info);
 	while (1)
 	{
-		read_command_line(info);
-		// ptr_free((void **)&(info->command));
-		// free(info->command);
-		// info->command = NULL;
-		// continue ;
-		if (info->command[0] == '\0')
-		{
-			ptr_free((void **)&(info->command));
-			// printf("[%s]\n", info->command);
-			// fflush(stdout);
-			write(1, "\033[0K", 4);
-			// put_prompt(envp);
-			// printf("innnnnnnnnnn\n");
-			// fflush(stdout);
-			continue ;
-		}
+		if (read_command_line(info) == false)
+			write(1, "\033[0K", 4); //これいらないかも、なんで書いたのか忘れた
 		else
 		{
-			puts("======");
-			bool ppp;
-			if ((ppp = parse_command_line(info, envp)) != false)
-				execute_command(info);
+			// if (parse_command_line(info, envp) == false)
+			// 	continue ; //pwd | で次|を押してプロンプトが二つ出るのを防いでる
+			parse_command_line(info, envp);
+			execute_command(info);
 			while (info->cmd_lst)
 			{
 				t_cmdlst *tmp;
@@ -90,12 +77,10 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		// 	printf("command = [%s]\n", info->command);
 		// fflush(stdout);
 			ptr_free((void **)&(info->command));
-			if (ppp == false)
-				continue ;
 		}
 		// free(info->current_dir_path);
 		// exit(0);
-		// put_prompt(envp);
+		put_prompt(envp, info);
 	}
 	return (1);
 }

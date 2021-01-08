@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/07 03:26:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 03:56:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,9 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	// 	return (false);
 	if (rc == true)
 		rc = wait_pipe_or_redirect_next_cmd(info);
-	if (rc == true)
-		cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
 	if (rc == false)
 		return (false);
+	cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
 	// if (rc == false)
 	// 	all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__); // ERR_EXECVEかえる
 	i = 0;
@@ -194,24 +193,24 @@ bool		parse_command_line(t_minishell_info *info, char *envp[])
 	return (true);
 }
 
-void	rm_chr_in_str(char **str, char chr)
-{
-	size_t	i;
-	size_t	j;
+// void	rm_chr_in_str(char **str, char chr)
+// {
+// 	size_t	i;
+// 	size_t	j;
 
-	i = 0;
-	j = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] != chr)
-		{
-			(*str)[j] = (*str)[i];
-			j++;
-		}
-		i++;
-	}
-	(*str)[j] = '\0';
-}
+// 	i = 0;
+// 	j = 0;
+// 	while ((*str)[i])
+// 	{
+// 		if ((*str)[i] != chr)
+// 		{
+// 			(*str)[j] = (*str)[i];
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	(*str)[j] = '\0';
+// }
 
 // void	remove_quotation(char quo, char **command)
 // {
@@ -220,7 +219,7 @@ void	rm_chr_in_str(char **str, char chr)
 
 
 
-static bool wait_quo(char first_appear, char **command)
+bool wait_quo(char first_appear, char **command)
 {
 	int		rc;
 	char	buf = '\0';
@@ -279,55 +278,37 @@ static bool wait_quo(char first_appear, char **command)
 ** (write(0, "\033[0K", 4);はCtrl + Dを押した時に^Dみたいなのが出るのを防いでいる)
 */
 
-bool		read_command_line(t_minishell_info *info)
-{
-	char	*command;
-	char	buf[2];
-	int	flag;
-	ssize_t	rc;
+// bool		read_command_line(t_minishell_info *info)
+// {
+// 	char	*command;
+// 	char	buf[2];
+// 	ssize_t	rc;
 
-	put_prompt(info->envp);
-	command = ft_strdup("");
-	// printf("{%p}\n", info->command);
-	buf[0] = '\0';
-	buf[1] = '\0';
-	flag = true;
-	while ((rc = read(0, &(buf[0]), 1)) >= 0 && buf[0] != '\n')
-	{
-		write(0, "\033[0K", 4);
-		if (buf[1] == buf[0] && buf[0] != '\0')
-		{
-			rm_chr_in_str(&command, buf[1]);
-			buf[1] = '\0';
-			continue ;
-		}
-		else if (buf[0] == '\'' || buf[0] == '\"')
-			buf[1] = buf[0];
-		if (rc != 0)
-			command = re_strjoinch(&command, buf[0]);
-		else
-			// if (command[0] == '\0' && buf[0] != '\n')
-			if (buf[0] == '\0')
-				ctrl_d_exit(command, info);
-	}
-	if (buf[1] == '\'' || buf[1] == '\"')
-	{
-		flag = wait_quo(buf[1], &command);
-		// printf("{%s}\n", command);
-	}
-	info->command = command;
-	printf("+%p+\n", info->command);
-	if (rc == -1)
-		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	// printf("\ncommand = [%s]\n", info->command);
-	// fflush(stdout);
-	// printf("flag = %d\n", flag);
-	// fflush(stdout);
-	// printf("rc = %ld\n", rc);
-	// fflush(stdout);
-	// printf("buf[0] = [%c]\n", buf[0]);
-	// fflush(stdout);
-	// printf("command = [%s]\n", info->command);
-	// fflush(stdout);
-	return (flag);
-}
+// 	put_prompt(info->envp, info);
+// 	if (!(command = ft_strdup("")))
+// 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+// 	buf[0] = '\0';
+// 	buf[1] = '\0';
+// 	while ((rc = safe_read(&(buf[0]), &command, info)) >= 0 && buf[0] != '\n')
+// 	{
+// 		write(0, "\033[0K", 4);
+// 		if (buf[1] == buf[0] && buf[0] != '\0')
+// 		{
+// 			rm_chr_in_str(&command, buf[1]);
+// 			buf[1] = '\0';
+// 			continue ;
+// 		}
+// 		else if (buf[0] == '\'' || buf[0] == '\"')
+// 			buf[1] = buf[0];
+// 		if (rc != 0)
+// 			command = re_strjoinch(&command, buf[0]);
+// 		else
+// 			if (buf[0] == '\0')
+// 				ctrl_d_exit(command, info);
+// 	}
+// 	if (buf[1] == '\'' || buf[1] == '\"')
+// 		return (wait_quotation(buf[1], &command, info));
+// 	info->command = command;
+// 	printf("+%p+\n", info->command);
+// 	return (true);
+// }

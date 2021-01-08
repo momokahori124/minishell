@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:55:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/03 18:37:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 00:50:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "minishell.h"
 # define CMD_NOT_FOUND 127
 
-void		put_prompt(char *envp[]);
+void		put_prompt(char *envp[], t_minishell_info *info);
 void		put_welcome_message(void);
 void		put_help_message(void);
 // int			put_cmd_not_found(char **line);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/05 20:21:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/08 01:30:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "minishell.h"
 # include "struct_etc.h"
 # define ERR_READ "Failed to \033[4mread\033[0m at the above location. "
+# define ERR_WRITE "Failed to \033[4mwrite\033[0m at the above location. "
 # define ERR_MALLOC "Failed to \033[4mmalloc\033[0m at the above location. "
 # define ERR_EXECVE "Failed to \033[4mexecve\033[0m at the above location. "
 # define ERR_FORK "Failed to \033[4mfork\033[0m at the above location. "
@@ -44,11 +45,11 @@
 void	perror_exit(char *error_message, int line_num, char *file_name);
 void	free_perror_exit(char *ptr, char *error_message, int line_num, \
 				char *file_name);
-void	free_exit(char *ptr, int state);
+void	free_exit(char **ptr, int state);
 void	all_free_perror_exit(t_minishell_info *info, char *error_message, \
 				int line_num, char *file_name);
 
-void	ctrl_d_exit(char *ptr, t_minishell_info *info);
+void	ctrl_d_exit(char **ptr, t_minishell_info *info);
 bool	syntax_error(int type, t_minishell_info *info);
 bool	syntax_warning(int type);
 bool	warning_message(char *error_message, t_minishell_info *info);
