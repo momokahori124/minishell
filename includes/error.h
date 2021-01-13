@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/13 21:54:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 03:19:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@
 # define SYNTAX_NL "minishell: syntax error near unexpected token `newline\'\n"
 
 # define ERR_MANDATORY "That command is not supported by mandatory.\n"
+# define ERR_DB_SEMICOLON "minishell: `;;\' is not supported by mandatory.\n"
+# define ERR_DB_PIPE "minishell: `||\' is not supported by mandatory.\n"
+# define ERR_OUTPUT_PIPE "minishell: `>|\' is not supported by mandatory.\n"
+# define ERR_DB_INPUT "minishell: `<<\' is not supported by mandatory.\n"
+# define ERR_TR_INPUT "minishell: `<<<\' is not supported by mandatory.\n"
 
 
 void	perror_exit(char *error_message, int line_num, char *file_name);
@@ -51,7 +56,8 @@ void	all_free_perror_exit(t_minishell_info *info, char *error_message, \
 
 void	ctrl_d_exit(char **ptr, t_minishell_info *info);
 bool	syntax_error(int type, t_minishell_info *info);
-bool	free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info);
+bool	two_ptr_2d_free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info);
+bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *info);
 bool	syntax_warning(int type);
 bool	warning_message(char *error_message, t_minishell_info *info);
 

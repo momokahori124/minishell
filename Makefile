@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/13 22:17:15 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/14 03:06:06 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,10 @@ SRCFILE =	minishell.c \
 			cute_message.c \
 			signal.c \
 			pwd_command.c \
+			command_format_check.c \
 			command_utils_1.c \
 			command_utils_2.c \
+			command_utils_3.c \
 			exec_command.c \
 			pipe_redirect_utils.c \
 			is_what.c \
@@ -37,13 +39,13 @@ SRCS = $(addprefix $(SRCDIR), $(SRCFILE))
 
 OBJS = $(SRCS:.c=.o)
 %.o : %.c
-	$(CC) $(CFLAGS) -fsanitize=address -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -fsanitize=address -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 $(LIBFT): FORCE
 	@make -C $(LIBS)

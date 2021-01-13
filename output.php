@@ -105,6 +105,13 @@ pwd >>>>><< a
 bash: syntax error near unexpected token `>>'
 <!------------------>
 
+<!-- triple_input -->
+pwd ><<< a
+bash: syntax error near unexpected token `<<<'
+pwd >><<< a
+bash: syntax error near unexpected token `<<<'
+<!------------------>
+
 <!-- space output-->
 pwd > > a
 bash: syntax error near unexpected token `>'
@@ -158,10 +165,16 @@ bash: syntax error near unexpected token `>>'
 <!-- space semicolon-->
 pwd > ;
 bash: syntax error near unexpected token `;'
+
+
 pwd > ; ls
 bash: syntax error near unexpected token `;'
+
+
 pwd >> ; ls
 bash: syntax error near unexpected token `;'
+
+
 pwd >>> ; ls
 bash: syntax error near unexpected token `>'
 pwd >>>> ; ls
@@ -195,6 +208,21 @@ bash: syntax error near unexpected token `>'
 pwd >>>> < ls
 bash: syntax error near unexpected token `>>'
 pwd >>>>> < ls
+bash: syntax error near unexpected token `>>'
+<!------------------>
+
+<!-- space DB_input-->
+pwd > <<
+bash: syntax error near unexpected token `<<'
+pwd > << ls
+bash: syntax error near unexpected token `<<'
+pwd >> << ls
+bash: syntax error near unexpected token `<<'
+pwd >>> << ls
+bash: syntax error near unexpected token `>'
+pwd >>>> << ls
+bash: syntax error near unexpected token `>>'
+pwd >>>>> << ls
 bash: syntax error near unexpected token `>>'
 <!------------------>
 

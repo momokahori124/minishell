@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/13 22:33:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 03:17:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,7 +345,7 @@ bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 	{
 		if (command[i] == ';' || command[i] == '<' || command[i] == '>' || \
 				command[i] == '|')
-			if ((return_value = check_next_chrs(command + i, info, command[i])) \
+			if ((return_value = check_next_chrs(command + i, info, command[i]))
 					== false)
 			{
 				ptr_free((void **)&command);
@@ -356,80 +356,50 @@ bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 }
 
 
-bool	free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+
+char	**insert_2d_array(char **dst, char **src1, char **src2)
 {
-	int	i;
-
-	i = 0;
-	if (array != NULL)
-	{		while ((*array)[i])
-			i++;
-		ptr_2d_free((void ***)array, i);
-	}
-	i = 0;
-	if (cmd_grp_info->cmd_grp != NULL)
-	{
-		ptr_2d_free((void ***)cmd_grp_info->cmd_grp, cmd_grp_info->array_size);
-	}
-	return (syntax_error(type, info));
-}
-
-
-# define NEXT_CMD 2
-
-bool	add_cmd_grp(char **split, t_cmd_grp *cmd_grp_info, int split_size, t_minishell_info *info)
-{
-	char	**res;
 	size_t	i;
 	size_t	j;
-	char	***cmd_grp;
 
-	printf("%d\n", cmd_grp_info->array_size);
-	printf("%d\n", split_size);
-	cmd_grp = (cmd_grp_info->cmd_grp);
-	if (!(res = malloc(sizeof(char *) * (split_size + cmd_grp_info->array_size + 1))))
-	{
-		ptr_2d_free((void ***)cmd_grp, cmd_grp_info->array_size);
-		ptr_2d_free((void ***)&split, split_size);
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
 	i = 0;
-	while ((*cmd_grp)[i])
+	while (src1[i])
 	{
-		res[i] = (*cmd_grp)[i];
+		dst[i] = src1[i];
 		i++;
 	}
 	j = 0;
-	while (split[j])
+	while (src2[j])
 	{
-		res[i + j] = split[j];
+		dst[i + j] = src2[j];
 		j++;
 	}
-	res[i + j] = NULL;
-	if (j == (size_t)split_size)
-		puts("SAME");
-	i = 0;
-	while (res[i])
-	{
-		printf("res : %s\n", res[i]);
-		i++;
-	}
-		printf("res : %s\n", res[i]);
-	ptr_2d_free((void ***)cmd_grp, 0);
-	ptr_2d_free((void ***)&split, 0);
-	*(cmd_grp_info->cmd_grp) = res;
-	i = 0;
-	while ((*(cmd_grp_info->cmd_grp))[i])
-	{
-		printf("info : %s\n", (*(cmd_grp_info->cmd_grp))[i]);
-		i++;
-	}
-		printf("info : %s\n", (*(cmd_grp_info->cmd_grp))[i]);
-	// exit(0);
-	return (NEXT_CMD);
+	dst[i + j] = NULL;
+	return (dst);
 }
 
 
+int		add_cmd_grp(char **split, t_cmd_grp *cmd_grp_info, int split_size, t_minishell_info *info)
+{
+	char	**res;
+	char	***cmd_grp;
+	int		array_size;
+
+	cmd_grp = cmd_grp_info->cmd_grp;
+	array_size = cmd_grp_info->array_size;
+	if (!(res = malloc(sizeof(char *) * (split_size + array_size + 1))))
+	{
+		ptr_2d_free((void ***)cmd_grp, array_size);
+		ptr_2d_free((void ***)&split, split_size);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	res = insert_2d_array(res, *cmd_grp, split);
+	cmd_grp_info->array_size += split_size;
+	ptr_2d_free((void ***)cmd_grp, 0);
+	ptr_2d_free((void ***)&split, 0);
+	*(cmd_grp_info->cmd_grp) = res;
+	return (NEXT_CMD);
+}
 
 int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
 {
@@ -444,10 +414,9 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 	ptr_free((void **)inputs);
 	while (split[i])
 	{
-			puts("in!!!!!!!!");
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
 		{
-			puts("in");
+			puts("NEXT_CMD");
 			return (add_cmd_grp(split, cmd_grp_info, i + 1, info));
 		}
 		if (split[i][0] == '|' && split[i][1] == '|')
@@ -460,16 +429,20 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 	// 	ptr_2d_free((void ***)&split, 0);
 	// 	return (NEXT_CMD);
 	// }
-	if (split[0][0] == '|')
-		return (free_and_syntax_error(PIPE, &split, cmd_grp_info, info));
-	else if (split[0][0] == ';' && split[0][1] == ';')
-		return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
-	else if (split[0][0] == ';')
-		return (free_and_syntax_error(SEMICOLON, &split, cmd_grp_info, info));
-	else if (split[i - 1][0] == '>' || split[i - 1][0] == '<')
-		return (free_and_syntax_error(NEWLINE, &split, cmd_grp_info, info));
-	if (split[i - 1][0] == '|' && split[i - 1][1] == '|')
-		return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+
+
+	// if (split[0][0] == '|')
+	// 	return (free_and_syntax_error(PIPE, &split, cmd_grp_info, info));
+	// else if (split[0][0] == ';' && split[0][1] == ';')
+	// 	return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+	// else if (split[0][0] == ';')
+	// 	return (free_and_syntax_error(SEMICOLON, &split, cmd_grp_info, info));
+	// else if (split[i - 1][0] == '>' || split[i - 1][0] == '<')
+	// 	return (free_and_syntax_error(NEWLINE, &split, cmd_grp_info, info));
+	// if (split[i - 1][0] == '|' && split[i - 1][1] == '|')
+	// 	return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+
+
 	// else if (split[i - 1][0] == '<')
 	// {
 	// 	if (split[i - 1][1] == '<')
@@ -510,24 +483,23 @@ static bool	check_buf_and_return_value(ssize_t rc, char **inputs, char buf, \
 	return (true);
 }
 
-static bool	do_when_input_char_equal_newline(char **inputs, char ***cmd_grp, \
-				int array_size, t_minishell_info *info)
+static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
 {
 	int	rc;
-	t_cmd_grp cmd_grp_info;
+	// t_cmd_grp cmd_grp_info;
 
-	cmd_grp_info.cmd_grp = cmd_grp;
-	cmd_grp_info.array_size = array_size;
-	printf("array : %d\n", cmd_grp_info.array_size);
-	rc = check_more_pipe(inputs, &cmd_grp_info, info);
+	// cmd_grp_info.cmd_grp = cmd_grp;
+	// cmd_grp_info.array_size = array_size;
+	rc = check_more_pipe(inputs, cmd_grp_info, info);
+	printf("rc : %d\n", rc);
 	if (rc != NEXT_CMD)
 	{
 		if (rc == false)
-			*cmd_grp = NULL;
+			*(cmd_grp_info->cmd_grp) = NULL;
 		return (false);
 	}
 	write(1, "> ", 2);
-	return (true);
+	return (NEXT_CMD);
 }
 
 char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
@@ -535,7 +507,10 @@ char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *inf
 	ssize_t		rc;
 	char		buf;
 	char		*inputs;
+	t_cmd_grp cmd_grp_info;
 
+	cmd_grp_info.cmd_grp = cmd_grp;
+	cmd_grp_info.array_size = array_size;
 	inputs = prepare_in_advance(info);
 	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
 	{
@@ -547,14 +522,14 @@ char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *inf
 		if (check_buf_and_return_value(rc, &inputs, buf, info) == false)
 			return (false);
 		if (buf == '\n')
-			if (do_when_input_char_equal_newline(&inputs, cmd_grp, array_size, info) == false)
+			if (do_when_input_char_equal_newline(&inputs, &cmd_grp_info, info) == false)
 				return (*cmd_grp);
 	}
 	return (NULL);
 }
 
-// __attribute__((destructor))
-// void end()
-// {
-// 	system("leaks minishell");
-// }
+__attribute__((destructor))
+void end()
+{
+	system("leaks minishell");
+}

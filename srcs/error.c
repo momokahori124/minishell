@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 01:30:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 03:19:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,16 @@ bool	syntax_error(int type, t_minishell_info *info)
 		write(2, SYNTAX_NL, 56);
 	else if (type == NOT_CMD)
 		write(2, ERR_MANDATORY, 44);
+	else if (type == DB_SEMICOLON)
+		write(2, ERR_DB_SEMICOLON, 47);
+	else if (type == DB_PIPE)
+		write(2, ERR_DB_PIPE, 47);
+	else if (type == OUTPUT_PIPE)
+		write(2, ERR_OUTPUT_PIPE, 47);
+	else if (type == DB_INPUT)
+		write(2, ERR_DB_INPUT, 47);
+	else if (type == TR_INPUT)
+		write(2, ERR_TR_INPUT, 48);
 	info->prev_rc = 258;
 	return (false);
 }
@@ -136,4 +146,36 @@ bool	warning_message(char *error_message, t_minishell_info *info)
 	errno = 0;
 	all_free_perror_exit(info, NULL, 0, 0);
 	return (false);
+}
+
+
+bool	two_ptr_2d_free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+{
+	int	i;
+
+	i = 0;
+	if (array != NULL)
+	{
+		while ((*array)[i])
+			i++;
+		ptr_2d_free((void ***)array, i);
+	}
+	i = 0;
+	if (cmd_grp_info->cmd_grp != NULL)
+		ptr_2d_free((void ***)cmd_grp_info->cmd_grp, cmd_grp_info->array_size);
+	return (syntax_error(type, info));
+}
+
+bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *info)
+{
+	int	i;
+
+	i = 0;
+	if (cmd_grp != NULL)
+	{
+		while ((*cmd_grp)[i])
+			i++;
+		ptr_2d_free((void ***)cmd_grp, i);
+	}
+	return (syntax_error(type, info));
 }
