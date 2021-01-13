@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:23:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:33:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static bool	execute(t_minishell_info *info)
 	else if (info->cmd_lst->type == PWD)
 		exec_pwd(info);
 	else if (info->cmd_lst->type == NOT_CMD)
-		info->prev_rc = put_cmd_not_found(info->cmd_split[0]);
+		info->prev_rc = put_cmd_not_found(info->cmd_lst->arg[0]);
 	return (1);
 }
 
@@ -69,11 +69,18 @@ static bool	execute(t_minishell_info *info)
 
 bool		execute_command(t_minishell_info *info)
 {
-	// printf("%p\n", info->cmd_lst);
+	t_cmdlst *begin;
+
+	begin = info->cmd_lst;
 	while (info->cmd_lst)
 	{
 		execute(info);
+		int i = 0;
+		while (info->cmd_lst->arg[i])
+			i++;
+		ptr_2d_free((void ***)&(info->cmd_lst->arg), i);
 		info->cmd_lst = info->cmd_lst->next;
 	}
+	info->cmd_lst = begin;
 	return (true);
 }

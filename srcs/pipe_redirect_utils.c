@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/09 02:35:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/13 22:33:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,47 +237,9 @@ bool	inspect_semicolon_pattern(char *cmd, int separator_count,
 // 	return (true);
 // }
 
-bool		wait_more_next_cmd(char **inputs, t_minishell_info *info)
-{
-	size_t	i;
+bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator);
+bool	check_pipe_or_redirect(char *command, t_minishell_info *info);
 
-	i = 0;
-	while ((*inputs)[i])
-	{
-		if ((*inputs)[i] == '|')
-		{
-			while ((*inputs)[i] && (*inputs)[i] == ' ')
-				i++;
-			if ((*inputs)[i] == '\0')
-			{
-				return (syntax_error(PIPE, info));
-			}
-			if ((*inputs)[i] == '|')
-			{
-				return (syntax_error(NOT_CMD, info));
-			}
-			if ((*inputs)[i] == ';' && (*inputs)[i + 1] == ';')
-			{
-				return (syntax_error(NOT_CMD, info));
-			}
-			if ((*inputs)[i] == ';')
-			{
-				return (syntax_error(SEMICOLON, info));
-			}
-			if ((*inputs)[i] == '<' || (*inputs)[i] == '>')
-			{
-				while ((*inputs)[i] && (*inputs)[i] == ' ')
-					i++;
-				if ((*inputs)[i] == '\0')
-					return (syntax_error(NEWLINE, info));
-			}
-		}
-		i++;
-	}
-	*inputs = re_strdup(inputs, "");
-	info->command = re_strjoin(&(info->command), inputs);
-	return (true);
-}
 
 bool		wait_next_cmd(t_minishell_info *info, int cnt)
 {
@@ -301,46 +263,34 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 		}
 		if (rc != 0)
 		{
-			// if (buf == '|' && aaaa == false)
-			// {
-			// 	// info->command = re_strjoin(&(info->command), inputs);
-			// 	// printf("commnad = [%s]\n", info->command);
-			// 	return (syntax_error(PIPE, info));
-			// }
-			// if (buf == '|' && aaaa == true)
-			// {
-			// 	// info->command = re_strjoin(&(info->command), inputs);
-			// 	// printf("commnad = [%s]\n", info->command);
-			// 	count++;
-			// 	// return (syntax_error(PIPE, info));
-			// }
 			if (buf != ' ' && buf != '\n')
 			{
 				inputs = re_strjoinch(&inputs, buf);
 			}
-			// // error_or_recursive(buf, inputs, cnt, info);
-			// 	// return (false);
-			// inputs = re_strjoinch(&inputs, buf);
 		}
 		if (rc == 0 && buf == '\0')
 			return (syntax_error(SYNTAX_EOL_NUM, info));
 		if (buf == '\n')
 		{
-			wait_more_next_cmd(&inputs, info);
-			printf("inputs = [%s]\n", inputs);
+			if (check_pipe_or_redirect(inputs, info) == false)
+				return (false);
+			info->command = re_strjoin(&(info->command), inputs);
+			inputs = re_strdup(&inputs, "");
 			write(1, "> ", 2);
-			// break ;
+			break ;
 		}
 	}
-	info->command = re_strjoin(&(info->command), inputs);
+	// info->command = re_strjoin(&(info->command), inputs);
 	printf("commnad = [%s]\n", info->command);
+	if (check_pipe_or_redirect(inputs, info) == false)
+		return (false);
 	ptr_free((void **)&inputs);
 	if (rc == -1)
 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
 	return (true);
 }
 
-static bool	check_pipe_num(int count, t_minishell_info *info)
+bool	check_pipe_num(int count, t_minishell_info *info)
 {
 	puts("++++");
 	if (count == 1)
@@ -348,7 +298,7 @@ static bool	check_pipe_num(int count, t_minishell_info *info)
 	return (false);
 }
 
-static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
+bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 {
 	int		separator_count;
 	bool	space_flag;
@@ -357,6 +307,7 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 	space_flag = false;
 	printf("separator_count = %d\n", separator_count);
 	printf("chr = %c\n", separator);
+	printf("cmd = %s\n", cmd);
 	if (cmd[separator_count] == ' ')
 		space_flag = true;
 	cmd = skip_space(cmd + separator_count);
@@ -374,6 +325,8 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 			return (syntax_error(NOT_CMD, info));
 		else if (*cmd == '\0')
 			return (check_pipe_num(separator_count, info));
+		else if (*cmd == '|')
+			return (syntax_error(PIPE, info));
 		else
 			return (true);
 	}
@@ -381,7 +334,7 @@ static bool	check_next_chrs(char *cmd, t_minishell_info *info, char separator)
 	return (false);
 }
 
-static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
+bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 {
 	bool			return_value;
 	unsigned int	i;
@@ -402,21 +355,206 @@ static bool	check_pipe_or_redirect(char *command, t_minishell_info *info)
 	return (return_value);
 }
 
-bool		wait_pipe_or_redirect_next_cmd(t_minishell_info *info)
-{
-	bool	rc;
-	char	*command;
 
-	rc = true;
-	command = ft_strdup(info->command);
-	rc = check_pipe_or_redirect(command, info);
-	// (void)rc;
-	// free(info->command);
-	// free(info->current_dir_path);
-	// exit(0);
-	// printf("===[%s]\n", info->command);
-	// printf("===[%d]\n", rc);
-	// fflush(stdout);
-	// rc = true;
-	return (rc);
+bool	free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+{
+	int	i;
+
+	i = 0;
+	if (array != NULL)
+	{		while ((*array)[i])
+			i++;
+		ptr_2d_free((void ***)array, i);
+	}
+	i = 0;
+	if (cmd_grp_info->cmd_grp != NULL)
+	{
+		ptr_2d_free((void ***)cmd_grp_info->cmd_grp, cmd_grp_info->array_size);
+	}
+	return (syntax_error(type, info));
 }
+
+
+# define NEXT_CMD 2
+
+bool	add_cmd_grp(char **split, t_cmd_grp *cmd_grp_info, int split_size, t_minishell_info *info)
+{
+	char	**res;
+	size_t	i;
+	size_t	j;
+	char	***cmd_grp;
+
+	printf("%d\n", cmd_grp_info->array_size);
+	printf("%d\n", split_size);
+	cmd_grp = (cmd_grp_info->cmd_grp);
+	if (!(res = malloc(sizeof(char *) * (split_size + cmd_grp_info->array_size + 1))))
+	{
+		ptr_2d_free((void ***)cmd_grp, cmd_grp_info->array_size);
+		ptr_2d_free((void ***)&split, split_size);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	i = 0;
+	while ((*cmd_grp)[i])
+	{
+		res[i] = (*cmd_grp)[i];
+		i++;
+	}
+	j = 0;
+	while (split[j])
+	{
+		res[i + j] = split[j];
+		j++;
+	}
+	res[i + j] = NULL;
+	if (j == (size_t)split_size)
+		puts("SAME");
+	i = 0;
+	while (res[i])
+	{
+		printf("res : %s\n", res[i]);
+		i++;
+	}
+		printf("res : %s\n", res[i]);
+	ptr_2d_free((void ***)cmd_grp, 0);
+	ptr_2d_free((void ***)&split, 0);
+	*(cmd_grp_info->cmd_grp) = res;
+	i = 0;
+	while ((*(cmd_grp_info->cmd_grp))[i])
+	{
+		printf("info : %s\n", (*(cmd_grp_info->cmd_grp))[i]);
+		i++;
+	}
+		printf("info : %s\n", (*(cmd_grp_info->cmd_grp))[i]);
+	// exit(0);
+	return (NEXT_CMD);
+}
+
+
+
+int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+{
+	char	**split;
+	int		i;
+
+	if ((*inputs)[0] == '\0')
+		return (true);
+	if (!(split = split_by_chrs_contain_delimiters(*inputs, "|;><")))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	i = 0;
+	ptr_free((void **)inputs);
+	while (split[i])
+	{
+			puts("in!!!!!!!!");
+		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
+		{
+			puts("in");
+			return (add_cmd_grp(split, cmd_grp_info, i + 1, info));
+		}
+		if (split[i][0] == '|' && split[i][1] == '|')
+			return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+		i++;
+	}
+	// if (split[i - 1][0] == '|' && split[i - 1][1] != '|')
+	// {
+	// 	// *cmd_grp = add_cmd_grp(split, cmd_grp, i, j);
+	// 	ptr_2d_free((void ***)&split, 0);
+	// 	return (NEXT_CMD);
+	// }
+	if (split[0][0] == '|')
+		return (free_and_syntax_error(PIPE, &split, cmd_grp_info, info));
+	else if (split[0][0] == ';' && split[0][1] == ';')
+		return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+	else if (split[0][0] == ';')
+		return (free_and_syntax_error(SEMICOLON, &split, cmd_grp_info, info));
+	else if (split[i - 1][0] == '>' || split[i - 1][0] == '<')
+		return (free_and_syntax_error(NEWLINE, &split, cmd_grp_info, info));
+	if (split[i - 1][0] == '|' && split[i - 1][1] == '|')
+		return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+	// else if (split[i - 1][0] == '<')
+	// {
+	// 	if (split[i - 1][1] == '<')
+	// 		return (syntax_error(NOT_CMD, info));
+	// 	return (syntax_error(INPUT, info));
+	// }
+	add_cmd_grp(split, cmd_grp_info, i, info);
+	// ptr_2d_free((void ***)&split, 0);
+		// puts("oooooooooooooo");
+	// free((*cmd_grp));
+	return (true);
+}
+
+static char	*prepare_in_advance(t_minishell_info *info)
+{
+	char	*res;
+
+	if (write(1, "> ", 2) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (!(res = ft_strdup("")))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	return (res);
+}
+
+static bool	check_buf_and_return_value(ssize_t rc, char **inputs, char buf, \
+			t_minishell_info *info)
+{
+	if (rc != 0)
+	{
+		if (buf != ' ' && buf != '\n')
+			*inputs = re_strjoinch(inputs, buf);
+	}
+	else if (rc == 0 && (*inputs)[0] == '\0')
+	{
+		syntax_error(SYNTAX_EOL_NUM, info);
+		return (false);
+	}
+	return (true);
+}
+
+static bool	do_when_input_char_equal_newline(char **inputs, char ***cmd_grp, \
+				int array_size, t_minishell_info *info)
+{
+	int	rc;
+	t_cmd_grp cmd_grp_info;
+
+	cmd_grp_info.cmd_grp = cmd_grp;
+	cmd_grp_info.array_size = array_size;
+	printf("array : %d\n", cmd_grp_info.array_size);
+	rc = check_more_pipe(inputs, &cmd_grp_info, info);
+	if (rc != NEXT_CMD)
+	{
+		if (rc == false)
+			*cmd_grp = NULL;
+		return (false);
+	}
+	write(1, "> ", 2);
+	return (true);
+}
+
+char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
+{
+	ssize_t		rc;
+	char		buf;
+	char		*inputs;
+
+	inputs = prepare_in_advance(info);
+	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
+	{
+		if (write(0, "\033[0K", 4) < 0)
+		{
+			ptr_free((void **)&inputs);
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		}
+		if (check_buf_and_return_value(rc, &inputs, buf, info) == false)
+			return (false);
+		if (buf == '\n')
+			if (do_when_input_char_equal_newline(&inputs, cmd_grp, array_size, info) == false)
+				return (*cmd_grp);
+	}
+	return (NULL);
+}
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }

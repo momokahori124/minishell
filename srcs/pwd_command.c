@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/04 19:10:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/11 14:55:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		exec_pwd(t_minishell_info *info)
 }
 
 /*
-** 各commandをリストで持つのでこれはpwdの情報をリストに繋げる関数
+** 各commandをリストで持つので情報をリストに繋げる関数
 */
 
 bool		add_cmd_to_lst(t_minishell_info *info, char **command, int type)

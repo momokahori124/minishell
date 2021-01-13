@@ -52,3 +52,21 @@ bash-3.2$
 
 bash-3.2$ ''
 bash: : command not found
+
+
+bash-3.2$ |
+bash: syntax error near unexpected token `|'
+bash-3.2$ ||
+bash: syntax error near unexpected token `||'
+bash-3.2$ >
+bash: syntax error near unexpected token `newline'
+bash-3.2$ <
+bash: syntax error near unexpected token `newline'
+bash-3.2$ >>
+bash: syntax error near unexpected token `newline'
+bash-3.2$ <<
+bash: syntax error near unexpected token `newline'
+bash-3.2$ ;
+bash: syntax error near unexpected token `;'
+bash-3.2$ ;;
+bash: syntax error near unexpected token `;;'

@@ -168,23 +168,101 @@ bool wait_quotation(char first_appear, char **command, t_minishell_info *info)
 // 	system("leaks a.out");
 // }
 
+bool	spaces_or_not_in_array(char **arr, int *element_num)
+{
+	int		i;
+	bool	flag;
 
-void ff()
-{
-	return ;
+	i = -1;
+	*element_num = 0;
+	flag = false;
+	while (arr[++i])
+	{
+		if (arr[i][0] == ' ')
+		{
+			if (skip_space(arr[i])[0] == '\0')
+				flag = true;
+		}
+		else
+			(*element_num)++;
+	}
+	return (flag);
 }
-void f()
+
+char	**create_no_spaces_array(char **new, char **old)
 {
-	return ff();
+	int		i;
+	int		new_index;
+
+	i = -1;
+	new_index = 0;
+	while (old[++i])
+	{
+		printf("old : [%s]\n", old[i]);
+		if (old[i][0] == ' ')
+		{
+			if (skip_space(old[i])[0] == '\0')
+				ptr_free((void **)&old[i]);
+		}
+		else
+		{
+			puts("+");
+		// printf("old : [%s]\n", old[i]);
+			new[new_index++] = old[i];
+		}
+	}
+	new[new_index] = NULL;
+	return (new);
 }
+
+
+char	**rm_space_in_array(char **arr, t_minishell_info *info)
+{
+	int		i;
+	int		element_num;
+	char	**res;
+
+	if (spaces_or_not_in_array(arr, &element_num) == false)
+		return (arr);
+	printf("%d\n", element_num);
+	if (!(res = malloc(sizeof(char *) * (element_num + 1))))
+	{
+		ptr_2d_free((void ***)&arr, i);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	res = create_no_spaces_array(res, arr);
+	ptr_2d_free((void ***)&arr, 0);
+	return (res);
+}
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks a.out");
+// }
 
 int main()
 {
 	t_minishell_info *info;
-	char *s = strdup("\'");
-	bool a = wait_quotation('\'', &s, info);
-	free(s);
-	printf("bool = %s\n", a == true ? "true" : "false");
+	// char **res = ft_split("aaa|   |    |bbb|   |ccc", '|');
+	char **res = split_by_chrs_contain_delimiters("pd |     ", "><;|");
+	int i = 0;
+	// while (res[i])
+	// {
+	// 	printf("res1 = %s\n", res[i]);
+	// 	i++;
+	// }
+
+	char **resa = rm_space_in_array(res, info);
+	i = 0;
+	while (resa[i])
+	{
+		printf("res2 = %s\n", resa[i]);
+		free(resa[i]);
+		i++;
+	}
+	free(resa);
+
 }
 
 // #define NUM_DATA 7

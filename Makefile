@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/08 01:01:03 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/13 22:17:15 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ fclean: clean
 re: fclean all
 
 leak: $(LIBFT) $(OBJS)
-	gcc -g -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -g -o $(NAME) $(OBJS) $(LIBFT)
 	./minishell
 
 valgrind: $(LIBFT) $(OBJS)

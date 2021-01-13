@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 01:53:48 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/09 16:11:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static bool	check_buf_and_return_value(ssize_t rc, char buf, int count[2], \
 		other_quo = '\"';
 	else if (first_quo == '\"')
 		other_quo = '\'';
-	if (rc == 0 && buf == '\0')
+	if (rc == 0)
 		return (true);
 	else if (rc != 0 && buf == first_quo)
 		count[0]++;

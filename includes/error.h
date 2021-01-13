@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 01:30:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/13 21:54:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	all_free_perror_exit(t_minishell_info *info, char *error_message, \
 
 void	ctrl_d_exit(char **ptr, t_minishell_info *info);
 bool	syntax_error(int type, t_minishell_info *info);
+bool	free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info);
 bool	syntax_warning(int type);
 bool	warning_message(char *error_message, t_minishell_info *info);
 

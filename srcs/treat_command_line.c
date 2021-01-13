@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 03:56:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/13 22:36:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,13 @@ static bool	cmd_exit_check(char *cmd)
 	return (false);
 }
 
-static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
+static bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 {
 	t_stat	stat_buf;
 	char	*bin_path;
 
-	bin_path = ft_strjoin("/bin/", command);
+	info->cmd_split = command;
+	bin_path = ft_strjoin("/bin/", command[0]);
 	if (bin_path == NULL)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
@@ -96,7 +97,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
 	}
 	ptr_free((void **)&bin_path);
 
-	bin_path = ft_strjoin("/usr/bin/", command); // makeとかのため
+	bin_path = ft_strjoin("/usr/bin/", command[0]); // makeとかのため
 	if (bin_path == NULL)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
@@ -105,6 +106,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
 		info->cmd_split[0] = bin_path;
 		return (true);
 	}
+	ptr_free((void **)&bin_path);
 	return (false);
 }
 
@@ -112,7 +114,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char *command)
 ** 入力された文字列から各コマンドをparseする関数
 */
 
-static bool	parsing(t_minishell_info *info, char *command)
+bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
@@ -127,69 +129,174 @@ static bool	parsing(t_minishell_info *info, char *command)
 	if (cmd_exit_check(split[0]) == false)
 		str_tolower(&(split[0]));
 	type = str_bsearch(split[0], base, CMD_NUM);
-	info->cmd_split = split;
 	if (type == NOT_CMD)
 	{
-		if (check_bash_standard_commands(info, split[0]) == true)
+		if (check_bash_standard_commands(info, split) == true)
 			return (add_cmd_to_lst(info, split, BIN));
 	}
-	split++;
+	// split++;
 	add_cmd_to_lst(info, split, type);
 	return (1);
 }
 
-// /*
-// ** 入力された文字列から各コマンドをparseする関数
-// */
+bool	spaces_or_not_in_array(char **arr, int *element_num, int *i)
+{
+	bool	flag;
 
-// static bool	parsing(t_minishell_info *info, char *command)
-// {
-// 	int	rc;
+	*i = -1;
+	*element_num = 0;
+	flag = false;
+	while (arr[++(*i)])
+	{
+		if (arr[(*i)][0] == ' ')
+		{
+			if (skip_space(arr[(*i)])[0] == '\0')
+				flag = true;
+		}
+		else
+			(*element_num)++;
+	}
+	return (flag);
+}
 
-// 	if ((rc = is_command("pwd", skip_space(command), info)) == 1 ||
-// 		(rc = is_command("echo", skip_space(command), info)) == 1)
-// 		return (add_pwd_to_lst(info, command));
-// 	// // else if ()
-// 	else
-// 		info->prev_rc = put_cmd_not_found((&(info->command)));
-// 	exit(1);
-// 	return (1);
-// }
+char	**create_no_spaces_array(char **new, char **old)
+{
+	int		i;
+	int		new_index;
+
+	i = -1;
+	new_index = 0;
+	while (old[++i])
+	{
+		if (old[i][0] == ' ')
+		{
+			if (skip_space(old[i])[0] == '\0')
+				ptr_free((void **)&old[i]);
+		}
+		else
+			new[new_index++] = old[i];
+	}
+	new[new_index] = NULL;
+	return (new);
+}
+
+
+char	**rm_space_in_array(char **arr, t_minishell_info *info)
+{
+	int		i;
+	int		element_num;
+	char	**res;
+
+	if (spaces_or_not_in_array(arr, &element_num, &i) == false)
+		return (arr);
+	if (!(res = malloc(sizeof(char *) * (element_num + 1))))
+	{
+		ptr_2d_free((void ***)&arr, i);
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	res = create_no_spaces_array(res, arr);
+	ptr_2d_free((void ***)&arr, 0);
+	return (res);
+}
+
+
+bool	check_format_of_command(char ***grp, t_minishell_info *info)
+{
+	int	i;
+
+	i = 0;
+	while ((*grp)[i])
+	{
+		puts("=======================");
+		if (i != 0 && (*grp)[i][0] == '|' && (*grp)[i][1] != '|' && !(*grp)[i + 1])
+			if ((*grp = wait_for_next_cmd(grp, i + 1, info)) == NULL)
+				return (false);
+		if ((*grp)[0][0] == '|' && !(*grp)[i + 1])
+			// return (free_and_syntax_error(PIPE, NULL, grp, info));
+			;
+		else if ((*grp)[0][0] == '|' && (*grp)[0][1] == '|' && !(*grp)[i + 1])
+			// return (free_and_syntax_error(NOT_CMD, NULL, grp, info));
+			;
+		else if (i == 0 && !(*grp)[i + 1] && (*grp)[i][0] == '<' && (*grp)[i][1] == '<')
+			return (syntax_error(NOT_CMD, info));
+		else if (i == 0 && !(*grp)[i + 1] && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<'))
+		{
+			// printf("i : %d\n", i);
+			return (syntax_error(NEWLINE, info));
+		}
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] == '>')
+			return (syntax_error(DB_OUTPUT, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] == '|')
+			return (syntax_error(NOT_CMD, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] != '>')
+			return (syntax_error(OUTPUT, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == ';' && (*grp)[i - 1][1] == ';')
+			return (syntax_error(NOT_CMD, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == ';' && (*grp)[i - 1][1] != ';')
+			return (syntax_error(SEMICOLON, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '|' && (*grp)[i - 1][1] == '|')
+			return (syntax_error(PIPE, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '|' && (*grp)[i - 1][1] != '|')
+			return (syntax_error(NOT_CMD, info));
+		else if (i != 0 && ((*grp)[i][0] == '>' || (*grp)[i][0] == '<') && (*grp)[i - 1][0] == '<' && (*grp)[i - 1][1] == '<')
+			return (syntax_error(NOT_CMD, info));
+		i++;
+	}
+	// if (i > 1 && (*grp)[i - 1][0] == '|' && (*grp)[i - 1][1] != '|')
+	// {
+	// 	if ((*grp = wait_for_next_cmd(grp, i, info)) == NULL)
+	// 		return (false);
+	// }
+	// else if (i > 2 && ((*grp)[i - 2][0] == '>' || (*grp)[i - 2][0] == '<') && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] == '>')
+	// 	return (syntax_error(DB_OUTPUT, info));
+	// else if (i > 2 && (ft_strncmp((*grp)[i - 2], ">>", 2) || ft_strncmp((*grp)[i - 2], "<<", 2)) && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] == '>')
+	// 	return (syntax_error(DB_OUTPUT, info));
+	// else if (i > 1 && (*grp)[i - 1][0] == '>' && (*grp)[i - 1][1] == '>')
+	// 	return (syntax_error(NEWLINE, info));
+	return (true);
+}
+
 
 /*
 ** parsing関数でparseするためにwhileを回す関数(envpは構造体に入れると思う)
 ** commandもinfo->commandもmalloc済
 */
 
-bool		parse_command_line(t_minishell_info *info, char *envp[])
+bool		parse_command_line(t_minishell_info *info)
 {
 	char	**cmd_grp;
-	bool	rc;
 	int		i;
 
-	rc = true;
-	if (info->command[0] == '\0')
+	printf("%s\n", info->command);
+	if (!(cmd_grp = split_by_chrs_contain_delimiters(info->command, "><;|")))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	cmd_grp = rm_space_in_array(cmd_grp, info);
+	ptr_free((void **)&(info->command));
+	if (check_format_of_command(&cmd_grp, info) == false)
 		return (false);
-
-	// rc = rm_quotation(info);
-	// if (rc == false)
-	// 	return (false);
-	if (rc == true)
-		rc = wait_pipe_or_redirect_next_cmd(info);
-	if (rc == false)
-		return (false);
-	cmd_grp = split_by_chrs_contain_delimiters(info->command, "|;><");
-	// if (rc == false)
-	// 	all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__); // ERR_EXECVEかえる
-	i = 0;
-	while (cmd_grp[i])
+	// i = 0;
+	// while (cmd_grp[i])
+	// 	i++;
+	// if (i > 1 && cmd_grp[i - 1][0] == '|' && cmd_grp[i - 1][1] != '|')
+	// {
+	// 	if ((cmd_grp = wait_for_next_cmd(&cmd_grp, i, info)) == NULL)
+	// 		return (false);
+	// }
+	// if (i == 1 && cmd_grp[i - 1][0] == '|' && cmd_grp[i - 1][1] != '|')
+	// 	return (syntax_error(PIPE, info));
+	// else if (i > 2 && (cmd_grp[i - 2][0] == '>' || cmd_grp[i - 2][0] == '<') && cmd_grp[i - 1][0] == '>' && cmd_grp[i - 1][1] == '>')
+	// 	return (syntax_error(DB_OUTPUT, info));
+	// else if (i > 2 && (ft_strncmp(cmd_grp[i - 2], ">>", 2) || ft_strncmp(cmd_grp[i - 2], "<<", 2)) && cmd_grp[i - 1][0] == '>' && cmd_grp[i - 1][1] == '>')
+	// 	return (syntax_error(DB_OUTPUT, info));
+	// else if (i > 1 && cmd_grp[i - 1][0] == '>' && cmd_grp[i - 1][1] == '>')
+	// 	return (syntax_error(NEWLINE, info));
+	i = -1;
+	while (cmd_grp[++i])
 	{
-		printf("%d : %s\n", i, cmd_grp[i]);
+		printf("[%d] : [%s]\n", i, cmd_grp[i]);
 		parsing(info, cmd_grp[i]);
-		i++;
 	}
-	(void)envp;
-	// exit(0);
+	ptr_2d_free((void ***)&cmd_grp, i);
 	return (true);
 }
 

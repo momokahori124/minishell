@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/06 06:48:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/13 21:49:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ typedef struct		s_cmdlst
 	char			**arg;
 	struct s_cmdlst	*next;
 }					t_cmdlst;
+
+typedef struct		s_cmd_grp
+{
+	char			***cmd_grp;
+	int				array_size;
+}					t_cmd_grp;
 
 enum	e_cmd
 {
