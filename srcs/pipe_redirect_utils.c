@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 03:17:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 03:30:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,7 +420,7 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 			return (add_cmd_grp(split, cmd_grp_info, i + 1, info));
 		}
 		if (split[i][0] == '|' && split[i][1] == '|')
-			return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+			return (two_ptr_2d_free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
 		i++;
 	}
 	// if (split[i - 1][0] == '|' && split[i - 1][1] != '|')
@@ -528,8 +528,8 @@ char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *inf
 	return (NULL);
 }
 
-__attribute__((destructor))
-void end()
-{
-	system("leaks minishell");
-}
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }

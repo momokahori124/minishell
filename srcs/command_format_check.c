@@ -6,26 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:37:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 03:16:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 03:26:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
-
-static bool	free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *info)
-{
-	int	i;
-
-	i = 0;
-	if (cmd_grp != NULL)
-	{
-		while ((*cmd_grp)[i])
-			i++;
-		printf("i : %d\n", i);
-		ptr_2d_free((void ***)cmd_grp, i);
-	}
-	return (syntax_error(type, info));
-}
 
 bool	check_format_of_command(char ***grp, t_minishell_info *info)
 {
