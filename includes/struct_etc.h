@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 02:39:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:38:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ enum	e_cmd
 {
 	BIN,
 	SEMICOLON,
+	SEMI_INPUT,
+	SEMI_OUTPUT,
+	SEMI_DB_OUTPUT,
 	INPUT,
 	OUTPUT,
 	DB_OUTPUT,

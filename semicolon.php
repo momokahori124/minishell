@@ -40,12 +40,10 @@ a
 echo "a" ; >> pwd
 a
 pwdのファイルもできる。中に書き込みはなし。
-
 echo "a" ;>;> pwd
 bash: syntax error near unexpected token `;'
 echo "a" ;> ;> pwd
 bash: syntax error near unexpected token `;'
-
 echo "a" ;>>> pwd
 bash: syntax error near unexpected token `>'
 echo "a" ; >>> pwd
@@ -78,8 +76,6 @@ rm pwd
 echo "a" ;< pwd
 a
 bash: pwd: No such file or directory
-
-
 echo "a" ;<< pwd
 > 読み込み待ちになる "<<"扱い
 echo "a" ;<<< pwd

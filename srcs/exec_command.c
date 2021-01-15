@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 03:53:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:34:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,50 +39,13 @@ void		exec_bin(t_minishell_info *info)
 		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
-void		exec_exit(t_minishell_info *info)
-{
-	int		count;
-	bool	flag;
-	char	**arg;
-	int		exit_code;
-
-	arg = info->cmd_lst->arg;
-	flag = false;
-	exit_code = 1;
-	while (arg[count])
-		count++;
-	write(2, "\033[0Kexit\n", 9);
-	if (arg[1] != NULL && ft_isdigit(arg[1][0]))
-		flag = true;
-	if (count == 1)
-		exit(exit_code);
-	else if (count == 2 && flag == true)
-		exit(ft_atoi(arg[1]));
-	else
-	{
-		if (flag)
-		{
-			write(2, "minishell: exit: too many arguments\n", 36);
-			info->prev_rc = 1;
-			return ;
-		}
-		else
-		{
-			// aaaはarg[1]に変えないとだめ
-			write(2, "minishell: exit: aaa: numeric argument required\n", 48);
-			exit(255);
-		}
-	}
-	errno = 0;
-	all_free_perror_exit(info, NULL, 0, NULL);
-}
-
 /*
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数
 */
 
 static bool	execute(t_minishell_info *info)
 {
+	printf("%d\n", info->cmd_lst->type);
 	if (info->cmd_lst->type == BIN)
 		exec_bin(info);
 	else if (info->cmd_lst->type == EXIT)

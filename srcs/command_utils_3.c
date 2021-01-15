@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:30:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 03:05:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/15 19:01:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static char	**create_no_spaces_array(char **new, char **old)
 	new_index = 0;
 	while (old[++i])
 	{
-		printf("old : %s\n", old[i]);
 		if (old[i][0] == ' ')
 		{
 			if (skip_space(old[i])[0] == '\0')

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 03:30:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/14 20:00:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,6 +412,7 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = 0;
 	ptr_free((void **)inputs);
+	// re_strdup(inputs, "");
 	while (split[i])
 	{
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
@@ -456,10 +457,13 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 	return (true);
 }
 
-static char	*prepare_in_advance(t_minishell_info *info)
+static char	*prepare_in_advance(t_minishell_info *info, \
+			t_cmd_grp *cmd_grp_info, char ***cmd_grp, int array_size)
 {
 	char	*res;
 
+	cmd_grp_info->cmd_grp = cmd_grp;
+	cmd_grp_info->array_size = array_size;
 	if (write(1, "> ", 2) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (!(res = ft_strdup("")))
@@ -475,8 +479,9 @@ static bool	check_buf_and_return_value(ssize_t rc, char **inputs, char buf, \
 		if (buf != ' ' && buf != '\n')
 			*inputs = re_strjoinch(inputs, buf);
 	}
-	else if (rc == 0 && (*inputs)[0] == '\0')
+	else if (rc == 0 && ((*inputs) == NULL || (*inputs)[0] == '\0'))
 	{
+		ptr_free((void **)inputs);
 		syntax_error(SYNTAX_EOL_NUM, info);
 		return (false);
 	}
@@ -502,16 +507,14 @@ static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_i
 	return (NEXT_CMD);
 }
 
-char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
+bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
 {
 	ssize_t		rc;
 	char		buf;
 	char		*inputs;
 	t_cmd_grp cmd_grp_info;
 
-	cmd_grp_info.cmd_grp = cmd_grp;
-	cmd_grp_info.array_size = array_size;
-	inputs = prepare_in_advance(info);
+	inputs = prepare_in_advance(info, &cmd_grp_info, cmd_grp, array_size);
 	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
 	{
 		if (write(0, "\033[0K", 4) < 0)
@@ -520,12 +523,15 @@ char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *inf
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 		}
 		if (check_buf_and_return_value(rc, &inputs, buf, info) == false)
+		{
+			ptr_2d_free((void ***)cmd_grp_info.cmd_grp, cmd_grp_info.array_size);
 			return (false);
+		}
 		if (buf == '\n')
 			if (do_when_input_char_equal_newline(&inputs, &cmd_grp_info, info) == false)
-				return (*cmd_grp);
+				return (true);
 	}
-	return (NULL);
+	return (false);
 }
 
 // __attribute__((destructor))

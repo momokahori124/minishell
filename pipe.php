@@ -58,10 +58,11 @@ bash: syntax error near unexpected token `;;'
 echo "a" |< pwd
 echo "a" |< pwd
 bash: pwd: No such file or directory
-> echo "a" |<< pwd
+echo "a" |<< pwd
 > s
 >
-echo "a" |<<< pwd 対応しない
+echo "a" |<<< pwd
+対応しない
 echo "a" |<<<< pwd
 bash: syntax error near unexpected token `<'
 echo "a" |<<<<< pwd
@@ -70,19 +71,19 @@ bash: syntax error near unexpected token `<<'
 
 
 
-bash-3.2$ pwd | |
+pwd | |
 bash: syntax error near unexpected token `|'
-bash-3.2$ pwd | >>
+pwd | >>
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd | >
+pwd | >
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd | <<
+pwd | <<
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd | <
+pwd | <
 bash: syntax error near unexpected token `newline'
-bash-3.2$ pwd | ;
+pwd | ;
 bash: syntax error near unexpected token `;'
-bash-3.2$ pwd | ;;
+pwd | ;;
 bash: syntax error near unexpected token `;;'
-bash-3.2$ pwd | ||
+pwd | ||
 bash: syntax error near unexpected token `||'
