@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:37:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:42:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,6 @@
 ** ほりももちゃんが作ったput系の関数群
 ** writeを何回も呼ぶの嫌だったのでput_welcome_messageみたいにするか迷い中。
 */
-
-// static char		*get_working_dir(char *pwd)
-// {
-// 	int len = ft_strlen(pwd);
-// 	int i = len - 1;
-// 	char *ret;
-// 	int count = 0;
-
-// 	while (i >= 0)
-// 	{
-// 		if (pwd[i] == '/')
-// 			count++;
-// 		if (count == 2)
-// 			return (pwd + i + 1);
-// 		i--;
-// 	}
-// 	return (pwd);
-// }
 
 void		put_prompt(t_minishell_info *info)
 {

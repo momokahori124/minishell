@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:30:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:44:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,11 @@ void	sig_quit(int code)
 
 void	sig_int(int code)
 {
-	// put_prompt(envp, info);
 	(void)code;
 	if (g_sig.pid == 0) //子だったら
 	{
-		ft_putstr_fd("\b\b  ", STDERR);
-		ft_putstr_fd("\n", STDERR);
-		ft_putstr_fd("\033[0;36m\033[1m🤬 minishell ▸ \033[0m", STDERR);
+		write(1, "\b\b  \n", 5);
+		put_prompt(NULL);
 		g_sig.exit_status = 1;
 	}
 	else
@@ -51,6 +49,6 @@ void	sig_int(int code)
 		ft_putstr_fd("\n", STDERR);
 		g_sig.exit_status = 130;
 	}
-	// exit(0);
+	exit(0);
 	g_sig.sigint = 1;
 }
