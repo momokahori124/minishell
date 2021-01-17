@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 20:42:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:39:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ int			search_env(char *envp[], char *env_name)
 			return (i);
 		i++;
 	}
-	ft_putstr_fd("Error : can not find env_name\n", 1);
-	exit(0);
+	exit(EXIT_FAILURE);
 }
 
 void ft_putenv(char *s, t_minishell_info *info)
@@ -56,7 +55,8 @@ void ft_putenv(char *s, t_minishell_info *info)
 
 int		console_loop(t_minishell_info *info, char *envp[])
 {
-	put_prompt(envp, info);
+	(void)envp;
+	put_prompt(info);
 	while (1)
 	{
 		if (read_command_line(info) == false)
@@ -81,7 +81,8 @@ int		console_loop(t_minishell_info *info, char *envp[])
 		}
 		// free(info->current_dir_path);
 		// exit(0);
-		put_prompt(envp, info);
+		// info->cmd_lst = NULL;
+		put_prompt(info);
 	}
 	return (1);
 }
@@ -101,6 +102,35 @@ void	set_env_info(t_minishell_info *info, char **envp)
 	info->prev_rc = 0;
 }
 
+static char		*get_working_dir(char *pwd)
+{
+	int	len;
+	int	count;
+
+	len  = ft_strlen(pwd) - 1;
+	count = 0;
+	while (len >= 0)
+	{
+		if (pwd[len] == '/')
+			count++;
+		if (count == 2)
+			return (pwd + len + 1);
+		len--;
+	}
+	return (pwd);
+}
+
+void	set_prompt_message(char *envp[])
+{
+	char *s;
+
+	s = envp[search_env(envp, "USER")];
+	while (*s++ != '=')
+		;
+	g_user_name = s;
+	s = get_working_dir(envp[search_env(envp, "PWD")]);
+	g_working_dir = s;
+}
 
 int		main(int argc, char *argv[], char *envp[])
 {
@@ -113,6 +143,7 @@ int		main(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	// put_welcome_message();
+	set_prompt_message(envp);
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
 	set_env_info(&info, envp); //ここでinfoの中にenv情報入れる

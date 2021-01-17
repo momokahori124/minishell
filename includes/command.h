@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 20:35:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 19:47:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
 
 
 bool	execute_command(t_minishell_info *info);
+bool	execute(t_minishell_info *info, int type, char *cmd);
+void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
+
+t_cmdlst	*redirect_output(t_minishell_info *info, t_cmdlst **cmd_lst);
 
 // utils2
 char	**split_by_chrs_contain_delimiters(char *str, char *charset);

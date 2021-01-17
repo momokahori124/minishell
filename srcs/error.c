@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 21:23:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:38:14 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 {
 	size_t		i;
 
+	// if (info == NULL)
+		// signal_error_exit()
 	i = 0;
 	free(info->command);
 	free(info->current_dir_path);

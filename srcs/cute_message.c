@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 21:00:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/17 23:37:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,40 +17,32 @@
 ** writeを何回も呼ぶの嫌だったのでput_welcome_messageみたいにするか迷い中。
 */
 
-static char		*get_working_dir(char *pwd)
+// static char		*get_working_dir(char *pwd)
+// {
+// 	int len = ft_strlen(pwd);
+// 	int i = len - 1;
+// 	char *ret;
+// 	int count = 0;
+
+// 	while (i >= 0)
+// 	{
+// 		if (pwd[i] == '/')
+// 			count++;
+// 		if (count == 2)
+// 			return (pwd + i + 1);
+// 		i--;
+// 	}
+// 	return (pwd);
+// }
+
+void		put_prompt(t_minishell_info *info)
 {
-	int len = ft_strlen(pwd);
-	int i = len - 1;
-	char *ret;
-	int count = 0;
-
-	while (i >= 0)
-	{
-		if (pwd[i] == '/')
-			count++;
-		if (count == 2)
-		{
-			ret = ft_strdup(pwd + i + 1);
-			return (ret);
-		}
-		i--;
-	}
-	ret = ft_strdup(pwd);
-	return (ret);
-}
-
-void		put_prompt(char *envp[], t_minishell_info *info)
-{
-	char *s;
-
-	s = envp[search_env(envp, "USER")];
-	ft_putenv(s, info);
+	if (ft_putstr_fd(g_user_name, 1) == false)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(1, "\033[1m\x1b[35m ❤️ \x1b[0m", 21) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	s = get_working_dir(envp[search_env(envp, "PWD")]);
-	if (ft_putstr_fd(s, 1) == false)
+	if (ft_putstr_fd(g_working_dir, 1) == false)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	free(s);
 	if (write(1, "\033[1m\x1b[35m ❤️ > \x1b[0m", 23) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
@@ -80,7 +72,7 @@ int		put_cmd_not_found(char *command)
 
 	len = ft_strlen(command);
 	message = ft_str3join("minishell: ", command, ": command not found\n");
-	write(STDOUT_FILENO, message, len + 31);
+	write(STDERR_FILENO, message, len + 31);
 	ptr_free((void **)&message);
 	return (CMD_NOT_FOUND);
 }
