@@ -2,14 +2,24 @@
 #include <string.h> /* strcmp(  ), size_t で必要 */
 #include "includes/minishell.h"
 
+// void	f(int l, char *f)
+// {
+// 	// printf
+// 	red_error();
+// 	char *tmp = ft_strjoin(f, ":");
+// 	char *res = strjoin_num(tmp, l);
+// 	write(2, "srcs/", 5);
+// 	ft_putendl_fd(res, 2);
+// 	free(tmp);
+// 	free(res);
+// }
+
+
+
 int main()
 {
-	char buf;
-	int rc;
-	while ((rc = read(0, &buf, 1) ) >= 0)
-	{
-		printf("%d : %c\n", rc, buf);
-	}
+	g_working_dir = "/Users/jinichiro/Desktop/tmp/minishell/";
+	perror_exit("aaa", __LINE__, __FILE__);
 }
 
 // #define NUM_DATA 7

@@ -6,34 +6,34 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 21:20:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:27:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
 
-int		is_command(char *cmd, t_minishell_info *info)
-{
-	char		**split;
-	const char	*base[CMD_NUM] = {"cd", "echo", "env", "exit",
-									"export", "pwd", "unset"};
+// int		is_command(char *cmd, t_minishell_info *info)
+// {
+// 	char		**split;
+// 	const char	*base[CMD_NUM] = {"cd", "echo", "env", "exit",
+// 									"export", "pwd", "unset"};
 
-	(void)info;
-	split = ft_split(cmd, ' ');
-	if (split == NULL)
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	char *tmp = split[0];
-	while (*tmp)
-	{
-		*tmp = ft_tolower(*tmp);
-		tmp++;
-	}
-	int	type = str_bsearch(split[0], base, CMD_NUM);
-	info->cmd_split = split;
-	split++;
-	add_cmd_to_lst(info, split, type);
-	return (type);
-}
+// 	(void)info;
+// 	split = ft_split(cmd, ' ');
+// 	if (split == NULL)
+// 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+// 	char *tmp = split[0];
+// 	while (*tmp)
+// 	{
+// 		*tmp = ft_tolower(*tmp);
+// 		tmp++;
+// 	}
+// 	int	type = str_bsearch(split[0], base, CMD_NUM);
+// 	info->cmd_split = split;
+// 	split++;
+// 	add_cmd_to_lst(info, split, type);
+// 	return (type);
+// }
 
 bool	cmd_exit_check(char *cmd)
 {
@@ -50,14 +50,12 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 	t_stat	stat_buf;
 	char	*bin_path;
 
-	info->cmd_split = command;
 	bin_path = ft_strjoin("/bin/", command[0]);
 	if (bin_path == NULL)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
-		ptr_free((void **)&(info->cmd_split[0]));
-		info->cmd_split[0] = bin_path;
+		command[0] = bin_path;
 		return (true);
 	}
 	ptr_free((void **)&bin_path);
@@ -67,8 +65,7 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
-		ptr_free((void **)&(info->cmd_split[0]));
-		info->cmd_split[0] = bin_path;
+		command[0] = bin_path;
 		return (true);
 	}
 	ptr_free((void **)&bin_path);
@@ -84,8 +81,9 @@ bool	parsing(t_minishell_info *info, char *command)
 	int			type;
 	char		**split;
 	// ;> ;< ;>>とかの処理もする
-	const char	*base[CMD_NUM] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>", ">|", "cd", "echo",
-							"env", "exit", "export", "pwd", "unset", "|"};
+	const char	*base[CMD_NUM] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>",
+								">|", "cd", "echo", "env", "exit",
+								"export", "pwd", "unset", "|"};
 
 	split = ft_split(command, ' ');
 	if (split == NULL)
@@ -102,9 +100,6 @@ bool	parsing(t_minishell_info *info, char *command)
 	}
 	add_cmd_to_lst(info, split, type);
 	return (1);
-
-
-
 }
 
 /*

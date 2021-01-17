@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:39:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:54:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	set_env_info(t_minishell_info *info, char **envp)
 {
 	info->current_dir_path = getcwd(NULL, 0);
 	info->cmd_lst = NULL; // リスト初期化
+	info->cmd_split = NULL; // リスト初期化
 	info->envp = envp;
 	info->command = NULL;
 	info->prev_rc = 0;
@@ -128,8 +129,17 @@ void	set_prompt_message(char *envp[])
 	while (*s++ != '=')
 		;
 	g_user_name = s;
+	g_user_name_count = 0;
+	while (g_user_name[g_user_name_count])
+		g_user_name_count++;
 	s = get_working_dir(envp[search_env(envp, "PWD")]);
+	// s = envp[search_env(envp, "PWD")];
+	// while (*s++ != '=')
+	// 	;
 	g_working_dir = s;
+	g_working_dir_count = 0;
+	while (g_working_dir[g_working_dir_count])
+		g_working_dir_count++;
 }
 
 int		main(int argc, char *argv[], char *envp[])

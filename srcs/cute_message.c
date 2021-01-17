@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:42:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:55:19 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 
 void		put_prompt(t_minishell_info *info)
 {
-	if (ft_putstr_fd(g_user_name, 1) == false)
+	if (write(1, g_user_name, g_user_name_count) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(1, "\033[1m\x1b[35m ❤️ \x1b[0m", 21) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	if (ft_putstr_fd(g_working_dir, 1) == false)
+	if (write(1, g_working_dir, g_working_dir_count) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(1, "\033[1m\x1b[35m ❤️ > \x1b[0m", 23) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);

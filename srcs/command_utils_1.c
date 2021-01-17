@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 01:37:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:49:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,22 @@
 ** 見つからなかった場合はもうコマンドとして終わりなのでreturn ("");する
 */
 
-char	*next_command(char *command)
-{
-	size_t	i;
+// char	*next_command(char *command)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (command[i])
-	{
-		if (command[i] == '>' && command[i + 1] == '>')
-			return (command + i + 1);
-		else if (command[i] == ';' || command[i] == '|' || \
-			command[i] == '<' || command[i] == '>')
-			return (command + i);
-		i++;
-	}
-	return ("");
-}
+// 	i = 0;
+// 	while (command[i])
+// 	{
+// 		if (command[i] == '>' && command[i + 1] == '>')
+// 			return (command + i + 1);
+// 		else if (command[i] == ';' || command[i] == '|' ||
+// 			command[i] == '<' || command[i] == '>')
+// 			return (command + i);
+// 		i++;
+// 	}
+// 	return ("");
+// }
 
 static t_cmdlst	*cmd_lstlast(t_cmdlst *lst)
 {

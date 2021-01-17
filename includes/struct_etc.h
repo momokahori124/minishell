@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:24:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:51:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ enum	e_cmd
 # define NEXT_CMD 2
 
 char		*g_user_name;
+int			g_user_name_count;
 char		*g_working_dir;
+int			g_working_dir_count;
 
 #endif

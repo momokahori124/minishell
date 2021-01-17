@@ -1,18 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect_output.c                                  :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 19:45:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 19:48:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:18:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
 
-static void		write_to_file(char *name[2], int mode, int type, \
+static void		read_from_file(char *filename, t_cmdlst *begin, t_minishell_info *info)
+{
+	int	fd;
+	int	backup_stdin;
+
+	if ((backup_stdin = dup(STDIN_FILENO)) == -1)
+		all_free_perror_exit(info, ERR_DUP, __LINE__, __FILE__);
+	if (close(STDIN_FILENO) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+	if ((fd = open(filename, O_RDONLY)) == -1)
+	{
+		if (dup(backup_stdin) == -1)
+			all_free_perror_exit(info, ERR_DUP, __LINE__, __FILE__);
+		if (errno == ENOENT)
+			return (err_no_such_file_or_directory(filename, info));
+		all_free_perror_exit(info, ERR_OPEN, __LINE__, __FILE__);
+	}
+	execute(info, begin);
+	if (close(fd) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+	if (dup(backup_stdin) == -1)
+		all_free_perror_exit(info, ERR_DUP, __LINE__, __FILE__);
+}
+
+static void		write_to_file(char *filename, int mode, t_cmdlst *begin, \
 						t_minishell_info *info)
 {
 	int	fd;
@@ -22,9 +46,9 @@ static void		write_to_file(char *name[2], int mode, int type, \
 		all_free_perror_exit(info, ERR_DUP, __LINE__, __FILE__);
 	if (close(STDOUT_FILENO) == -1)
 		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-	if ((fd = open(name[1], O_CREAT | O_WRONLY | mode, 0666)) == -1)
+	if ((fd = open(filename, O_CREAT | O_WRONLY | mode, 0666)) == -1)
 		all_free_perror_exit(info, ERR_OPEN, __LINE__, __FILE__);
-	execute(info, type, name[0]);
+	execute(info, begin);
 	if (close(fd) == -1)
 		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	if (dup(backup_stdout) == -1)
@@ -34,9 +58,9 @@ static void		write_to_file(char *name[2], int mode, int type, \
 static t_cmdlst	*save_cmdlst_and_create_file(t_cmdlst **cmd_lst, t_cmdlst *next,
 					int prev_output, t_minishell_info *info)
 {
-	if (next && (next->type == OUTPUT || next->type == DB_OUTPUT))
+	if (next && (next->type == OUTPUT || next->type == DB_OUTPUT || next->type == INPUT))
 	{
-		if (prev_output == OUTPUT)
+		if (prev_output == OUTPUT || prev_output == DB_OUTPUT)
 		{
 			if (open((*cmd_lst)->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0666)
 						< 0)
@@ -54,40 +78,44 @@ static t_cmdlst	*return_file_for_writing(t_cmdlst **cmd_lst, int *output_type,
 	t_cmdlst	*next;
 	int			cnt;
 
-	cnt = -1;
+	cnt = 0;
 	while ((*cmd_lst))
 	{
 		next = (*cmd_lst)->next;
-		if ((++cnt & 1) == 1)
+		if ((cnt & 1) == 0)
 		{
-			if ((*cmd_lst)->type != OUTPUT && (*cmd_lst)->type != DB_OUTPUT)
+			if ((*cmd_lst)->type != OUTPUT && (*cmd_lst)->type != DB_OUTPUT
+				&& (*cmd_lst)->type != INPUT)
 				return (res);
 			*output_type = (*cmd_lst)->type;
 			free_alloc_ptr_in_cmd_lst(cmd_lst);
 		}
-		else if ((cnt & 1) == 0)
+		else if ((cnt & 1) == 1)
 			res = save_cmdlst_and_create_file(cmd_lst, next, \
 						*output_type, info);
 		*cmd_lst = next;
+		cnt++;
 	}
 	return (res);
 }
 
-t_cmdlst		*redirect_output(t_minishell_info *info, t_cmdlst **cmd_lst)
+t_cmdlst		*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 {
 	t_cmdlst	*save;
+	t_cmdlst	*begin;
 	int			output_type;
-	int			cmd_type;
-	char		*name[2];
+	char		*filename;
 
-	name[0] = (*cmd_lst)->arg[0];
-	cmd_type = (*cmd_lst)->type;
-	save = return_file_for_writing(cmd_lst, &output_type, info);
-	name[1] = save->arg[0];
+	begin = *cmd_lst;
+	save = return_file_for_writing(&((*cmd_lst)->next), &output_type, info);
+	filename = save->arg[0];
 	*cmd_lst = save;
 	if (output_type == OUTPUT)
-		write_to_file(name, O_TRUNC, cmd_type, info);
+		write_to_file(filename, O_TRUNC, begin, info);
 	else if (output_type == DB_OUTPUT)
-		write_to_file(name, O_APPEND, cmd_type, info);
+		write_to_file(filename, O_APPEND, begin, info);
+	else if (output_type == INPUT)
+		read_from_file(filename, begin, info);
+	free_alloc_ptr_in_cmd_lst(&begin);
 	return (save->next);
 }

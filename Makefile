@@ -6,14 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/17 19:50:01 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/18 02:29:18 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = gcc
 
-CFLAGS = -g -Wall -Werror -Wextra           #   -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra         #     -fsanitize=address
 
 SRCFILE =	minishell.c \
 			minishell_utils.c \
@@ -23,7 +23,7 @@ SRCFILE =	minishell.c \
 			signal.c \
 			pwd_command.c \
 			exit.c \
-			redirect_output.c \
+			redirect.c \
 			command_format_check.c \
 			is_output_format_error.c \
 			is_pipe_format_error.c \
@@ -38,12 +38,13 @@ SRCFILE =	minishell.c \
 			wait_quotation.c \
 			read_command_line.c \
 
-SRCDIR = srcs/
+SRCDIR = srcs
+OBJDIR = $(SRCDIR)/objs
 
-SRCS = $(addprefix $(SRCDIR), $(SRCFILE))
-
-OBJS = $(SRCS:.c=.o)
-%.o : %.c
+SRCS = $(addprefix $(SRCDIR)/, $(SRCFILE))
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
+$(OBJDIR)/%.o : $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 LIBS = ./utils/Libft/

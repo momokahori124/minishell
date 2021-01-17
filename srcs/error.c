@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:38:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:57:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ void		perror_exit(char *error_message, int line_num, char *file_name)
 	char	*tmp;
 
 	red_error();
-	location_message = ft_strjoin(file_name, " -> line:");
+	if (write(1, g_working_dir, g_working_dir_count) < 0)
+	{
+		perror(ERR_WRITE);
+		exit(EXIT_FAILURE);
+	}
+	location_message = ft_strjoin(file_name, ":");
 	tmp = location_message;
 	location_message = strjoin_num(location_message, line_num);
 	ft_putendl_fd(location_message, 2);
@@ -67,12 +72,6 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 		ptr_2d_free((void ***)&(info->cmd_lst->arg), i);
 		free(info->cmd_lst);
 		info->cmd_lst = tmp;
-	}
-	if (info->cmd_split != NULL)  // 先にNULL埋めておく
-	{
-		while (info->cmd_split[i])
-			i++;
-		ptr_2d_free((void ***)&(info->cmd_split), i);
 	}
 	if (errno == 0)
 		exit(1);
@@ -186,6 +185,15 @@ bool	warning_message(char *error_message, t_minishell_info *info)
 	return (false);
 }
 
+void	err_no_such_file_or_directory(char *filename, t_minishell_info *info)
+{
+	if (write(STDERR_FILENO, "minishell: ", 11) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (ft_putstr_fd(filename, STDERR_FILENO) == false)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	if (write(STDERR_FILENO, ": No such file or directory\n", 28) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+}
 
 bool	two_ptr_2d_free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
 {
