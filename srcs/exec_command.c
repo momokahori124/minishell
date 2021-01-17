@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:19:38 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 04:13:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,10 @@ bool		execute_command(t_minishell_info *info)
 		if (next && (next->type == OUTPUT || next->type == DB_OUTPUT ||
 					next->type == INPUT))
 			next = redirect_sep(info, &(info->cmd_lst));
+		else if (next && next->type == PIPE)
+		{
+
+		}
 		else
 			execute(info, info->cmd_lst);
 		free_alloc_ptr_in_cmd_lst(&(info->cmd_lst));
