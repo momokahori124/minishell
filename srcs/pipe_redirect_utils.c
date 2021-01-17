@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 16:41:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 03:00:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,6 @@ bool		wait_next_cmd(t_minishell_info *info, int cnt)
 
 bool	check_pipe_num(int count, t_minishell_info *info)
 {
-	puts("++++");
 	if (count == 1)
 		return (wait_next_cmd(info, 0));
 	return (false);
