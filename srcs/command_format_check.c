@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:37:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 20:35:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 16:40:20 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ bool	check_format_of_command(char ***grp, t_minishell_info *info)
 {
 	int	i;
 
-	i = 0;
-	while ((*grp)[i])
+	i = -1;
+	while ((*grp)[++i])
 	{
 		if (i != 0 && (*grp)[i][0] == '|' && (*grp)[i][1] != '|' && !(*grp)[i + 1])
 		{
-			if (wait_for_next_cmd(grp, i + 1, info) == false)
+			wait_for_next_cmd(grp, i + 1, info);
+			if (*grp == NULL)
 				return (false);
 			break ;
 		}
@@ -31,8 +32,6 @@ bool	check_format_of_command(char ***grp, t_minishell_info *info)
 			return (false);
 		if (is_semicolon_format_error(grp, i, info) == false)
 			return (false);
-
-		i++;
 	}
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 18:53:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 21:19:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define ERR_FORK "Failed to \033[4mfork\033[0m at the above location. "
 # define ERR_FAIL_CHILD "The child process did not terminate successfully. "
 # define ERR_WAIT_PID "Failed to \033[4mwait_pid\033[0m at the above location. "
+# define ERR_PIPE "Failed to \033[4mpipe\033[0m at the above location. "
+# define ERR_OPEN "Failed to \033[4mopen\033[0m at the above location. "
 
 
 # define SYNTAX_EOL_NUM -1

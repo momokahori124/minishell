@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 20:00:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 16:41:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,50 +410,18 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 		return (true);
 	if (!(split = split_by_chrs_contain_delimiters(*inputs, "|;><")))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	i = 0;
 	ptr_free((void **)inputs);
-	// re_strdup(inputs, "");
+	i = 0;
 	while (split[i])
 	{
+		// pipeの読み込み中にいろいろエラーを弾く。
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
-		{
-			puts("NEXT_CMD");
 			return (add_cmd_grp(split, cmd_grp_info, i + 1, info));
-		}
-		if (split[i][0] == '|' && split[i][1] == '|')
-			return (two_ptr_2d_free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
+		else if (split[i][0] == '|' && split[i][1] == '|')
+			return (two_ptr_2d_free_and_syntax_error(DB_PIPE, &split, cmd_grp_info, info));
 		i++;
 	}
-	// if (split[i - 1][0] == '|' && split[i - 1][1] != '|')
-	// {
-	// 	// *cmd_grp = add_cmd_grp(split, cmd_grp, i, j);
-	// 	ptr_2d_free((void ***)&split, 0);
-	// 	return (NEXT_CMD);
-	// }
-
-
-	// if (split[0][0] == '|')
-	// 	return (free_and_syntax_error(PIPE, &split, cmd_grp_info, info));
-	// else if (split[0][0] == ';' && split[0][1] == ';')
-	// 	return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
-	// else if (split[0][0] == ';')
-	// 	return (free_and_syntax_error(SEMICOLON, &split, cmd_grp_info, info));
-	// else if (split[i - 1][0] == '>' || split[i - 1][0] == '<')
-	// 	return (free_and_syntax_error(NEWLINE, &split, cmd_grp_info, info));
-	// if (split[i - 1][0] == '|' && split[i - 1][1] == '|')
-	// 	return (free_and_syntax_error(NOT_CMD, &split, cmd_grp_info, info));
-
-
-	// else if (split[i - 1][0] == '<')
-	// {
-	// 	if (split[i - 1][1] == '<')
-	// 		return (syntax_error(NOT_CMD, info));
-	// 	return (syntax_error(INPUT, info));
-	// }
 	add_cmd_grp(split, cmd_grp_info, i, info);
-	// ptr_2d_free((void ***)&split, 0);
-		// puts("oooooooooooooo");
-	// free((*cmd_grp));
 	return (true);
 }
 
@@ -491,10 +459,7 @@ static bool	check_buf_and_return_value(ssize_t rc, char **inputs, char buf, \
 static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
 {
 	int	rc;
-	// t_cmd_grp cmd_grp_info;
 
-	// cmd_grp_info.cmd_grp = cmd_grp;
-	// cmd_grp_info.array_size = array_size;
 	rc = check_more_pipe(inputs, cmd_grp_info, info);
 	printf("rc : %d\n", rc);
 	if (rc != NEXT_CMD)
@@ -533,9 +498,3 @@ bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
 	}
 	return (false);
 }
-
-// __attribute__((destructor))
-// void end()
-// {
-// 	system("leaks minishell");
-// }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/15 18:34:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 21:28:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,155 @@ void		exec_bin(t_minishell_info *info)
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数
 */
 
-static bool	execute(t_minishell_info *info)
+char *typecheck(int type, char *s)
 {
-	printf("%d\n", info->cmd_lst->type);
-	if (info->cmd_lst->type == BIN)
-		exec_bin(info);
-	else if (info->cmd_lst->type == EXIT)
-		exec_exit(info);
-	else if (info->cmd_lst->type == PWD)
-		exec_pwd(info);
-	else if (info->cmd_lst->type == NOT_CMD)
-		info->prev_rc = put_cmd_not_found(info->cmd_lst->arg[0]);
-	return (1);
+	if (type == PWD)
+		return ("pwd");
+	else if (type == OUTPUT)
+		return (">");
+	else
+		return (s);
 }
 
-/*
-** リストを回してexecute_each_command関数に渡すようにする関数
-*/
+static bool	execute(t_minishell_info *info, t_cmdlst *cmd_lst)
+{
+	// fprintf(stderr, "type : %s\n", typecheck(cmd_lst->type));
+	if (cmd_lst->type == BIN)
+		exec_bin(info);
+	else if (cmd_lst->type == EXIT)
+		exec_exit(info);
+	else if (cmd_lst->type == PWD)
+		exec_pwd(info);
+	else if (cmd_lst->type == NOT_CMD)
+		info->prev_rc = put_cmd_not_found(cmd_lst->arg[0]);
+	return (true);
+}
+
+typedef struct	s_fd
+{
+	int			fd;
+	int			backup_stdout;
+}				t_fd;
+
+
+bool	write_to_file(char *filename, int mode, t_fd *mini_fd)
+{
+	mini_fd->backup_stdout = dup(STDOUT_FILENO);
+	mini_fd->fd = open(filename, O_CREAT | O_WRONLY | mode, 0666);
+	dup2(mini_fd->fd, STDOUT_FILENO);
+	close(mini_fd->fd);
+	return (true);
+}
+
+void		free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
+{
+	ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
+	ptr_free((void **)cmd_lst);
+}
+
+t_cmdlst	*save_cmdlst_and_create_file(t_cmdlst **cmd_lst, t_cmdlst *next,
+					int prev_output, t_minishell_info *info)
+{
+	if (next && (next->type == OUTPUT || next->type == DB_OUTPUT))
+	{
+		if (prev_output == OUTPUT)
+		{
+			if (open((*cmd_lst)->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0666)
+						< 0)
+				all_free_perror_exit(info, ERR_OPEN, __LINE__, __FILE__);
+		}
+		free_alloc_ptr_in_cmd_lst(cmd_lst);
+	}
+	return (*cmd_lst);
+}
+
+t_cmdlst	*return_file_for_writing(t_cmdlst **cmd_lst, int *output_type,
+				t_minishell_info *info)
+{
+	t_cmdlst	*res;
+	t_cmdlst	*next;
+	int			cnt;
+
+	cnt = -1;
+	while ((*cmd_lst))
+	{
+		next = (*cmd_lst)->next;
+		if ((++cnt & 1) == 1)
+		{
+			if ((*cmd_lst)->type != OUTPUT)
+				return (res);
+			*output_type = (*cmd_lst)->type;
+			free_alloc_ptr_in_cmd_lst(cmd_lst);
+		}
+		else if ((cnt & 1) == 0)
+			res = save_cmdlst_and_create_file(cmd_lst, next, *output_type, info);
+		*cmd_lst = next;
+	}
+	return (res);
+}
+
+bool	redirect_output(t_minishell_info *info, t_cmdlst **cmd_lst)
+{
+	// t_cmdlst	*output;
+	// t_cmdlst	*next;
+	t_cmdlst	*save;
+	t_fd		mini_fd;
+	int			output_type;
+	char		*filename;
+	int			cmd_type;
+
+
+	cmd_type = (*cmd_lst)->type;
+	save = return_file_for_writing(cmd_lst, &output_type, info);
+	printf("%s\n", typecheck(output_type, save->arg[0]));
+	printf("%s\n", save->arg[0]);
+	// exit(0);
+	filename = save->arg[0];
+	if (output_type == OUTPUT)
+	{
+		write_to_file(filename, O_TRUNC, &mini_fd);
+	}
+	save->type = cmd_type;
+	execute(info, save);
+	*cmd_lst = save->next;
+	// int i = 0;
+	// while ((*cmd_lst)->arg[i])
+	// 	i++;
+	// ptr_2d_free((void ***)&((*cmd_lst)->arg), i);
+	// i = 0;
+	// while (output->arg[i])
+	// 	i++;
+	// ptr_2d_free((void ***)&(output->arg), i);
+	// i = 0;
+	// while (next->arg[i])
+	// 	i++;
+	// ptr_2d_free((void ***)&(next->arg), i);
+	// *cmd_lst = next;
+	dup2(mini_fd.backup_stdout, STDOUT_FILENO);
+	return (true);
+}
 
 bool		execute_command(t_minishell_info *info)
 {
 	t_cmdlst *begin;
+	t_cmdlst *next;
 
 	begin = info->cmd_lst;
 	while (info->cmd_lst)
 	{
-		execute(info);
+		// fprintf(stderr, "type : %s\n", typecheck(info->cmd_lst->type, info->cmd_lst->arg[0]));
+		next = info->cmd_lst->next;
+		// printf("%p\n", next);
+		// if (next && next->type == OUTPUT)
+		// 	if (pipe(next->pipe) < 0)
+		// 		all_free_perror_exit(info, ERR_PIPE, __LINE__, __FILE__);
+		if (next && next->type == OUTPUT)
+		{
+			redirect_output(info, &(info->cmd_lst));
+			printf("%p\n", info->cmd_lst);
+			continue ;
+		}
+		execute(info, info->cmd_lst);
 		int i = 0;
 		while (info->cmd_lst->arg[i])
 			i++;
@@ -78,3 +201,9 @@ bool		execute_command(t_minishell_info *info)
 	info->cmd_lst = begin;
 	return (true);
 }
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }

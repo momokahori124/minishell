@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 00:31:32 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 21:20:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
+	// ;> ;< ;>>とかの処理もする
 	const char	*base[CMD_NUM] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>", ">|", "cd", "echo",
 							"env", "exit", "export", "pwd", "unset", "|"};
 
@@ -101,6 +102,9 @@ bool	parsing(t_minishell_info *info, char *command)
 	}
 	add_cmd_to_lst(info, split, type);
 	return (1);
+
+
+
 }
 
 /*

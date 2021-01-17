@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 18:53:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 21:23:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void		ctrl_d_exit(char **ptr, t_minishell_info *info)
 	ft_putstr_fd("\033[0Kexit\n", 2);
 	free(info->command);
 	free(info->current_dir_path);
-	free(info->cmd_lst);
+	// free(info->cmd_lst);
 	free_exit(ptr, EXIT_FAILURE);
 }
 

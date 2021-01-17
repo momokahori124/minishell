@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:54:12 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/12 18:34:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 21:00:49 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int		put_cmd_not_found(char *command)
 
 	len = ft_strlen(command);
 	message = ft_str3join("minishell: ", command, ": command not found\n");
-	write(STDOUT, message, len + 31);
+	write(STDOUT_FILENO, message, len + 31);
 	ptr_free((void **)&message);
 	return (CMD_NOT_FOUND);
 }

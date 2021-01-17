@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/05 21:15:37 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/16 18:40:42 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ COUNT_SRCS = $(addprefix $(COUNT_DIR)/, \
 #========== file function ======================================================
 FILE_DIR = $(SRCDIR)/file_func
 FILE_SRCS = $(addprefix $(FILE_DIR)/, \
-				create_file_name.c \
+				create_filename.c \
 				get_next_line.c \
 				get_next_line_utils.c \
 )

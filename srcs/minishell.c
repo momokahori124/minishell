@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/12 18:58:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 20:42:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ int		console_loop(t_minishell_info *info, char *envp[])
 			// 	continue ; //pwd | で次|を押してプロンプトが二つ出るのを防いでる
 			if (parse_command_line(info) != false)
 				execute_command(info);
-			while (info->cmd_lst)
-			{
-				t_cmdlst *tmp;
-				tmp = info->cmd_lst->next;
+			// while (info->cmd_lst)
+			// {
+			// 	t_cmdlst *tmp;
+			// 	tmp = info->cmd_lst->next;
 
-				free(info->cmd_lst);
-				info->cmd_lst = tmp;
-			}
+			// 	free(info->cmd_lst);
+			// 	info->cmd_lst = tmp;
+			// }
 		// 	printf("command = [%s]\n", info->command);
 		// fflush(stdout);
 			// ptr_free((void **)&(info->command));

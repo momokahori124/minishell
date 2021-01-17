@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/11 14:55:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 19:29:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void		exec_pwd(t_minishell_info *info)
 {
-	ft_putendl_fd(info->current_dir_path, STDOUT);
+	ft_putendl_fd(info->current_dir_path, STDOUT_FILENO);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 00:47:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/16 19:04:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define MAX(x, y) ((x) > (y) ? (x) : (y))
 # define SUCCESS 0
 # define ERROR 1
-# define STDOUT 1
+// # define STDOUT 1
 
 int			search_env(char *envp[], char *env_name);
 void		ft_putenv(char *s, t_minishell_info *info);
