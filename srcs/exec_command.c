@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 02:31:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 04:39:15 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void		exec_bin(t_minishell_info *info, t_cmdlst *cmd)
 
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
 {
-	ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
+	if ((*cmd_lst)->arg != NULL)
+		ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
 	ptr_free((void **)cmd_lst);
 }
 
@@ -87,10 +88,8 @@ bool		execute_command(t_minishell_info *info)
 		else if (next && next->type == PIPE)
 			next = pipe_sep(info, &(info->cmd_lst));
 		else
-		{
 			execute(info, info->cmd_lst);
-			// free_alloc_ptr_in_cmd_lst(&(info->cmd_lst));
-		}
+		free_alloc_ptr_in_cmd_lst(&(info->cmd_lst));
 		info->cmd_lst = next;
 	}
 	info->cmd_lst = NULL;

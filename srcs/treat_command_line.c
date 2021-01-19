@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 02:18:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 04:37:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@
 
 bool	cmd_exit_check(char *cmd)
 {
-	if ((cmd[0] == 'e' || cmd[0] == 'E') && \
-		(cmd[1] == 'x' || cmd[1] == 'X') && \
-		(cmd[2] == 'i' || cmd[2] == 'I') && \
-		(cmd[3] == 't' || cmd[3] == 'T'))
+	if (cmd[0] == 'e' && cmd[1] == 'x' && cmd[2] == 'i' && cmd[3] == 't')
 		return (true);
 	return (false);
 }
@@ -74,6 +71,36 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 	return (false);
 }
 
+int	ft_lowerstr_cmp(char *p1, char *p2)
+{
+	unsigned char	*s1;
+	unsigned char	*s2;
+
+	if (!p1 || !p2)
+		return (INT_MIN);
+	s1 = (unsigned char *)p1;
+	s2 = (unsigned char *)p2;
+	while (*s1 && ft_tolower(*s1) == ft_tolower(*s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (ft_tolower(*s1) - ft_tolower(*s2));
+}
+
+bool	devide_semicolon_and_redirect(int type, t_minishell_info *info)
+{
+	add_cmd_to_lst(info, NULL, SEMICOLON);
+	if (type == SEMI_OUTPUT)
+		add_cmd_to_lst(info, NULL, OUTPUT);
+	else if (type == SEMI_DB_OUTPUT)
+		add_cmd_to_lst(info, NULL, DB_OUTPUT);
+	else if (type == SEMI_INPUT)
+		add_cmd_to_lst(info, NULL, DB_INPUT);
+	return (1);
+}
+
+
 /*
 ** 入力された文字列から各コマンドをparseする関数
 */
@@ -87,19 +114,19 @@ bool	parsing(t_minishell_info *info, char *command)
 								">|", "cd", "echo", "env", "exit",
 								"export", "pwd", "unset", "|"};
 
-	split = ft_split(command, ' ');
-	if (split == NULL)
+	if (!(split = ft_split(command, ' ')))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return (1);
-	if (cmd_exit_check(split[0]) == false)
-		str_tolower(&(split[0]));
-	type = str_bsearch(split[0], base, CMD_NUM);
-	if (type == NOT_CMD)
-	{
+	if (cmd_exit_check(split[0]) == true)
+		return (add_cmd_to_lst(info, split, EXIT));
+	type = str_bsearch(split[0], base, CMD_NUM, ft_lowerstr_cmp);
+	if (type == SEMI_OUTPUT || type == SEMI_DB_OUTPUT ||
+				type == SEMI_INPUT)
+		return (devide_semicolon_and_redirect(type, info));
+	else if (type == NOT_CMD)
 		if (check_bash_standard_commands(info, split) == true)
 			return (add_cmd_to_lst(info, split, BIN));
-	}
 	add_cmd_to_lst(info, split, type);
 	return (1);
 }

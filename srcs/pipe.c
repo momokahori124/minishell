@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 02:09:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 03:57:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,5 @@ t_cmdlst	*pipe_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 	}
 	apply_last_pipe(cmd_lst, pipefd[i - 1], info);
 	next = (*cmd_lst)->next;
-	free_alloc_ptr_in_cmd_lst(cmd_lst);
 	return (next);
 }
