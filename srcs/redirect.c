@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 19:45:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:18:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 04:21:01 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../includes/pipe_redirect.h"
 
 static void		read_from_file(char *filename, t_cmdlst *begin, t_minishell_info *info)
 {

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:18:35 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/18 04:20:21 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define COMMAND_H
 
 # include "struct_etc.h"
-# include "minishell.h"
+// # include "minishell.h"
 # include "exit.h"
+# include "pipe_redirect.h"
 
 // char	*read_command_line(t_minishell_info *info);
 bool	read_command_line(t_minishell_info *info);
@@ -42,7 +43,7 @@ bool	execute_command(t_minishell_info *info);
 bool	execute(t_minishell_info *info, t_cmdlst *cmd);
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 
-t_cmdlst	*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst);
+// t_cmdlst	*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst);
 
 // utils2
 char	**split_by_chrs_contain_delimiters(char *str, char *charset);
