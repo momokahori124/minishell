@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:57:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 02:36:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void		perror_exit(char *error_message, int line_num, char *file_name)
 
 	red_error();
 	if (write(1, g_working_dir, g_working_dir_count) < 0)
+	{
+		perror(ERR_WRITE);
+		exit(EXIT_FAILURE);
+	}
+	if (write(1, "/", 1) < 0)
 	{
 		perror(ERR_WRITE);
 		exit(EXIT_FAILURE);

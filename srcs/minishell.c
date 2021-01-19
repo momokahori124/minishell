@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 01:49:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 02:37:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,23 +104,23 @@ void	set_env_info(t_minishell_info *info, char **envp)
 	info->prev_rc = 0;
 }
 
-static char		*get_working_dir(char *pwd)
-{
-	int	len;
-	int	count;
+// static char		*get_working_dir(char *pwd)
+// {
+// 	int	len;
+// 	int	count;
 
-	len  = ft_strlen(pwd) - 1;
-	count = 0;
-	while (len >= 0)
-	{
-		if (pwd[len] == '/')
-			count++;
-		if (count == 2)
-			return (pwd + len + 1);
-		len--;
-	}
-	return (pwd);
-}
+// 	len  = ft_strlen(pwd) - 1;
+// 	count = 0;
+// 	while (len >= 0)
+// 	{
+// 		if (pwd[len] == '/')
+// 			count++;
+// 		if (count == 2)
+// 			return (pwd + len + 1);
+// 		len--;
+// 	}
+// 	return (pwd);
+// }
 
 void	set_prompt_message(char *envp[])
 {
@@ -133,10 +133,10 @@ void	set_prompt_message(char *envp[])
 	g_user_name_count = 0;
 	while (g_user_name[g_user_name_count])
 		g_user_name_count++;
-	s = get_working_dir(envp[search_env(envp, "PWD")]);
-	// s = envp[search_env(envp, "PWD")];
-	// while (*s++ != '=')
-	// 	;
+	// s = get_working_dir(envp[search_env(envp, "PWD")]);
+	s = envp[search_env(envp, "PWD")];
+	while (*s++ != '=')
+		;
 	g_working_dir = s;
 	g_working_dir_count = 0;
 	while (g_working_dir[g_working_dir_count])
