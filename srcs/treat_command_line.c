@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 21:59:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 02:18:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
+		ptr_free((void **)&(command[0]));
 		command[0] = bin_path;
 		return (true);
 	}
@@ -65,6 +66,7 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (lstat(bin_path, &stat_buf) == 0)
 	{
+		ptr_free((void **)&(command[0]));
 		command[0] = bin_path;
 		return (true);
 	}

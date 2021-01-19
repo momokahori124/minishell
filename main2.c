@@ -53,3 +53,9 @@ int main(void) {
 
   return 0;
 }
+
+__attribute__((destructor))
+void end()
+{
+    system("leaks a.out");
+}

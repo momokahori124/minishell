@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 21:02:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 00:47:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,10 +414,15 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 	while (split[i])
 	{
 		// pipeの読み込み中にいろいろエラーを弾く。
+		// 多分これでいけてるはず
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
 			return (add_cmd_grp(split, cmd_grp_info, i + 1, info));
-		else if (split[i][0] == '|' && split[i][1] == '|')
-			return (two_ptr_2d_free_and_syntax_error(DB_PIPE, &split, cmd_grp_info, info));
+		if (is_output_format_error(&split, i, info) == false)
+			return (false);
+		if (is_pipe_format_error(&split, i, info) == false)
+			return (false);
+		if (is_semicolon_format_error(&split, i, info) == false)
+			return (false);
 		i++;
 	}
 	add_cmd_grp(split, cmd_grp_info, i, info);
@@ -482,7 +487,7 @@ int			wait_for_next_cmd(char ***cmd_grp, int array_size,
 	inputs = prepare_in_advance(info, &cmd_grp_info, cmd_grp, array_size);
 	while ((rc = safe_read(&buf, &inputs, info)) >= 0)
 	{
-		if (write(0, "\033[0K", 4) < 0)
+		if (write(1, "\033[0K", 4) < 0)
 		{
 			ptr_free((void **)&inputs);
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -513,5 +518,8 @@ void	connect_std_in_out_and_pipe(int pipefd[2], int i_o,
 {
 	if (dup2(pipefd[i_o], i_o) == -1)
 		all_free_perror_exit(info, ERR_DUP2, __LINE__, __FILE__);
-	close_pipe_fd(pipefd, info);
+	if (close(pipefd[STDIN_FILENO]) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+	if (close(pipefd[STDOUT_FILENO]) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 }

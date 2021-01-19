@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/16 18:40:42 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/20 02:02:27 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -190,37 +190,37 @@ ECHO	=	"[`expr $C  '*' 100 / $T`%]"
 $(OBJDIR)/%.o : $(ALGORITHM_DIR)/%.c
 	@mkdir -p $(OBJDIR)
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(CONVERT_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(COUNT_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(FILE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(FREE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(ISWHAT_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(LST_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(MEMORY_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(STRING_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(VEC3D_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 $(OBJDIR)/%.o : $(WRITE_DIR)/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling  $(RESET)$(UNDER_LINE)"$@"$(RESET)"
+	@printf " %-100b\r" "$(YELLOW)$(ECHO) Compiling $(RESET)$(UNDER_LINE)"$@"$(RESET)"
 
 
 # ========== Main Make =========================================================
