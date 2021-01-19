@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 20:29:16 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 00:46:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 19:10:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ bool		is_semicolon_format_error(char ***grp, int i, \
 		t_minishell_info *info)
 {
 	if ((*grp)[i][0] != ';')
+		return (true);
+	if ((*grp)[i][0] == ';' && (*grp)[i + 1] == NULL)
 		return (true);
 	if (is_semicolon_format_error2(grp, i, info) == false)
 		return (false);

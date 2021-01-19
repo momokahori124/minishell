@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 18:12:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 19:16:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@ void		exec_bin(t_minishell_info *info, t_cmdlst *cmd)
 		if (return_val == -1)
 			all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__);
 	}
-	if ((wait_pid = waitpid(fork_pid, &status, 0)) == -1)
-		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	else
+	{
+		if ((wait_pid = waitpid(fork_pid, &status, 0)) == -1)
+			all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	}
 	if (WIFEXITED(status))
 		return ;
 	else
@@ -63,6 +66,7 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 {
 	int	type;
 
+	// printf("%s\n", cmd->arg[0]);
 	type = cmd->type;
 	if (type == BIN)
 		exec_bin(info, cmd);
@@ -72,7 +76,7 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 		exec_pwd(info);
 	else if (type == NOT_CMD)
 	{
-		puts("not_cmd");
+		// puts("not_cmd");
 		info->prev_rc = put_cmd_not_found(cmd->arg[0]);
 	}
 	return (true);
@@ -116,7 +120,7 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2], t_minishell_info *info)
 	}
 	else
 	{
-		close_pipe_fd(pipefd, info);
+		// close_pipe_fd(pipefd, info); // ここだとうまくいかない　シグナル番号１３
 		if (waitpid(fork_pid, &status, 0) == -1)
 			all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	}
@@ -126,15 +130,26 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2], t_minishell_info *info)
 		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
+/*
+** パイプをうまく機能させようと思うと、
+** 必要のないファイルディスクリプタは片っ端から閉じておく必要があります。
+** 無駄に開いている読み出し口や書き込み口があると、入力が終わってもEOFが返されません。
+** するとパイプで繋がれたプログラムが終了しないので、いつまでも待ち続ける羽目になります。
+** 必要なものだけ開いた状態にするのが鉄則です。
+** (引用) https://www.haya-programming.com/entry/2018/11/08/185349
+*/
+
 void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2], t_minishell_info *info)
 {
 	int	fork_pid;
 	int	status;
+	(void)status;
 
-	pipe(pipefd);
-	if ((fork_pid = fork()) == -1)
+	// // pipe(pipefd);
+	fork_pid = fork();
+	if (fork_pid == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
-	if (fork_pid == 0)
+	else if (fork_pid == 0)
 	{
 		connect_stdin_and_pipe(pipefd, info);
 		execute(info, *cmd_lst);
@@ -160,48 +175,22 @@ t_cmdlst	*pipe_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 {
 	int		pipefd[2];
 	(void)info;
-	int fork_pid;
+	// int fork_pid;
 	t_cmdlst	*tmp;
 	// int begin_flag;
 
 	apply_first_pipe(cmd_lst, pipefd, info);
 	while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next && (*cmd_lst)->next->type == PIPE)))
 	{
-		printf("type : {%s}\n", typecheck((*cmd_lst)->type, (*cmd_lst)->arg[0]));
+		fprintf(stderr, "type : {%s}\n", typecheck((*cmd_lst)->type, (*cmd_lst)->arg[0]));
 
 		tmp = *cmd_lst;
 		*cmd_lst = (*cmd_lst)->next;
 		free_alloc_ptr_in_cmd_lst(&tmp);
 	}
-	// apply_last_pipe(cmd_lst, pipefd, info);
-	if ((fork_pid = fork()) == 0)
-	{
-		// 子プロセス
-		dup2(pipefd[0], 0);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		execute(info, *cmd_lst);
-		exit(0);
-	}
-	else
-	{
-		//親プロセス
-		int status;
-		close(pipefd[0]);
-		close(pipefd[1]);
-		// while (wait(NULL) > 0)
-		// 	;
-		waitpid(fork_pid, &status, 0);
-	}
-	// while (wait(NULL) > 0)
-	// 		;
-	if (*cmd_lst == NULL)
-		puts("NULL");
-	else
-	{
-		printf("[%s]\n", (*cmd_lst)->arg[0]);
-	}
-	// exit(0);
+	// puts("1");
+	apply_last_pipe(cmd_lst, pipefd, info);
+	exit(0);
 	return (*cmd_lst);
 }
 

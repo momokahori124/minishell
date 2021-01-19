@@ -1,41 +1,62 @@
-# include <stdio.h>
-# include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <ctype.h>
-
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
 #include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
+
 int main()
 {
-	pid_t pid = fork();
-	if (pid < 0) {
-		perror("fork");
-		exit(-1);
-	} else if (pid == 0) {
-		// 子プロセスで別プログラムを実行
-		puts("Failed to \033[4mread\033[0m aaaa");
-		puts("Failed to \033[1mread\033[0m aaaa");
-		execlp("echo", "echo", "abc", "def", NULL);
-		// perror("echo");
-		// exit(-1);
-	}
+    char *argv[] = {"ls", "|", "head" , "|", "wc", NULL};
+    int i, pipe_locate[10], pipe_count = 0;
+    pipe_locate[0] = -1;
+    for (i = 0; argv[i] != NULL; i++) {
+        if (strcmp(argv[i], "|") == 0) {
+            pipe_count++;
+            pipe_locate[pipe_count] = i;
+            argv[i] = NULL;
+        }
+    }
 
-	// 親プロセス
-	int status;
-	pid_t r = waitpid(pid, &status, 0); //子プロセスの終了待ち
-	if (r < 0) {
-		perror("waitpid");
-		exit(-1);
-	}
-	if (WIFEXITED(status)) {
-		// 子プロセスが正常終了の場合
-		printf("child exit-code=%d\n", WEXITSTATUS(status));
-	} else {
-		printf("child status=%04x\n", status);
-	}
-	return 0;
+    int pfd[9][2];
+    if (pipe_count == 0) {
+        if (fork() == 0) {
+            execvp(argv[0], argv);
+            exit(0);
+        }
+        else {
+            int status;
+            wait(&status);
+        }
+    }
+
+    for (i = 0; i < pipe_count + 1 && pipe_count != 0; i++) {
+        if (i != pipe_count) pipe(pfd[i]);
+
+        if (fork() == 0) {
+            if (i == 0) {
+                dup2(pfd[i][1], 1);
+                close(pfd[i][0]); close(pfd[i][1]);
+            } else if (i == pipe_count) {
+                dup2(pfd[i - 1][0], 0);
+                close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+            } else {
+                dup2(pfd[i - 1][0], 0);
+                dup2(pfd[i][1], 1);
+                close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+                close(pfd[i][0]); close(pfd[i][1]);
+            }
+
+            execvp(argv[pipe_locate[i] + 1], argv + pipe_locate[i] + 1);
+            exit(0);
+        }
+        else if (i > 0) {
+            close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+        }
+    }
+    int status;
+
+    for (i = 0; i < pipe_count + 1; i++) {
+        wait(&status);
+    }
+    return 0;
 }
