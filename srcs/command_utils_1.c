@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:49:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 20:54:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,22 @@ void	cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new)
 	}
 	last = cmd_lstlast(*begin);
 	last->next = new;
+}
+
+t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many)
+{
+	t_cmdlst	*next;
+	int			i;
+
+	i = 0;
+	while (*cmd_lst && i < how_many)
+	{
+		next = (*cmd_lst)->next;
+		free_alloc_ptr_in_cmd_lst(cmd_lst);
+		*cmd_lst = next;
+		i++;
+	}
+	return (*cmd_lst);
 }
 
 void	rm_chr_in_str(char **str, char chr)

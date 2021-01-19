@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:27:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 21:59:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ bool		parse_command_line(t_minishell_info *info)
 	char	**cmd_grp;
 	int		i;
 
-	printf("%s\n", info->command);
+	// printf("%s\n", info->command);
 	if (!(cmd_grp = split_by_chrs_contain_delimiters(info->command, "><;|")))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	cmd_grp = rm_space_in_array(cmd_grp, info);
@@ -122,7 +122,7 @@ bool		parse_command_line(t_minishell_info *info)
 	i = -1;
 	while (cmd_grp[++i])
 	{
-		printf("[%d] : [%s]\n", i, cmd_grp[i]);
+		// printf("[%d] : [%s]\n", i, cmd_grp[i]);
 		parsing(info, cmd_grp[i]);
 	}
 	ptr_2d_free((void ***)&cmd_grp, i);

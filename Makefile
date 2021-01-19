@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/18 17:09:47 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/19 20:59:45 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCFILE =	minishell.c \
 			pwd_command.c \
 			exit.c \
 			redirect.c \
+			pipe.c \
 			command_format_check.c \
 			is_output_format_error.c \
 			is_pipe_format_error.c \

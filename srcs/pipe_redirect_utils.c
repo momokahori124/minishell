@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 03:00:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 21:02:15 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,7 +406,7 @@ int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *i
 	int		i;
 
 	if ((*inputs)[0] == '\0')
-		return (true);
+		return (NEWLINE);
 	if (!(split = split_by_chrs_contain_delimiters(*inputs, "|;><")))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	ptr_free((void **)inputs);
@@ -461,7 +461,7 @@ static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_i
 
 	rc = check_more_pipe(inputs, cmd_grp_info, info);
 	printf("rc : %d\n", rc);
-	if (rc != NEXT_CMD)
+	if (rc != NEXT_CMD && rc != NEWLINE)
 	{
 		if (rc == false)
 			*(cmd_grp_info->cmd_grp) = NULL;
@@ -471,7 +471,8 @@ static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_i
 	return (NEXT_CMD);
 }
 
-bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
+int			wait_for_next_cmd(char ***cmd_grp, int array_size,
+								t_minishell_info *info)
 {
 	ssize_t		rc;
 	char		buf;
@@ -493,7 +494,24 @@ bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info)
 		}
 		if (buf == '\n')
 			if (do_when_input_char_equal_newline(&inputs, &cmd_grp_info, info) == false)
-				return (true);
+				return (cmd_grp_info.array_size);
 	}
 	return (false);
+}
+
+
+void	close_pipe_fd(int pipefd[2], t_minishell_info *info)
+{
+	if (close(pipefd[STDIN_FILENO]) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+	if (close(pipefd[STDOUT_FILENO]) == -1)
+		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+}
+
+void	connect_std_in_out_and_pipe(int pipefd[2], int i_o,
+				t_minishell_info *info)
+{
+	if (dup2(pipefd[i_o], i_o) == -1)
+		all_free_perror_exit(info, ERR_DUP2, __LINE__, __FILE__);
+	close_pipe_fd(pipefd, info);
 }

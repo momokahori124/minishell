@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:54:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 20:07:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	set_env_info(t_minishell_info *info, char **envp)
 	info->current_dir_path = getcwd(NULL, 0);
 	info->cmd_lst = NULL; // リスト初期化
 	info->cmd_split = NULL; // リスト初期化
+	info->cmd_lst_num = 0; // リスト初期化
 	info->envp = envp;
 	info->command = NULL;
 	info->prev_rc = 0;

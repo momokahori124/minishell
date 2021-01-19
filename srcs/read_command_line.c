@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 02:14:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 19:35:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static void	check_return_value(ssize_t rc, char **command, char buf, \
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	else if (rc == 0 && (*command)[0] == '\0')
-	{
-		puts("int");
 		ctrl_d_exit(command, info);
-	}
 }
 
 /*
@@ -76,6 +73,7 @@ bool		read_command_line(t_minishell_info *info)
 
 	if (!(command = ft_strdup("")))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	buf[0] = '\0';
 	buf[1] = '\0';
 	while ((rc = safe_read(&buf[0], &command, info)) >= 0 && buf[0] != '\n')
 	{

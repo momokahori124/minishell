@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/18 04:20:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 20:54:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	exec_pwd(t_minishell_info *info);
 
 char	*next_command(char *command);
 void	cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new);
+t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many);
 
 void	rm_chr_in_str(char **str, char chr);
 ssize_t	safe_read(char *buf, char **ptr, t_minishell_info *info);
@@ -35,7 +36,9 @@ bool	rm_quotation(t_minishell_info *info);
 bool	wait_quotation(char first_appear, char **command, t_minishell_info *info);
 
 // char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
-bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
+// bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
+int		wait_for_next_cmd(char ***cmd_grp, int array_size,
+								t_minishell_info *info);
 
 
 bool	execute_command(t_minishell_info *info);

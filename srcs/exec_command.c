@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 19:16:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/19 22:02:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,122 +82,6 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 	return (true);
 }
 
-void	close_pipe_fd(int pipefd[2], t_minishell_info *info)
-{
-	if (close(pipefd[STDIN_FILENO]) == -1)
-		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-	if (close(pipefd[STDOUT_FILENO]) == -1)
-		all_free_perror_exit(info, ERR_CLOSE, __LINE__, __FILE__);
-}
-
-void	connect_stdout_and_pipe(int pipefd[2], t_minishell_info *info)
-{
-	if (dup2(pipefd[STDOUT_FILENO], STDOUT_FILENO) == -1)
-		all_free_perror_exit(info, ERR_DUP2, __LINE__, __FILE__);
-	close_pipe_fd(pipefd, info);
-}
-
-void	connect_stdin_and_pipe(int pipefd[2], t_minishell_info *info)
-{
-	if (dup2(pipefd[STDIN_FILENO], STDIN_FILENO) == -1)
-		all_free_perror_exit(info, ERR_DUP2, __LINE__, __FILE__);
-	close_pipe_fd(pipefd, info);
-}
-
-void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2], t_minishell_info *info)
-{
-	int	fork_pid;
-	int	status;
-
-	pipe(pipefd);
-	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
-	if (fork_pid == 0)
-	{
-		connect_stdout_and_pipe(pipefd, info);
-		execute(info, *cmd_lst);
-		exit(0);
-	}
-	else
-	{
-		// close_pipe_fd(pipefd, info); // ここだとうまくいかない　シグナル番号１３
-		if (waitpid(fork_pid, &status, 0) == -1)
-			all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
-	}
-	if (WIFEXITED(status))
-		return ;
-	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
-}
-
-/*
-** パイプをうまく機能させようと思うと、
-** 必要のないファイルディスクリプタは片っ端から閉じておく必要があります。
-** 無駄に開いている読み出し口や書き込み口があると、入力が終わってもEOFが返されません。
-** するとパイプで繋がれたプログラムが終了しないので、いつまでも待ち続ける羽目になります。
-** 必要なものだけ開いた状態にするのが鉄則です。
-** (引用) https://www.haya-programming.com/entry/2018/11/08/185349
-*/
-
-void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2], t_minishell_info *info)
-{
-	int	fork_pid;
-	int	status;
-	(void)status;
-
-	// // pipe(pipefd);
-	fork_pid = fork();
-	if (fork_pid == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (fork_pid == 0)
-	{
-		connect_stdin_and_pipe(pipefd, info);
-		execute(info, *cmd_lst);
-		exit(0);
-	}
-	else
-	{
-		close_pipe_fd(pipefd, info);
-		if (waitpid(fork_pid, &status, 0) == -1)
-			all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
-	}
-	if (WIFEXITED(status))
-		return ;
-	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
-}
-
-
-// pipefd[1]に入れたデータはpipefd[0]から取り出せる
-// dup2(pipefd[1], 1)とすると標準出力先がpipefd[1]、つまりパイプの入り口とつながります
-
-t_cmdlst	*pipe_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
-{
-	int		pipefd[2];
-	(void)info;
-	// int fork_pid;
-	t_cmdlst	*tmp;
-	// int begin_flag;
-
-	apply_first_pipe(cmd_lst, pipefd, info);
-	while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next && (*cmd_lst)->next->type == PIPE)))
-	{
-		fprintf(stderr, "type : {%s}\n", typecheck((*cmd_lst)->type, (*cmd_lst)->arg[0]));
-
-		tmp = *cmd_lst;
-		*cmd_lst = (*cmd_lst)->next;
-		free_alloc_ptr_in_cmd_lst(&tmp);
-	}
-	// puts("1");
-	apply_last_pipe(cmd_lst, pipefd, info);
-	exit(0);
-	return (*cmd_lst);
-}
-
-
-
-
-
 bool		execute_command(t_minishell_info *info)
 {
 	t_cmdlst *next;
@@ -215,9 +99,7 @@ bool		execute_command(t_minishell_info *info)
 					next->type == INPUT))
 			next = redirect_sep(info, &(info->cmd_lst));
 		else if (next && next->type == PIPE)
-		{
 			next = pipe_sep(info, &(info->cmd_lst));
-		}
 		else
 			execute(info, info->cmd_lst);
 		// free_alloc_ptr_in_cmd_lst(&(info->cmd_lst));
@@ -227,8 +109,8 @@ bool		execute_command(t_minishell_info *info)
 	return (true);
 }
 
-// __attribute__((destructor))
-// void end()
-// {
-// 	system("leaks minishell");
-// }
+// // __attribute__((destructor))
+// // void end()
+// // {
+// // 	system("leaks minishell");
+// // }
