@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/20 02:02:27 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/20 04:50:42 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -120,6 +120,7 @@ STRING_SRCS = $(addprefix $(STRING_DIR)/, \
 				re_strjoinch.c \
 				re_strdup.c \
 				re_strjoin.c \
+				strcmp_regardless_of_case.c \
 )
 #========== 3Dvecter function ==================================================
 VEC3D_DIR = $(SRCDIR)/vec3d_func

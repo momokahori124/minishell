@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 04:37:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 16:39:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,10 @@ bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 	return (false);
 }
 
-int	ft_lowerstr_cmp(char *p1, char *p2)
+bool	devide_semicolon_and_redirect(int type, char ***split,
+						t_minishell_info *info)
 {
-	unsigned char	*s1;
-	unsigned char	*s2;
-
-	if (!p1 || !p2)
-		return (INT_MIN);
-	s1 = (unsigned char *)p1;
-	s2 = (unsigned char *)p2;
-	while (*s1 && ft_tolower(*s1) == ft_tolower(*s2))
-	{
-		s1++;
-		s2++;
-	}
-	return (ft_tolower(*s1) - ft_tolower(*s2));
-}
-
-bool	devide_semicolon_and_redirect(int type, t_minishell_info *info)
-{
+	ptr_2d_free((void ***)split, 1);
 	add_cmd_to_lst(info, NULL, SEMICOLON);
 	if (type == SEMI_OUTPUT)
 		add_cmd_to_lst(info, NULL, OUTPUT);
@@ -109,21 +94,22 @@ bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
-	// ;> ;< ;>>とかの処理もする
-	const char	*base[CMD_NUM] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>",
-								">|", "cd", "echo", "env", "exit",
+	const char	*base[CMD_NUM - 1] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>",
+								">|", "cd", "echo", "env",
 								"export", "pwd", "unset", "|"};
 
 	if (!(split = ft_split(command, ' ')))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return (1);
+	// 先にseparatorだけでバイナリーサーチしても良い
 	if (cmd_exit_check(split[0]) == true)
 		return (add_cmd_to_lst(info, split, EXIT));
-	type = str_bsearch(split[0], base, CMD_NUM, ft_lowerstr_cmp);
+	type = str_bsearch(split[0], base, CMD_NUM, strcmp_regardless_of_case);
+	printf("%d\n", type);
 	if (type == SEMI_OUTPUT || type == SEMI_DB_OUTPUT ||
 				type == SEMI_INPUT)
-		return (devide_semicolon_and_redirect(type, info));
+		return (devide_semicolon_and_redirect(type, &split, info));
 	else if (type == NOT_CMD)
 		if (check_bash_standard_commands(info, split) == true)
 			return (add_cmd_to_lst(info, split, BIN));

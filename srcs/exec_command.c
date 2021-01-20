@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 04:39:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 04:42:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ bool		execute_command(t_minishell_info *info)
 	return (true);
 }
 
-// __attribute__((destructor))
-// void end()
-// {
-// 	system("leaks minishell");
-// }
+__attribute__((destructor))
+void end()
+{
+	system("leaks minishell");
+}
