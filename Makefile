@@ -6,14 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/20 19:36:46 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/21 02:21:33 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = gcc
 
-CFLAGS = -g                  -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra               #  -fsanitize=address
 
 SRCFILE =	minishell.c \
 			minishell_utils.c \
@@ -24,6 +24,7 @@ SRCFILE =	minishell.c \
 			pwd_command.c \
 			exit.c \
 			redirect.c \
+			redirect2.c \
 			pipe.c \
 			command_format_check.c \
 			is_output_format_error.c \

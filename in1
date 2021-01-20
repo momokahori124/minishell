@@ -11,6 +11,7 @@ cmd_lst-
 command
 in
 in1
+in2
 in4
 in5
 includes
@@ -20,6 +21,8 @@ main2.c
 minishell
 minishell.dSYM
 next
+out1
+out2
 output.php
 pipe.php
 pwd

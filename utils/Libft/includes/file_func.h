@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/11 21:33:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/21 02:11:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ int				get_next_line(int fd, char **line);
 t_gnl			*gnl_lstnew(char *content, int fd);
 void			gnl_lstadd_front(t_gnl **lst, t_gnl *new);
 t_gnl			*recognize_fd(int fd, t_gnl **lst);
+bool			ft_close(int *fd);
 
 #endif

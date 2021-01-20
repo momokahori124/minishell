@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/20 04:50:42 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/21 02:10:44 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ FILE_SRCS = $(addprefix $(FILE_DIR)/, \
 				create_filename.c \
 				get_next_line.c \
 				get_next_line_utils.c \
+				ft_close.c \
 )
 #========== free function ======================================================
 FREE_DIR = $(SRCDIR)/free_func
