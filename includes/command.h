@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 20:54:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:22:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 // t_cmdlst	*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst);
 
 // utils2
-char	**split_by_chrs_contain_delimiters(char *str, char *charset);
+// char	**split_by_chrs_contain_delimiters(char *str, char *charset);
+char	**split_by_separator_contain_delimiters(char *str);
 
 // utils3
 char		**rm_space_in_array(char **arr, t_minishell_info *info);

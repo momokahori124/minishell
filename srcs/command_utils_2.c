@@ -6,13 +6,18 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 16:15:55 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/09 20:46:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/21 01:11:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
 
-static size_t	count_words(char *str, char *charset)
+static bool		isalnum_except_next_redir(char *str)
+{
+	return (ft_isalnum(*str) && *(str + 1) != '>');
+}
+
+static size_t	count_words(char *str)
 {
 	size_t		word_count;
 	int			flag;
@@ -21,88 +26,82 @@ static size_t	count_words(char *str, char *charset)
 	flag = 0;
 	while (*str)
 	{
-		while (*str && ft_strchr(charset, *str) && (flag = 1))
+		while (*str && (isalnum_except_next_redir(str) || *str == ' ') && (flag = 1))
 			str++;
-		if (*str && !ft_strchr(charset, *str))
+		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
 		{
 			if (flag == 1)
 				word_count += 2;
 			else
 				word_count++;
 			flag = 0;
-			while (*str && !ft_strchr(charset, *str))
+			while (*str && !(isalnum_except_next_redir(str) || *str == ' '))
 				str++;
 		}
 	}
 	return (word_count + flag);
 }
 
-static char		*insert_word(char *str, char *cset)
+static char		*insert_word(char **str)
 {
 	char		*word;
 	size_t		i;
 
 	i = 0;
-	while (str[i] && !ft_strchr(cset, str[i]))
+	while ((*str)[i] && !(isalnum_except_next_redir(&(*str)[i]) || (*str)[i] == ' '))
 		i++;
 	if (!(word = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	i = 0;
-	while (str[i] && !ft_strchr(cset, str[i]))
+	while (**str && !(isalnum_except_next_redir(*str) || **str == ' '))
 	{
-		word[i] = str[i];
+		word[i] = **str;
 		i++;
+		(*str)++;
 	}
 	word[i] = '\0';
 	return (word);
 }
 
-static char		*insert_separator(char *str, char *cset)
+static char		*insert_separator(char **str)
 {
 	char		*word;
 	size_t		i;
 
 	i = 0;
-	while (str[i] && ft_strchr(cset, str[i]))
+	while ((*str)[i] && (isalnum_except_next_redir(&(*str)[i]) || (*str)[i] == ' '))
 		i++;
 	if (!(word = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	i = 0;
-	while (str[i] && ft_strchr(cset, str[i]))
+	while (**str && (isalnum_except_next_redir(*str) || **str == ' '))
 	{
-		word[i] = str[i];
+		word[i] = **str;
 		i++;
+		(*str)++;
 	}
 	word[i] = '\0';
 	return (word);
 }
 
-char			**split_by_chrs_contain_delimiters(char *str, char *charset)
+char			**split_by_separator_contain_delimiters(char *str)
 {
 	char		**res;
 	size_t		word_count;
 	size_t		i;
 
-	word_count = count_words(str, charset);
+	word_count = count_words(str);
 	if (!(res = malloc(sizeof(char *) * (word_count + 1))))
 		return (NULL);
 	i = 0;
 	while (i < word_count)
 	{
-		if (*str && ft_strchr(charset, *str))
-		{
-			if (!(res[i++] = insert_separator(str, charset)))
+		if (*str && (isalnum_except_next_redir(str) || *str == ' '))
+			if (!(res[i++] = insert_separator(&str)))
 				return (ptr_2d_free((void***)&res, --i));
-			while (*str && ft_strchr(charset, *str))
-				str++;
-		}
-		if (*str && !ft_strchr(charset, *str))
-		{
-			if (!(res[i++] = insert_word(str, charset)))
+		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
+			if (!(res[i++] = insert_word(&str)))
 				return (ptr_2d_free((void***)&res, --i));
-			while (*str && !ft_strchr(charset, *str))
-				str++;
-		}
 	}
 	res[i] = NULL;
 	return (res);

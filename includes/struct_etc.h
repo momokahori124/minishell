@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 17:25:39 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:26:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct		s_cmd_grp
 enum	e_cmd
 {
 	BIN,
+	STDERR_OUTPUT,
+	STDERR_DB_OUTPUT,
 	SEMICOLON,
 	SEMI_INPUT,
 	SEMI_OUTPUT,

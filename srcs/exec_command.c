@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 19:42:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:58:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
 {
 	if ((*cmd_lst)->arg != NULL)
 		ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
-	printf("%p\n", cmd_lst);
-	printf("%p\n", *cmd_lst);
 	ptr_free((void **)cmd_lst);
 }
 

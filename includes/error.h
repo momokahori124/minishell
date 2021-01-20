@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 18:32:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:54:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ bool	syntax_warning(int type);
 bool	warning_message(char *error_message, t_minishell_info *info);
 
 void	all_free_minishell_info(t_minishell_info *info);
-int		err_no_such_file_or_directory(char *filename, t_minishell_info *info);
+bool	err_no_such_file_or_directory(char *filename, t_minishell_info *info);
 
 #endif

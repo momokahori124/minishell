@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 21:55:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 00:47:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:24:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,14 +400,15 @@ int		add_cmd_grp(char **split, t_cmd_grp *cmd_grp_info, int split_size, t_minish
 	return (NEXT_CMD);
 }
 
-int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+int		check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info,
+								t_minishell_info *info)
 {
 	char	**split;
 	int		i;
 
 	if ((*inputs)[0] == '\0')
 		return (NEWLINE);
-	if (!(split = split_by_chrs_contain_delimiters(*inputs, "|;><")))
+	if (!(split = split_by_separator_contain_delimiters(*inputs)))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	ptr_free((void **)inputs);
 	i = 0;

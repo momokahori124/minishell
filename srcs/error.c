@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 19:35:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 23:54:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ bool	warning_message(char *error_message, t_minishell_info *info)
 	return (false);
 }
 
-int		err_no_such_file_or_directory(char *filename, t_minishell_info *info)
+bool	err_no_such_file_or_directory(char *filename, t_minishell_info *info)
 {
 	if (write(STDERR_FILENO, "minishell: ", 11) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
@@ -198,7 +198,7 @@ int		err_no_such_file_or_directory(char *filename, t_minishell_info *info)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, ": No such file or directory\n", 28) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	return (-1);
+	return (false);
 }
 
 bool	two_ptr_2d_free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
