@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 04:01:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/08 00:01:06 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 19:09:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*re_strdup(char **s1, char *s2)
 	size_t	len;
 
 	if (*s1 == NULL)
-		return (ft_strdup(""));
+		*s1 = ft_strdup("");
 	len = ft_strlen(s2) + 1;
 	if (!(res = malloc(sizeof(char) * (len))))
 	{

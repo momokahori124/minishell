@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 19:35:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 21:12:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ bool		read_command_line(t_minishell_info *info)
 		if (write(0, "\033[0K", 4) < 0)
 		{
 			ptr_free((void **)&command);
-			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		}
 		if (check_quotation(&command, buf) == true)
 			continue ;

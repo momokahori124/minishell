@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 02:36:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 19:35:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void		perror_exit(char *error_message, int line_num, char *file_name)
 	char	*tmp;
 
 	red_error();
-	if (write(1, g_working_dir, g_working_dir_count) < 0)
+	if (write(2, g_working_dir, g_working_dir_count) < 0)
 	{
 		perror(ERR_WRITE);
 		exit(EXIT_FAILURE);
 	}
-	if (write(1, "/", 1) < 0)
+	if (write(2, "/", 1) < 0)
 	{
 		perror(ERR_WRITE);
 		exit(EXIT_FAILURE);
@@ -190,7 +190,7 @@ bool	warning_message(char *error_message, t_minishell_info *info)
 	return (false);
 }
 
-void	err_no_such_file_or_directory(char *filename, t_minishell_info *info)
+int		err_no_such_file_or_directory(char *filename, t_minishell_info *info)
 {
 	if (write(STDERR_FILENO, "minishell: ", 11) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
@@ -198,6 +198,7 @@ void	err_no_such_file_or_directory(char *filename, t_minishell_info *info)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (write(STDERR_FILENO, ": No such file or directory\n", 28) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	return (-1);
 }
 
 bool	two_ptr_2d_free_and_syntax_error(int type, char ***array, t_cmd_grp *cmd_grp_info, t_minishell_info *info)

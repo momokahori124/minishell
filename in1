@@ -3,8 +3,13 @@ README.md
 a
 a.out
 a.out.dSYM
+a1
+a2
+a3
 b
+cmd_lst-
 command
+in
 in1
 in2
 includes
@@ -13,11 +18,13 @@ main2.c
 minishell
 minishell.dSYM
 next
+out
 out1
 out2
 output.php
 pipe.php
 pwd
+result
 semicolon.php
 srcs
 test.c

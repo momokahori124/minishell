@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 16:39:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 21:07:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ bool	parsing(t_minishell_info *info, char *command)
 {
 	int			type;
 	char		**split;
-	const char	*base[CMD_NUM - 1] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>",
-								">|", "cd", "echo", "env",
-								"export", "pwd", "unset", "|"};
+	const char	*base[CMD_NUM] = {"\0", ";", ";<", ";>", ";>>", "<", ">", ">>",
+								">|", "cd", "echo", "env", "export", "pwd",
+								"unset", "|"};
 
 	if (!(split = ft_split(command, ' ')))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
@@ -106,7 +106,6 @@ bool	parsing(t_minishell_info *info, char *command)
 	if (cmd_exit_check(split[0]) == true)
 		return (add_cmd_to_lst(info, split, EXIT));
 	type = str_bsearch(split[0], base, CMD_NUM, strcmp_regardless_of_case);
-	printf("%d\n", type);
 	if (type == SEMI_OUTPUT || type == SEMI_DB_OUTPUT ||
 				type == SEMI_INPUT)
 		return (devide_semicolon_and_redirect(type, &split, info));
@@ -137,7 +136,7 @@ bool		parse_command_line(t_minishell_info *info)
 	i = -1;
 	while (cmd_grp[++i])
 	{
-		// printf("[%d] : [%s]\n", i, cmd_grp[i]);
+		printf("[%d] : [%s]\n", i, cmd_grp[i]);
 		parsing(info, cmd_grp[i]);
 	}
 	ptr_2d_free((void ***)&cmd_grp, i);

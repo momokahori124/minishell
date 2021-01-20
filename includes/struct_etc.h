@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 20:06:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 17:25:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ enum	e_cmd
 	CD,
 	ECHO,
 	ENV,
-	EXIT,
 	EXPORT,
 	PWD,
 	UNSET,
@@ -67,6 +66,9 @@ enum	e_cmd
 # define OUTPUT_PIPE CMD_NUM + 3
 # define DB_INPUT CMD_NUM + 4
 # define TR_INPUT CMD_NUM + 5
+# define EXIT CMD_NUM + 6
+# define OUTPUT_INPUT CMD_NUM + 7
+# define DB_OUTPUT_INPUT CMD_NUM + 8
 
 // # define SEMICOLON SEMICOLON
 // # define INPUT INPUT

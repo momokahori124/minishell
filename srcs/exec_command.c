@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 04:42:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/20 19:42:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
 {
 	if ((*cmd_lst)->arg != NULL)
 		ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
+	printf("%p\n", cmd_lst);
+	printf("%p\n", *cmd_lst);
 	ptr_free((void **)cmd_lst);
 }
 
@@ -49,15 +51,15 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数
 */
 
-char *typecheck(int type, char *s)
-{
-	if (type == PWD)
-		return ("pwd");
-	else if (type == OUTPUT)
-		return (">");
-	else
-		return (s);
-}
+// char *typecheck(int type, char *s)
+// {
+// 	if (type == PWD)
+// 		return ("pwd");
+// 	else if (type == OUTPUT)
+// 		return (">");
+// 	else
+// 		return (s);
+// }
 
 bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 {
@@ -81,14 +83,17 @@ bool		execute_command(t_minishell_info *info)
 
 	while (info->cmd_lst)
 	{
-		next = info->cmd_lst->next;
-		if (next && (next->type == OUTPUT || next->type == DB_OUTPUT ||
-					next->type == INPUT))
-			next = redirect_sep(info, &(info->cmd_lst));
-		else if (next && next->type == PIPE)
-			next = pipe_sep(info, &(info->cmd_lst));
+		if (info->cmd_lst->next && (info->cmd_lst->next->type == OUTPUT || info->cmd_lst->next->type == DB_OUTPUT ||
+					info->cmd_lst->next->type == INPUT))
+			info->cmd_lst = redirect_sep(info, &(info->cmd_lst));
+		else if (info->cmd_lst->next && info->cmd_lst->next->type == PIPE)
+			info->cmd_lst = pipe_sep(info, &(info->cmd_lst));
 		else
 			execute(info, info->cmd_lst);
+		if (info->cmd_lst == NULL)
+			break ;
+		next = info->cmd_lst->next;
+		printf("%d\n", info->cmd_lst->type);
 		free_alloc_ptr_in_cmd_lst(&(info->cmd_lst));
 		info->cmd_lst = next;
 	}
@@ -96,8 +101,8 @@ bool		execute_command(t_minishell_info *info)
 	return (true);
 }
 
-__attribute__((destructor))
-void end()
-{
-	system("leaks minishell");
-}
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }
