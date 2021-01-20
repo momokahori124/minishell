@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/16 19:04:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/21 03:41:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <dirent.h>
 # include "../utils/Libft/includes/libft.h"
 # include "error.h"
 # include "minishell_utils.h"
