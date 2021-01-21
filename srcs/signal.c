@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:44:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:39:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@
 
 # define STDERR 2
 
-typedef struct	s_sig
-{
-	int				sigint;
-	int				sigquit;
-	int				exit_status;
-	pid_t			pid;
-}				t_sig;
+// typedef struct	s_sig
+// {
+// 	int				sigint;
+// 	int				sigquit;
+// 	int				exit_status;
+// 	pid_t			pid;
+// }				t_sig;
 
-t_sig	g_sig;
+// t_sig	g_sig;
 
 void	sig_quit(int code)
 {
@@ -38,17 +38,20 @@ void	sig_quit(int code)
 void	sig_int(int code)
 {
 	(void)code;
-	if (g_sig.pid == 0) //子だったら
+	puts("+++++++++++");
+	if (g_bin_fork_pid == 0) //子だったら
 	{
+	puts("=");
 		write(1, "\b\b  \n", 5);
-		put_prompt(NULL);
+		// put_prompt(NULL);
 		g_sig.exit_status = 1;
 	}
 	else
 	{
+	puts("+++++++++++");
 		ft_putstr_fd("\n", STDERR);
 		g_sig.exit_status = 130;
 	}
-	exit(0);
+	// exit(0);
 	g_sig.sigint = 1;
 }

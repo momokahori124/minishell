@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   numjoin_str.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/23 10:30:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:08:37 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/22 01:46:14 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/22 01:59:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/string_func.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char			*numjoin_str(char *s, long long num)
 {
-	char			*str;
-	unsigned int	i;
-	size_t			mini_len;
+	char		*res;
+	long long	num_len;
+	size_t		s_len;
+	size_t		i;
+	size_t		j;
 
-	if (s == NULL)
-		return (NULL);
-	if (!(start == 0 && s[0] == '\0') && ft_strlen(s) <= start)
-		return (ft_strdup(""));
-	mini_len = ft_strlen(&s[start]);
-	if (mini_len < len)
-		len = mini_len;
-	if (!(str = malloc(sizeof(char) * (len + 1))))
+	num_len = ft_numlen(num);
+	s_len = ft_strlen(s);
+	if (!(res = malloc(sizeof(char) * (s_len + num_len + 1))))
 		return (NULL);
 	i = 0;
-	while (i < len)
+	while (num_len)
 	{
-		str[i] = s[i + start];
+		res[num_len - 1] = num % 10 + '0';
+		num_len--;
+		num /= 10;
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	j = -1;
+	while (s[++j])
+		res[i++] = s[j];
+	res[i + num_len] = '\0';
+	return (res);
 }

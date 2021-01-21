@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   algorithm_func.h                                   :+:      :+:    :+:   */
+/*   is_float.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/10 20:46:43 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 04:57:03 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/22 02:15:05 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/22 02:15:39 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ALGORITHM_FUNC_H
-# define ALGORITHM_FUNC_H
+#include "../../includes/iswhat_func.h"
 
-# include "libft.h"
-
-void	ft_swap(void **a, void **b);
-int		marge_strsort(char **array, size_t begin, \
-			size_t end, int (*cmp_by)());
-int		str_bsearch(char *key, const char *base[], int array_size,
-						int (*cmp_by)());
-
-#endif
+bool		is_float(char *s)
+{
+	if (*s == '-')
+		s++;
+	while (ft_isdigit(*s))
+		s++;
+	if (*s == '.')
+	{
+		s++;
+		while (ft_isdigit(*s))
+			s++;
+	}
+	if (*s)
+		return (false);
+	return (true);
+}

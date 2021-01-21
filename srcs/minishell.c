@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 03:28:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 00:43:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,27 @@ void	put_envs(char *envp[])
 	}
 }
 
-int			search_env(char *envp[], char *env_name)
+// char	*search_env(char **env, char *str, t_minishell_info *info)
+char	*search_env(char **env, char *str)
 {
-	// search_env(envp, "PWD") ってやったらPWDのenv番号を出してくれる関数
-	int i = 0;
-	while (1)
+	size_t	i;
+	size_t	j;
+	// char	*export_value;
+
+	i = 0;
+	while (env[i])
 	{
-		if (envp[i] == NULL)
-			break;
-		if (ft_strncmp(envp[i], env_name, ft_strlen(env_name)) == 0)
-			return (i);
+		if (ft_strncmp(env[i], str, ft_strlen(str)) == 0)
+		{
+			j = 0;
+			while (env[i][j] != '=')
+				j++;
+			return (env[i] + j + 1);
+		}
 		i++;
 	}
-	exit(EXIT_FAILURE);
+	// export_value = info->
+	return (NULL);
 }
 
 void ft_putenv(char *s, t_minishell_info *info)
@@ -126,26 +134,25 @@ void	set_prompt_message(char *envp[])
 {
 	char *s;
 
-	s = envp[search_env(envp, "USER")];
-	while (*s++ != '=')
-		;
+	s = search_env(envp, "USER");
 	g_user_name = s;
 	g_user_name_count = 0;
 	while (g_user_name[g_user_name_count])
 		g_user_name_count++;
 	// s = get_working_dir(envp[search_env(envp, "PWD")]);
-	s = envp[search_env(envp, "PWD")];
-	while (*s++ != '=')
-		;
+	s = search_env(envp, "PWD");
 	g_working_dir = s;
 	g_working_dir_count = 0;
 	while (g_working_dir[g_working_dir_count])
 		g_working_dir_count++;
 }
 
-int		main(int argc, char *argv[], char *envp[])
+// void	set_env()
+
+int		main(int argc, char *argv[])
 {
 	t_minishell_info	info;
+	extern char			**environ;
 
 	if (argc != 1)
 	{
@@ -154,11 +161,21 @@ int		main(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	// put_welcome_message();
-	set_prompt_message(envp);
+	set_prompt_message(environ);
+	info.shell_level = search_env(environ, "SHLVL");
+	int i = 0;
+	while (i < 1)
+	{
+		info.shell_level[i] = ft_atoi(info.shell_level) + 1 + '0';
+		i++;
+	}
+	info.shell_level[i] = '\0';
+	// info.shell_level[0] += ft_atoi(info.shell_level) + 1 - '0';
+	printf("shell L : %s\n",info.shell_level);
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
-	set_env_info(&info, envp); //ここでinfoの中にenv情報入れる
-	console_loop(&info, envp);
+	set_env_info(&info, environ); //ここでinfoの中にenv情報入れる
+	console_loop(&info, environ);
 	(void)argc;
 	(void)argv;
 }

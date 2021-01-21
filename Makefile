@@ -6,14 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/21 02:21:33 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/22 00:09:49 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = gcc
 
-CFLAGS = -g -Wall -Werror -Wextra               #  -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra                 -fsanitize=address
 
 SRCFILE =	minishell.c \
 			minishell_utils.c \
@@ -33,6 +33,7 @@ SRCFILE =	minishell.c \
 			command_utils_1.c \
 			command_utils_2.c \
 			command_utils_3.c \
+			command_utils_4.c \
 			exec_command.c \
 			pipe_redirect_utils.c \
 			is_what.c \

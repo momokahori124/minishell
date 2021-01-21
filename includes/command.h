@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 23:22:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:39:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,19 @@
 // # include "minishell.h"
 # include "exit.h"
 # include "pipe_redirect.h"
+
+
+pid_t		g_bin_fork_pid;
+
+typedef struct	s_sig
+{
+	int				sigint;
+	int				sigquit;
+	int				exit_status;
+	pid_t			pid;
+}				t_sig;
+
+t_sig	g_sig;
 
 // char	*read_command_line(t_minishell_info *info);
 bool	read_command_line(t_minishell_info *info);
@@ -53,7 +66,11 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 char	**split_by_separator_contain_delimiters(char *str);
 
 // utils3
-char		**rm_space_in_array(char **arr, t_minishell_info *info);
+char	**rm_space_in_array(char **arr, t_minishell_info *info);
+
+// utils4
+char			**split_switch_env_value(char *s, char c,
+						t_minishell_info *info);
 
 // format
 bool	check_format_of_command(char ***grp, t_minishell_info *info);

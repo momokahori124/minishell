@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 19:06:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:22:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ static void	normal_exit(t_minishell_info *info)
 	exit(1);
 }
 
-static void	selected_code_exit(t_minishell_info *info, int exit_code)
+static void	selected_code_exit(t_minishell_info *info, int exit_code,
+				bool float_flag)
 {
+	if (float_flag)
+		exit_code = 255;
 	all_free_minishell_info(info);
-	exit(exit_code);
+	exit(exit_code % 256);
 }
 
 static void	fail_too_arg_exit(t_minishell_info *info)
@@ -58,7 +61,7 @@ void		exec_exit(t_minishell_info *info)
 	if (count == 1)
 		normal_exit(info);
 	else if (count == 2 && numeric_arg_flag == true)
-		selected_code_exit(info, ft_atoi(arg[1]));
+		selected_code_exit(info, ft_atoi(arg[1]), is_float(arg[1]));
 	else if (numeric_arg_flag)
 		fail_too_arg_exit(info);
 	else

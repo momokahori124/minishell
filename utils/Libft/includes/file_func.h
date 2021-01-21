@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 20:46:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 02:11:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/21 04:57:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FILE_FUNC_H
 
 # include "libft.h"
+# include <stdbool.h>
 # define NO_RETURN 2
 # define R_NL 1
 # define R_EOF 0

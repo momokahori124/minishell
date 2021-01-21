@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 03:41:50 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 00:02:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define ERROR 1
 // # define STDOUT 1
 
-int			search_env(char *envp[], char *env_name);
+char		*search_env(char **env, char *str);
 void		ft_putenv(char *s, t_minishell_info *info);
 
 #endif

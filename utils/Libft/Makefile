@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/23 20:15:31 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/21 02:10:44 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/22 02:16:08 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ ISWHAT_SRCS = $(addprefix $(ISWHAT_DIR)/, \
 				ft_isdigit.c \
 				ft_isprint.c \
 				ft_isspace.c \
+				is_float.c \
 )
 #========== lst function =======================================================
 LST_DIR = $(SRCDIR)/lst_func
@@ -122,6 +123,7 @@ STRING_SRCS = $(addprefix $(STRING_DIR)/, \
 				re_strdup.c \
 				re_strjoin.c \
 				strcmp_regardless_of_case.c \
+				numjoin_str.c \
 )
 #========== 3Dvecter function ==================================================
 VEC3D_DIR = $(SRCDIR)/vec3d_func

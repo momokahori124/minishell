@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 23:26:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:34:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ typedef struct stat t_stat;
 typedef struct		s_minishell_info
 {
 	char			*command;
+	char			**cmd_split;
+	int				cmd_lst_num;
+	char			**envp;
+	char			*shell_level;
 	char			*current_dir_path;
 	int				prev_rc;
-	char			**cmd_split;
-	char			**envp;
-	int				cmd_lst_num;
 	struct s_cmdlst	*cmd_lst;
 }					t_minishell_info;
 
@@ -86,5 +87,6 @@ char		*g_user_name;
 int			g_user_name_count;
 char		*g_working_dir;
 int			g_working_dir_count;
+// pid_t		g_bin_fork_pid;
 
 #endif

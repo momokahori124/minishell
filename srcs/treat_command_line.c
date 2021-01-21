@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 03:45:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:24:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,86 +37,51 @@
 
 bool	cmd_exit_check(char *cmd)
 {
-	if (cmd[0] == 'e' && cmd[1] == 'x' && cmd[2] == 'i' && cmd[3] == 't')
+	if (cmd[0] == 'e' && cmd[1] == 'x' && cmd[2] == 'i' && cmd[3] == 't'
+		&& cmd[4] == '\0')
 		return (true);
 	return (false);
 }
 
-bool	is_executable_file_in_bin_dir(char *path, char *command)
+bool	check_executable_file_in_bin_dir(char *path, char ***command,
+				t_minishell_info *info)
 {
-	DIR				*dir;
-	struct dirent	*dp;
+	t_stat	stat_buf;
+	char	*bin_path;
 
-	dir = opendir(bin);
-	if (!dir)
-		return (NULL);
-	while ((dp = readdir(dir)))
+	if (!(bin_path = ft_str3join(path, "/", (*command)[0])))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (lstat(bin_path, &stat_buf) == 0)
 	{
-		if (ft_strcmp(dp->d_name, command) == 0)
-			path = path_join(bin, dp->d_name);
+		ptr_free((void **)&((*command)[0]));
+		(*command)[0] = bin_path;
+		return (true);
 	}
-	closedir(folder);
-	return (path);
+	ptr_free((void **)&bin_path);
+	return (false);
 }
 
 bool	check_bash_standard_commands(t_minishell_info *info, char ***command)
 {
 	char	*env_path;
 	char	**bin_paths;
+	int		i;
 
-	env_path = info->envp[search_env(info->envp, "PATH")];
-	while (*env_path++ != '=')
-		;
+	env_path = search_env(info->envp, "PATH");
 	if (!(bin_paths = ft_split(env_path, ':')))
 	{
 		ptr_2d_free((void ***)command, ARG_MAX);
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	int i = 0;
+	i = 0;
 	while (bin_paths[i])
 	{
-		printf("%s\n", bin_paths[i]);
-	is_executable_file_in_bin_dir(bin_paths[i], (*command)[0]);
+		if (check_executable_file_in_bin_dir(bin_paths[i], command, info) == true)
+			break ;
 		i++;
 	}
-	exit(0);
-
-
-
-
-
-
-
-
-
-
-	// t_stat	stat_buf;
-	// char	*bin_path;
-
-
-
-	// bin_path = ft_strjoin("/bin/", command[0]);
-	// if (bin_path == NULL)
-	// 	all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	// if (lstat(bin_path, &stat_buf) == 0)
-	// {
-	// 	ptr_free((void **)&(command[0]));
-	// 	command[0] = bin_path;
-	// 	return (true);
-	// }
-	// ptr_free((void **)&bin_path);
-
-	// bin_path = ft_strjoin("/usr/bin/", command[0]); // makeとかのため
-	// if (bin_path == NULL)
-	// 	all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	// if (lstat(bin_path, &stat_buf) == 0)
-	// {
-	// 	ptr_free((void **)&(command[0]));
-	// 	command[0] = bin_path;
-	// 	return (true);
-	// }
-	// ptr_free((void **)&bin_path);
-	// return (false);
+	ptr_2d_free((void ***)&bin_paths, ARG_MAX);
+	return (true);
 }
 
 bool	devide_semicolon_and_redirect(int type, char ***split,
@@ -133,7 +98,6 @@ bool	devide_semicolon_and_redirect(int type, char ***split,
 	return (1);
 }
 
-
 /*
 ** 入力された文字列から各コマンドをparseする関数
 */
@@ -144,8 +108,10 @@ bool	parsing(t_minishell_info *info, char *command)
 	char		**split;
 	const char	*base[CMD_NUM] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
 	"<", ">", ">>", ">|", "cd", "echo", "env", "export", "pwd", "unset", "|"};
+	// 	const char	*base[CMD_NUM - 1] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
+	// "<", ">", ">>", ">|", "cd", "echo", "export", "pwd", "unset", "|"};
 
-	if (!(split = ft_split(command, ' ')))
+	if (!(split = split_switch_env_value(command, ' ', info)))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return (1);
@@ -153,13 +119,14 @@ bool	parsing(t_minishell_info *info, char *command)
 	if (cmd_exit_check(split[0]) == true)
 		return (add_cmd_to_lst(info, split, EXIT));
 	type = str_bsearch(split[0], base, CMD_NUM, strcmp_regardless_of_case);
-	printf("%d\n", type);
 	if (type == SEMI_OUTPUT || type == SEMI_DB_OUTPUT ||
 				type == SEMI_INPUT)
 		return (devide_semicolon_and_redirect(type, &split, info));
 	else if (type == NOT_CMD)
+	{
 		if (check_bash_standard_commands(info, &split) == true)
 			return (add_cmd_to_lst(info, split, BIN));
+	}
 	add_cmd_to_lst(info, split, type);
 	return (1);
 }
