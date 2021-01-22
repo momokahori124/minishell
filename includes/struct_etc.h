@@ -6,24 +6,30 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:34:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 02:02:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_ETC_H
 # define STRUCT_ETC_H
 
-typedef struct stat t_stat;
+typedef struct	stat t_stat;
+
+
+typedef struct		s_my_env
+{
+	char			*value;
+	struct s_my_env	*next;
+}					t_my_env;
 
 typedef struct		s_minishell_info
 {
 	char			*command;
 	char			**cmd_split;
 	int				cmd_lst_num;
-	char			**envp;
+	struct s_my_env	*my_env;
 	char			*shell_level;
 	char			*current_dir_path;
-	int				prev_rc;
 	struct s_cmdlst	*cmd_lst;
 }					t_minishell_info;
 

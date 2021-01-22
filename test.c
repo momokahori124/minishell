@@ -38,8 +38,33 @@ char			*numjoin_str2(char *s, long long num)
 // }
 int main(int argc, char **argv)
 {
-	while (1);
-	printf("%d\n", atoi(argv[1]) % 256);
+	extern char **environ;
+
+	int i = 0;
+	while (environ[i])
+	{
+		printf("%s\n", environ[i]);
+		i++;
+	}
+	// puts("1111111111");
+	printf("%p\n", environ[i]);
+	// environ[i + 1] = "aaaaaaaaa";
+	printf("%s\n", environ[i + 1]);
+	printf("%s\n", environ[i + 2]);
+	printf("%s\n", environ[i + 3]);
+	printf("%s\n", environ[i + 4]);
+	printf("%s\n", environ[i + 5]);
+	printf("%s\n", environ[i + 6]);
+	printf("%s\n", environ[i + 7]);
+	printf("%s\n", environ[i + 8]);
+	printf("%p\n", environ[i + 9]);
+	// printf("%p\n", environ[i + 10]);
+	exit(0);
+	environ[i + 2] = "bbbbbb";
+	environ[i + 3] = "ccc";
+	printf("%s\n", environ[i + 1]);
+	printf("%s\n", environ[i + 2]);
+	printf("%s\n", environ[i + 3]);
 }
 
 // #define NUM_DATA 7

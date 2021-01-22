@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 00:43:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 02:02:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,15 @@ int		console_loop(t_minishell_info *info, char *envp[])
 // 	system("leaks minishell");
 // }
 
-void	set_env_info(t_minishell_info *info, char **envp)
+void	set_env_info(t_minishell_info *info)
 {
 	info->current_dir_path = getcwd(NULL, 0);
 	info->cmd_lst = NULL; // リスト初期化
 	info->cmd_split = NULL; // リスト初期化
 	info->cmd_lst_num = 0; // リスト初期化
-	info->envp = envp;
+	info->my_env = NULL;
 	info->command = NULL;
-	info->prev_rc = 0;
+	// info->prev_rc = 0;
 }
 
 // static char		*get_working_dir(char *pwd)
@@ -174,7 +174,7 @@ int		main(int argc, char *argv[])
 	printf("shell L : %s\n",info.shell_level);
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
-	set_env_info(&info, environ); //ここでinfoの中にenv情報入れる
+	set_env_info(&info); //ここでinfoの中にenv情報入れる
 	console_loop(&info, environ);
 	(void)argc;
 	(void)argv;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 00:07:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:09:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:51:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,16 @@ static size_t	word_length(char *s, char c)
 	return (i);
 }
 
-static int		switch_env_value(char **s, char **res, t_minishell_info *info)
+static int		switch_env_value(char **s, char **res)
 {
 	extern char	**environ;
+	int			exit_status;
 
+	exit_status = g_signal.exit_status;
 	if (**s == '$' && *(*(s) + 1) == '?')
 	{
 		(*s) += 2;
-		if (!(*res = numjoin_str(*s, info->prev_rc)))
+		if (!(*res = numjoin_str(*s, exit_status)))
 			return (-2);
 		return (-1);
 	}
@@ -57,8 +59,7 @@ static int		switch_env_value(char **s, char **res, t_minishell_info *info)
 	return (1);
 }
 
-static char		**insert_word(char *s, char c, size_t wc,
-					t_minishell_info *info)
+static char		**insert_word(char *s, char c, size_t wc)
 {
 	size_t		i;
 	size_t		len;
@@ -72,7 +73,7 @@ static char		**insert_word(char *s, char c, size_t wc,
 	{
 		while (*s == c)
 			s++;
-		if ((rc = switch_env_value(&s, &(res[i]), info)) == -2)
+		if ((rc = switch_env_value(&s, &(res[i]))) == -2)
 			return (ptr_2d_free((void ***)&res, i));
 		else if (rc == -1)
 			continue ;
@@ -85,8 +86,7 @@ static char		**insert_word(char *s, char c, size_t wc,
 	return (res);
 }
 
-char			**split_switch_env_value(char *s, char c,
-						t_minishell_info *info)
+char			**split_switch_env_value(char *s, char c)
 {
 	char		**res;
 	size_t		wc;
@@ -101,6 +101,6 @@ char			**split_switch_env_value(char *s, char c,
 		res[0] = NULL;
 		return (res);
 	}
-	res = insert_word(s, c, wc, info);
+	res = insert_word(s, c, wc);
 	return (res);
 }

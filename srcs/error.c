@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 23:54:48 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:48:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void		ctrl_d_exit(char **ptr, t_minishell_info *info)
 
 bool	syntax_error(int type, t_minishell_info *info)
 {
+	(void)info;
 	red_error();
 	if (type == OUTPUT)
 		write(2, SYNTAX_OP, 50);
@@ -165,7 +166,7 @@ bool	syntax_error(int type, t_minishell_info *info)
 		write(2, ERR_DB_INPUT, 47);
 	else if (type == TR_INPUT)
 		write(2, ERR_TR_INPUT, 48);
-	info->prev_rc = 258;
+	g_signal.exit_status = 258;
 	return (false);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:55:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/17 23:36:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:46:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void		put_prompt(t_minishell_info *info);
 void		put_welcome_message(void);
 void		put_help_message(void);
 // int			put_cmd_not_found(char **line);
-int			put_cmd_not_found(char *command);
+void		put_cmd_not_found(char *command);
 
 #endif

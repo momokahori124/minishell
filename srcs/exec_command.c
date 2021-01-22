@@ -6,36 +6,38 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:39:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 03:00:13 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
 
-int		exec_bin(t_minishell_info *info, t_cmdlst *cmd)
+void		exec_bin(t_minishell_info *info, t_cmdlst *cmd)
 {
-	int		return_val;
-	pid_t 	wait_pid;
-	int		status;
+	int			return_val;
+	pid_t 		wait_pid;
+	int			status;
+	extern char	**environ;
 
 	return_val = 0;
-	if ((g_bin_fork_pid = fork()) == -1)
+	if ((g_signal.fork_pid = fork()) == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
-	else if (g_bin_fork_pid == 0)
+	else if (g_signal.fork_pid == 0)
 	{
-		return_val = execve(cmd->arg[0], cmd->arg, info->envp);
+		return_val = execve(cmd->arg[0], cmd->arg, environ);
 		if (errno == ENOENT)
-			info->prev_rc = put_cmd_not_found(cmd->arg[0]);
+			put_cmd_not_found(cmd->arg[0]);
 		else if (return_val == -1)
 			all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__);
 		exit(CMD_NOT_FOUND);
 	}
-	if ((wait_pid = waitpid(g_bin_fork_pid, &status, 0)) == -1)
+	if ((wait_pid = waitpid(g_signal.fork_pid, &status, 0)) == -1)
 		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	if (g_signal.exit_status != 130)
+		g_signal.exit_status = WEXITSTATUS(status);
 	if (WIFEXITED(status) || WEXITSTATUS(status) == 0)
-		return (info->prev_rc = WEXITSTATUS(status));
+		return ;
 	all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
-	return (-1);
 }
 
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
@@ -97,7 +99,6 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 	int	type;
 
 	type = cmd->type;
-	info->prev_rc = 0;
 	if (type == BIN)
 		exec_bin(info, cmd);
 	else if (type == EXIT)
@@ -106,7 +107,9 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 		exec_pwd(info);
 	else if (type == ECHO)
 		exec_echo(info, cmd);
-	printf("prev_rc : %d\n", g_sig.exit_status);
+	else if (type == CD)
+		exec_cd(info, cmd);
+	printf("exit status : %d\n", g_signal.exit_status);
 	return (true);
 }
 

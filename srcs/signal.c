@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:39:44 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 03:04:46 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,20 @@ void	sig_quit(int code)
 void	sig_int(int code)
 {
 	(void)code;
-	puts("+++++++++++");
-	if (g_bin_fork_pid == 0) //子だったら
+	if (g_signal.fork_pid == 0) //子だったら
 	{
-	puts("=");
 		write(1, "\b\b  \n", 5);
-		// put_prompt(NULL);
-		g_sig.exit_status = 1;
+		put_prompt(NULL);
+		g_signal.exit_status = 1;
 	}
 	else
 	{
-	puts("+++++++++++");
-		ft_putstr_fd("\n", STDERR);
-		g_sig.exit_status = 130;
+		write(1, "\b\b  \n", 5);
+		// put_prompt(NULL);
+		g_signal.exit_status = 130;
+		// waitpid(g_signal.fork_pid, NULL, -1);
 	}
-	// exit(0);
-	g_sig.sigint = 1;
+	exit(1);
+	g_signal.fork_pid = 0;
+	// g_signal.sigint = 1;
 }

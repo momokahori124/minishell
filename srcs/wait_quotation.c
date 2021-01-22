@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/09 16:11:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 02:58:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ bool		wait_quotation(char first_quo, char **command, \
 		if (!(inputs = re_strjoinch(&inputs, buf)))
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	info->command = re_strjoin(command, inputs);
+	info->command = re_strjoin(command, *command, inputs);
 	rm_chr_in_str(&(info->command), first_quo);
 	ptr_free((void **)&inputs);
 	return (true);

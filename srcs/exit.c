@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:22:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/22 02:49:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	fail_too_arg_exit(t_minishell_info *info)
 {
 	if (write(2, "minishell: exit: too many arguments\n", 36) < 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	info->prev_rc = 1;
+	g_signal.exit_status = 1;
 	return ;
 }
 
