@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 01:33:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 01:45:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,21 +179,10 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name, char **cwd)
 			all_free_perror_exit(info, ERR_LSTAT, __LINE__, __FILE__);
 		return (false);
 	}
-	puts("=");
-	// if (S_ISLNK(stat_buf.st_mode) == 0 || S_ISDIR(stat_buf.st_mode))
-	// 	return (false);
-	printf("ここ%d\n", S_ISLNK(stat_buf.st_mode));
 	symbo_src = change_to_symbolic_source(dir_name, cwd, info);
-	printf("%s\n", symbo_src);
 	ptr_free((void **)cwd);
-	// update_env_value(&(info->my_env), "PWD=", symbo_src, info);
-	// printf("%s\n", search_env("PWD", 3, info->my_env));
-	// printf("%s\n", search_env("PWD", 3, info->my_env));
-	// printf("%s\n" ,getcwd(NULL, 0));
-	// exit(0);
-	printf("%s\n", symbo_src);
-	// ptr_free((void **)&symbo_src);
-	// if (chdir(".") == -1)
+	ptr_free((void **)&(info->current_dir_path));
+	info->current_dir_path = symbo_src;
 	if (chdir(symbo_src) == -1)
 	{
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
@@ -217,6 +206,7 @@ static void	go_to_symbolic_destination(t_minishell_info *info, char *dir)
 		path = dir;
 	if (is_symbolic_dir(info, path, &cwd) == true)
 		return ;
+	ptr_free((void **)&cwd);
 	if (chdir(path) == -1)
 	{
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
@@ -225,7 +215,9 @@ static void	go_to_symbolic_destination(t_minishell_info *info, char *dir)
 			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		perror(path);
 	}
-	ptr_free((void **)&cwd);
+	if (!(info->current_dir_path = re_strdup(&(info->current_dir_path), path)))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+
 }
 
 // static void	go_to_normal_dir(t_cmdlst *cmd)
