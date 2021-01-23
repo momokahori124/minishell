@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 04:55:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 22:12:50 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,14 @@
 
 void		exec_pwd(t_minishell_info *info)
 {
-	ft_putendl_fd(info->current_dir_path, STDOUT_FILENO);
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+		all_free_perror_exit(info, ERR_GETCWD, __LINE__, __FILE__);
+	if (!ft_putendl_fd(cwd, STDOUT_FILENO))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	ptr_free((void **)&cwd);
 }
 
 /*

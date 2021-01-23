@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 00:07:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:51:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 23:09:47 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,8 @@ static size_t	word_length(char *s, char c)
 	return (i);
 }
 
-static int		switch_env_value(char **s, char **res)
+static int		switch_env_value(char **s, char **res, t_my_env *my_env)
 {
-	extern char	**environ;
 	int			exit_status;
 
 	exit_status = g_signal.exit_status;
@@ -55,11 +54,11 @@ static int		switch_env_value(char **s, char **res)
 		return (-1);
 	}
 	if (**s == '$')
-		*s = search_env(environ, (*s) + 1);
+		*s = search_env((*s) + 1, ft_strlen((*s) + 1), my_env);
 	return (1);
 }
 
-static char		**insert_word(char *s, char c, size_t wc)
+static char		**insert_word(char *s, char c, size_t wc, t_my_env *my_env)
 {
 	size_t		i;
 	size_t		len;
@@ -73,7 +72,7 @@ static char		**insert_word(char *s, char c, size_t wc)
 	{
 		while (*s == c)
 			s++;
-		if ((rc = switch_env_value(&s, &(res[i]))) == -2)
+		if ((rc = switch_env_value(&s, &(res[i]), my_env)) == -2)
 			return (ptr_2d_free((void ***)&res, i));
 		else if (rc == -1)
 			continue ;
@@ -86,7 +85,7 @@ static char		**insert_word(char *s, char c, size_t wc)
 	return (res);
 }
 
-char			**split_switch_env_value(char *s, char c)
+char			**split_switch_env_value(char *s, char c, t_my_env *my_env)
 {
 	char		**res;
 	size_t		wc;
@@ -101,6 +100,6 @@ char			**split_switch_env_value(char *s, char c)
 		res[0] = NULL;
 		return (res);
 	}
-	res = insert_word(s, c, wc);
+	res = insert_word(s, c, wc, my_env);
 	return (res);
 }

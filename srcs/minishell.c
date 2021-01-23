@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 02:02:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 00:59:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,35 @@ void	put_envs(char *envp[])
 }
 
 // char	*search_env(char **env, char *str, t_minishell_info *info)
-char	*search_env(char **env, char *str)
+char	*search_env(char *str, int num, t_my_env *my_env)
 {
-	size_t	i;
-	size_t	j;
-	// char	*export_value;
+	size_t		i;
+	size_t		j;
+	extern char	**environ;
 
-	i = 0;
-	while (env[i])
+	i = -1;
+	// printf("%s\n", str);
+	while (environ[++i])
 	{
-		if (ft_strncmp(env[i], str, ft_strlen(str)) == 0)
+		if (ft_strncmp(environ[i], str, num) == 0)
 		{
 			j = 0;
-			while (env[i][j] != '=')
+			while (environ[i][j] != '=')
 				j++;
-			return (env[i] + j + 1);
+			return (environ[i] + j + 1);
 		}
-		i++;
 	}
-	// export_value = info->
+	while (my_env)
+	{
+		if (ft_strncmp(my_env->value, str, num) == 0)
+		{
+			j = 0;
+			while (my_env->value[j] != '=')
+				j++;
+			return (my_env->value + j + 1);
+		}
+		my_env = my_env->next;
+	}
 	return (NULL);
 }
 
@@ -133,14 +143,15 @@ void	set_env_info(t_minishell_info *info)
 void	set_prompt_message(char *envp[])
 {
 	char *s;
+	(void)envp;
 
-	s = search_env(envp, "USER");
+	s = search_env("USER", 4, NULL);
 	g_user_name = s;
 	g_user_name_count = 0;
 	while (g_user_name[g_user_name_count])
 		g_user_name_count++;
 	// s = get_working_dir(envp[search_env(envp, "PWD")]);
-	s = search_env(envp, "PWD");
+	s = search_env("PWD", 3, NULL);
 	g_working_dir = s;
 	g_working_dir_count = 0;
 	while (g_working_dir[g_working_dir_count])
@@ -162,7 +173,7 @@ int		main(int argc, char *argv[])
 	}
 	// put_welcome_message();
 	set_prompt_message(environ);
-	info.shell_level = search_env(environ, "SHLVL");
+	info.shell_level = search_env("SHLVL", 5, NULL);
 	int i = 0;
 	while (i < 1)
 	{

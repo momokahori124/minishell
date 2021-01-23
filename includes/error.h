@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 23:54:40 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 01:10:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 # define ERR_CLOSE "Failed to \033[4mclose\033[0m at the above location. "
 # define ERR_DUP "Failed to \033[4mdup\033[0m at the above location. "
 # define ERR_DUP2 "Failed to \033[4mdup2\033[0m at the above location. "
+# define ERR_CHDIR "Failed to \033[4mchdir\033[0m at the above location. "
+# define ERR_OPENDIR "Failed to \033[4mopendir\033[0m at the above location. "
+# define ERR_GETCWD "Failed to \033[4mgetcwd\033[0m at the above location. "
+# define ERR_LSTAT "Failed to \033[4mlstat\033[0m at the above location. "
 
 
 # define SYNTAX_EOL_NUM -1
@@ -35,6 +39,8 @@
 # define WARNING -2
 # define NEWLINE -3
 
+
+# define NO_OLDPWD "minishell: cd: OLDPWD not set"
 
 # define SYNTAX "minishell: syntax error near unexpected "
 # define SYNTAX_OP "minishell: syntax error near unexpected token `>\'\n"

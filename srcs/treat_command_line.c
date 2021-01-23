@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 02:04:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/23 23:10:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,8 @@ bool	check_bash_standard_commands(t_minishell_info *info, char ***command)
 	char		*env_path;
 	char		**bin_paths;
 	int			i;
-	extern char	**environ;
 
-	env_path = search_env(environ, "PATH");
+	env_path = search_env("PATH", 4, NULL);
 	if (!(bin_paths = ft_split(env_path, ':')))
 	{
 		ptr_2d_free((void ***)command, ARG_MAX);
@@ -112,7 +111,7 @@ bool	parsing(t_minishell_info *info, char *command)
 	// 	const char	*base[CMD_NUM - 1] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
 	// "<", ">", ">>", ">|", "cd", "echo", "export", "pwd", "unset", "|"};
 
-	if (!(split = split_switch_env_value(command, ' ')))
+	if (!(split = split_switch_env_value(command, ' ', info->my_env)))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
 		return (1);
