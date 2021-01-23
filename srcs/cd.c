@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 01:59:26 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 02:47:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,26 +137,23 @@ static void	go_to_home(t_minishell_info *info)
 	ptr_free((void **)&cwd);
 }
 
-char	*change_to_symbolic_source(char *dir_name, char **cwd, t_minishell_info *info)
+char	*change_to_symbolic_source(char *dir_name, t_minishell_info *info)
 {
 	char		*res;
 	int			i;
 	int			j;
 
 	i = 0;
-	while ((*cwd)[i])
+	while (info->current_dir_path[i])
 		i++;
 	j = 0;
 	while (dir_name[j])
 		j++;
 	if (!(res = malloc(i + j + 2)))
-	{
-		ptr_free((void **)cwd);
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
 	i = -1;
-	while ((*cwd)[++i])
-		res[i] = (*cwd)[i];
+	while (info->current_dir_path[++i])
+		res[i] = info->current_dir_path[i];
 	res[i++] = '/';
 	j = 0;
 	while (dir_name[j])
@@ -168,7 +165,7 @@ char	*change_to_symbolic_source(char *dir_name, char **cwd, t_minishell_info *in
 	return (res);
 }
 
-bool	is_symbolic_dir(t_minishell_info *info, char *dir_name, char **cwd)
+bool	is_symbolic_dir(t_minishell_info *info, char *dir_name)
 {
 	char	*symbo_src;
 	t_stat	stat_buf;
@@ -181,8 +178,7 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name, char **cwd)
 	}
 	if (S_ISLNK(stat_buf.st_mode) == 0 || S_ISDIR(stat_buf.st_mode))
 		return (false);
-	symbo_src = change_to_symbolic_source(dir_name, cwd, info);
-	ptr_free((void **)cwd);
+	symbo_src = change_to_symbolic_source(dir_name, info);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = symbo_src;
 	if (chdir(symbo_src) == -1)
@@ -193,32 +189,105 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name, char **cwd)
 	return (true);
 }
 
-static void	go_to_symbolic_destination(t_minishell_info *info, char *dir)
+void	set_tenten(t_minishell_info *info, char *dir_name)
 {
-	char		*cwd;
-	char		*path;
+	char	*path;
+	char	*cwd;
+	int		i;
+
+	i = -1;
+	while (info->current_dir_path[++i])
+		if (info->current_dir_path[i] == '/')
+			path = info->current_dir_path + i;
+	if (!(cwd = malloc(i + ft_strlen(dir_name) + 1)))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	i = -1;
+	while (&info->current_dir_path[++i] != path)
+		cwd[i] = info->current_dir_path[i];
+	cwd[i] = '\0';
+	ptr_free((void **)&(info->current_dir_path));
+	info->current_dir_path = cwd;
+}
+
+void	set_next_cwd(t_minishell_info *info, char *dir_name)
+{
+	char	*cwd;
+	int		i;
+	int		j;
+
+	i = -1;
+	while (info->current_dir_path[++i])
+		;
+	if (!(cwd = malloc(i + ft_strlen(dir_name) + 2)))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	i = -1;
+	while (info->current_dir_path[++i])
+		cwd[i] = info->current_dir_path[i];
+	cwd[i++] = '/';
+	j = -1;
+	while (dir_name[++j])
+		cwd[i + j] = dir_name[j];
+	cwd[i + j] = '\0';
+	ptr_free((void **)&(info->current_dir_path));
+	info->current_dir_path = cwd;
+}
+
+// void	set_current_dir(t_minishell_info *info, char *dir_name,
+// 			char **ptr)
+// {
+// 	char	*cwd;
+// 	int		i;
+// 	int		j;
+
+// 	ptr_free((void **)&(info->current_dir_path));
+// 	if (ptr != NULL)
+// 		ptr_free((void **)ptr);
+// 	i = -1;
+// 	while (info->current_dir_path[++i])
+// 		;
+// 	if (!(cwd = malloc(i + ft_strlen(dir_name) + 2)))
+// 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+// 	i = -1;
+// 	while (info->current_dir_path[++i])
+// 		cwd[i] = info->current_dir_path[i];
+// 	cwd[i++] = '/';
+// 	j = -1;
+// 	while (dir_name[++j])
+// 		cwd[i + j] = dir_name[j];
+// 	cwd[i + j] = '\0';
+// 	info->current_dir_path = cwd;
+// }
+
+static void	go_to_path(t_minishell_info *info, char *dir,
+			bool option_p_flag)
+{
+	// char		*cwd;
+	char		*dir_name;
 
 	if (dir == NULL)
 		return (go_to_home(info));
-	cwd = getcwd(NULL, 0);
-	update_env_value(&(info->my_env), "OLDPWD=", cwd, info);
-	if (dir[0] == '$' && dir[1] != '\0')
-		path = search_env(dir + 1, ft_strlen(dir + 1), info->my_env);
-	else
-		path = dir;
-	if (is_symbolic_dir(info, path, &cwd) == true)
+	if (dir[0] == '.' && dir[1] == '\0')
 		return ;
-	ptr_free((void **)&cwd);
-	if (chdir(path) == -1)
+	// cwd = getcwd(NULL, 0);
+	update_env_value(&(info->my_env), "OLDPWD=", info->current_dir_path, info);
+	dir_name = dir;
+	if (dir[0] == '$' && dir[1] != '\0')
+		dir_name = search_env(dir + 1, ft_strlen(dir + 1), info->my_env);
+	if (option_p_flag == false)
+		if (is_symbolic_dir(info, dir_name) == true)
+			return ;
+	if (chdir(dir_name) == -1)
 	{
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
 			all_free_perror_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 		if (write(STDERR_FILENO, "minishell: ", 12) < 0)
 			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		perror(path);
+		perror(dir_name);
 	}
-	set_current_dir_path(info, )
-
+	if (dir_name[0] == '.' && dir_name[1] == '.' && dir_name[2] == '\0')
+		return (set_tenten(info, ""));
+	else if (dir_name[0] != '.')
+		return (set_next_cwd(info, dir));
 }
 
 // static void	go_to_normal_dir(t_cmdlst *cmd)
@@ -274,16 +343,9 @@ void	exec_cd(t_minishell_info *info, t_cmdlst *cmd)
 	else if (arg[1][0] == '-' && arg[1][1] == '\0')
 		go_to_oldpwd(info);
 	else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
-		go_to_symbolic_destination(info, arg[2]);
+		go_to_path(info, arg[2], true);
 	else if (arg[1][0] == '-' && arg[1][1] == 'L' && arg[1][2] == '\0')
-	{
-		go_to_symbolic_destination(info, arg[2]);
-	}
+		go_to_path(info, arg[2], false);
 	else
-	{
-		go_to_symbolic_destination(info, arg[1]);
-		// puts("2");
-		// check_bash_standard_commands(info, &(info->cmd_lst->arg));
-		// exec_bin(info, cmd);
-	}
+		go_to_path(info, arg[1], false);
 }
