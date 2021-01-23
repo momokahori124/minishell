@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 01:45:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 01:59:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name, char **cwd)
 			all_free_perror_exit(info, ERR_LSTAT, __LINE__, __FILE__);
 		return (false);
 	}
+	if (S_ISLNK(stat_buf.st_mode) == 0 || S_ISDIR(stat_buf.st_mode))
+		return (false);
 	symbo_src = change_to_symbolic_source(dir_name, cwd, info);
 	ptr_free((void **)cwd);
 	ptr_free((void **)&(info->current_dir_path));
@@ -215,8 +217,7 @@ static void	go_to_symbolic_destination(t_minishell_info *info, char *dir)
 			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		perror(path);
 	}
-	if (!(info->current_dir_path = re_strdup(&(info->current_dir_path), path)))
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	set_current_dir_path(info, )
 
 }
 

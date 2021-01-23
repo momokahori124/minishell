@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 01:48:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 01:54:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 void		exec_pwd(t_minishell_info *info)
 {
-	char	*cwd;
+	// char	*cwd;
 
-	cwd = info->current_dir_path;
+	// cwd = info->current_dir_path;
 	// cwd = getcwd(NULL, 0);
 	// if (cwd == NULL)
 	// 	all_free_perror_exit(info, ERR_GETCWD, __LINE__, __FILE__);
@@ -29,16 +29,16 @@ void		exec_pwd(t_minishell_info *info)
 	// ptr_free((void **)&cwd);
 	// if (ft_putendl_fd(search_env("PWD", 3, NULL), 1) == false)
 	// 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	// if (ft_putendl_fd(info->current_dir_path, 1) == false)
-	// 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	int	i;
+	if (ft_putendl_fd(info->current_dir_path, 1) == false)
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	// int	i;
 
-	i = 0;
-	while (cwd[i])
-	{
-		if (!(cwd[i + 1] == '/' && cwd[i + 2] == '.' && cwd[i + 3] == '.'))
-			i++;
-	}
+	// i = 0;
+	// while (cwd[i])
+	// {
+	// 	if (!(cwd[i + 1] == '/' && cwd[i + 2] == '.' && cwd[i + 3] == '.'))
+	// 		i++;
+	// }
 	// write()
 }
 
