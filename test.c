@@ -1,189 +1,73 @@
-// #include <stdio.h>
+#include <stdio.h>
 #include <string.h> /* strcmp(  ), size_t で必要 */
 #include "includes/minishell.h"
 
-char			*numjoin_str2(char *s, long long num)
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main()
 {
-	char		*res;
-	long long	num_len;
-	size_t		s_len;
-	size_t		i;
-	size_t		j;
+    char *argv[] = {"cat", "|", "cat", "|", "ls" , NULL};
+    int i, pipe_locate[10], pipe_count = 0;
+    pipe_locate[0] = -1;
+    for (i = 0; argv[i] != NULL; i++) {
+        if (strcmp(argv[i], "|") == 0) {
+            pipe_count++;
+            pipe_locate[pipe_count] = i;
+            argv[i] = NULL;
+        }
+    }
 
-	num_len = ft_numlen(num);
-	s_len = ft_strlen(s);
-	if (!(res = malloc(sizeof(char) * (s_len + num_len + 1))))
-		return (NULL);
-	i = 0;
-	while (num_len)
+    int pfd[9][2];
+    if (pipe_count == 0) {
+        if (fork() == 0) {
+            execvp(argv[0], argv);
+            exit(0);
+        }
+        else {
+            int status;
+            wait(&status);
+        }
+    }
+
+    for (i = 0; i < pipe_count + 1 && pipe_count != 0; i++) {
+        if (i != pipe_count) pipe(pfd[i]);
+
+        if (fork() == 0) {
+            if (i == 0) {
+                dup2(pfd[i][1], 1);
+                close(pfd[i][0]); close(pfd[i][1]);
+            } else if (i == pipe_count) {
+                dup2(pfd[i - 1][0], 0);
+                close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+            } else {
+                dup2(pfd[i - 1][0], 0);
+                dup2(pfd[i][1], 1);
+                close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+                close(pfd[i][0]); close(pfd[i][1]);
+            }
+
+            execvp(argv[pipe_locate[i] + 1], argv + pipe_locate[i] + 1);
+            exit(0);
+        }
+        else if (i > 0) {
+            close(pfd[i - 1][0]); close(pfd[i - 1][1]);
+        }
+    }
+    int status;
+
+    for (i = 0; i < pipe_count + 1; i++) {
+        wait(&status);
+    }
+	if (WIFEXITED(status))
+		return (1);
+	else
 	{
-		res[num_len - 1] = num % 10 + '0';
-		num_len--;
-		num /= 10;
-		i++;
+		printf("%d\n", WTERMSIG(status));
+		//シグナルの番号を返すべきか
+		// all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 	}
-	j = -1;
-	while (s[++j])
-	{
-		res[i] = s[j];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
+    return 0;
 }
-
-// int main()
-// {
-
-// }
-int main(int argc, char **argv)
-{
-	extern char **environ;
-
-	int i = 0;
-	while (environ[i])
-	{
-		printf("%s\n", environ[i]);
-		i++;
-	}
-	// puts("1111111111");
-	printf("%p\n", environ[i]);
-	// environ[i + 1] = "aaaaaaaaa";
-	printf("%s\n", environ[i + 1]);
-	printf("%s\n", environ[i + 2]);
-	printf("%s\n", environ[i + 3]);
-	printf("%s\n", environ[i + 4]);
-	printf("%s\n", environ[i + 5]);
-	printf("%s\n", environ[i + 6]);
-	printf("%s\n", environ[i + 7]);
-	printf("%s\n", environ[i + 8]);
-	printf("%p\n", environ[i + 9]);
-	// printf("%p\n", environ[i + 10]);
-	exit(0);
-	environ[i + 2] = "bbbbbb";
-	environ[i + 3] = "ccc";
-	printf("%s\n", environ[i + 1]);
-	printf("%s\n", environ[i + 2]);
-	printf("%s\n", environ[i + 3]);
-}
-
-// #define NUM_DATA 7
-// const char *base[NUM_DATA] = {"cd", "echo", "env", "exit",
-// 							  "export", "pwd", "unset"};
-
-// /* バイナリサーチを行う */
-// int BSearch(const char *key, const char *base[], int bottom, int top);
-
-// int BSearch(const char *key, const char *base[], int bottom, int top)
-// {
-// 	int middle;
-// 	int temp;
-
-// 	if (bottom == top)
-// 		return (-1);
-// 	middle = (top + bottom) / 2;
-// 	if ((temp = strcmp(key, base[middle])) == 0)
-// 		return (middle);
-// 	else if (temp > 0)
-// 		if (top == middle + 1)
-// 			BSearch(key, base, middle, top + 1);
-// 		else
-// 			BSearch(key, base, middle + 1, top);
-// 	else
-// 		BSearch(key, base, bottom, middle);
-// 	return (-1);
-// }
-
-// int main(void)
-// {
-// 	int i;
-// 	int temp;
-// 	const char *key = "pwd"; /* 検索対象の文字列 */
-// 	int top = NUM_DATA - 1;
-// 	int bottom = 0;
-
-// 	printf("キーワード：%s\n", key);
-// 	printf("検索対象のデータ：%s\n", key);
-// 	for (i = 0; i < NUM_DATA; i++)
-// 		printf("\t%s\n", base[i]);
-
-// 	if ((temp = BSearch(key, base, bottom, top)) != -1)
-// 		printf("\n見つかりました: %s は %d 番目の要素です。\n",
-// 			   base[temp], temp + 1);
-// 	else
-// 		printf("\n見つかりません。\n");
-// // }
-
-// #include <stdio.h>
-
-#define ARRAY_SIZE 8
-const char *a[ARRAY_SIZE] = {"cd", "echo", "env", "exit",
-							  "export", "pwd", "unset", "zzz"};
-
-// int	str_bsearch(char *key, const char *base[], int right)
-// {
-// 	int	left;
-// 	int	mid;
-// 	int	tmp;
-
-// 	left = 0;
-// 	if (left == right)
-// 		return (-1);
-// 	while (left <= right)
-// 	{
-// 		mid = (left + right) / 2;
-// 		if ((tmp = strcmp(key, base[mid])) == 0)
-// 			return (mid);
-// 		else if (tmp > 0)
-// 			left = mid + 1;
-// 		else
-// 			right = mid - 1;
-// 	}
-// 	return (-2);
-// }
-
-// int main(void)
-// {
-// 	// int a[ARRAY_SIZE] = {1, 2, 3, 4, 5, 6, 7}; /* sorted array */
-// 	int left = 0;							   /* start key of index */
-// 	int right = ARRAY_SIZE;					   /* end key of index */
-// 	int mid;								   /* middle key of index */
-// 	char *value;								   /* search value */
-// 	int tmp;
-
-// 	puts("Find value?");
-// 	scanf("%s", value);
-
-// 	// while (left <= right)
-// 	// {
-// 	// 	mid = (left + right) / 2; /* calc of middle key */
-// 	// 	if ((tmp = strcmp(value, a[mid])) == 0)
-// 	// 	{
-// 	// 		puts("Found!\n");
-// 	// 		printf("%d : %s\n", mid, a[mid]);
-// 	// 		return 0;
-// 	// 	}
-// 	// 	else if (tmp > 0)
-// 	// 	{
-// 	// 		left = mid + 1; /* adjustment of left(start) key */
-// 	// 	}
-// 	// 	else
-// 	// 	{
-// 	// 		right = mid - 1; /* adjustment of right(end) key */
-// 	// 	}
-// 	// }
-// 	// puts("Not Found.\n");
-// 	int i = str_bsearch(value, a, ARRAY_SIZE);
-// 	if (i == -2)
-// 	{
-// 		puts("Not Found.");
-// 		return (1);
-// 	}
-// 	printf("%d : %s\n", i, a[i]);
-// 	return 0;
-// }
-
-// int main()
-// {
-// 	int i = str_bsearch("cd", a, ARRAY_SIZE);
-// }

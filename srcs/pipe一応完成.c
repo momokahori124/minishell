@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   pipe一応完成.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 16:31:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 16:30:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 		exit(0);
 	}
 	close_pipe_fd(pipefd, info);
+	// if (waitpid(fork_pid, &status, 0) == -1)
+	// 	all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	// if (WIFEXITED(status))
+	// 	return ;
+	// else //シグナルの番号を返すべきか
+	// 	all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
@@ -56,23 +62,68 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 		exit(0);
 	}
 	close_pipe_fd(old_pipefd, info);
+	if (waitpid(fork_pid, &status, 0) == -1)
+		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	if (WIFEXITED(status))
+		return ;
+	else //シグナルの番号を返すべきか
+		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
-void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
+void	apply_first_pipe(t_cmdlst **cmd_lst,
 						t_minishell_info *info)
 {
+	int			pipefd[info->cmd_lst_num / 2][2];
 	int	fork_pid;
 	int	status;
 
-	if ((pipe(pipefd)) == -1)
+	if ((pipe(pipefd[0])) == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
 	if ((fork_pid = fork()) == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
-		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
+		connect_std_in_out_and_pipe(pipefd[0], STDOUT_FILENO, info);
 		execute(info, *cmd_lst);
 		exit(0);
+	}
+	*cmd_lst = skip_lst_and_free(cmd_lst, 2);
+	int i = 0;
+	i++;
+	// while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next &&
+	// 			(*cmd_lst)->next->type == PIPE)))
+	// {
+	// 	apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
+	// 	*cmd_lst = skip_lst_and_free(cmd_lst, 2);
+	// 	i++;
+	// 	// if ((*cmd_lst)->type != PIPE)
+	// 	// {
+	// 	// 	apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
+	// 	// 	i++;
+	// 	// }
+	// 	// next = (*cmd_lst)->next;
+	// 	// free_alloc_ptr_in_cmd_lst(cmd_lst);
+	// 	// *cmd_lst = next;
+	// }
+	apply_last_pipe(cmd_lst, pipefd[i - 1], info);
+	// while (i + 1)
+	// {
+	// 	i--;
+	// 	wait(&status);
+	// }
+
+
+	while (wait(NULL) > 0)
+		;
+	// if (waitpid(fork_pid, &status, 0) == -1)
+	// 	all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	if (WIFEXITED(status))
+		return ;
+	else
+	{
+		printf("%d\n", WTERMSIG(status));
+		//シグナルの番号を返すべきか
+		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 	}
 }
 
@@ -88,27 +139,25 @@ t_cmdlst	*pipe_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 	int			i;
 
 	i = 0;
-	apply_first_pipe(cmd_lst, pipefd[0], info);
-	*cmd_lst = skip_lst_and_free(cmd_lst, 2);
-	i++;
-	while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next &&
-				(*cmd_lst)->next->type == PIPE)))
-	{
-		apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
-		*cmd_lst = skip_lst_and_free(cmd_lst, 2);
-		i++;
-		// if ((*cmd_lst)->type != PIPE)
-		// {
-		// 	apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
-		// 	i++;
-		// }
-		// next = (*cmd_lst)->next;
-		// free_alloc_ptr_in_cmd_lst(cmd_lst);
-		// *cmd_lst = next;
-	}
-	apply_last_pipe(cmd_lst, pipefd[i - 1], info);
-	while (wait(NULL) > 0)
-		;
+	apply_first_pipe(cmd_lst, info);
+	// *cmd_lst = skip_lst_and_free(cmd_lst, 2);
+	// i++;
+	// while (*cmd_lst && ((*cmd_lst)->type == PIPE || ((*cmd_lst)->next &&
+	// 			(*cmd_lst)->next->type == PIPE)))
+	// {
+	// 	apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
+	// 	*cmd_lst = skip_lst_and_free(cmd_lst, 2);
+	// 	i++;
+	// 	// if ((*cmd_lst)->type != PIPE)
+	// 	// {
+	// 	// 	apply_middle_pipe(cmd_lst, pipefd[i - 1], pipefd[i], info);
+	// 	// 	i++;
+	// 	// }
+	// 	// next = (*cmd_lst)->next;
+	// 	// free_alloc_ptr_in_cmd_lst(cmd_lst);
+	// 	// *cmd_lst = next;
+	// }
+	// apply_last_pipe(cmd_lst, pipefd[i - 1], info);
 	next = (*cmd_lst)->next;
 	return (next);
 }

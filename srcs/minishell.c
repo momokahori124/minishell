@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 00:59:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 02:55:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,9 @@ int		main(int argc, char *argv[])
 	info.shell_level[i] = '\0';
 	// info.shell_level[0] += ft_atoi(info.shell_level) + 1 - '0';
 	printf("shell L : %s\n",info.shell_level);
+	set_env_info(&info); //ここでinfoの中にenv情報入れる
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
-	set_env_info(&info); //ここでinfoの中にenv情報入れる
 	console_loop(&info, environ);
 	(void)argc;
 	(void)argv;

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 19:45:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 03:03:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 04:06:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +135,13 @@ t_cmdlst		*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 	}
 	if (fd[0] != -1 && fd[1] != -1)
 		mix_input_and_output(fd, begin, info);
-	if (fd[2] != -1 && fd[1] != -1)
+	else if (fd[2] != -1 && fd[1] != -1)
 		mix_input_and_stderr_output(fd, begin, info);
-	if (fd[1] != -1)
+	else if (fd[1] != -1)
 		read_from_file(fd[1], begin, info);
-	if (fd[2] != -1)
+	else if (fd[2] != -1)
 		write_to_file(fd[2], STDERR_FILENO, begin, info);
-	if (fd[0] != -1)
+	else if (fd[0] != -1)
 		write_to_file(fd[0], STDOUT_FILENO, begin, info);
 	free_alloc_ptr_in_cmd_lst(&begin);
 	return (*cmd_lst);

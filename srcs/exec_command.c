@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 23:19:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 04:04:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ void		exec_bin(t_minishell_info *info, t_cmdlst *cmd)
 	else if (g_signal.fork_pid == 0)
 	{
 		return_val = execve(cmd->arg[0], cmd->arg, environ);
-		if (errno == ENOENT)
+		if (errno == ENOENT || errno == EACCES)
 			put_cmd_not_found(cmd->arg[0]);
 		else if (return_val == -1)
 			all_free_perror_exit(info, ERR_EXECVE, __LINE__, __FILE__);
 		exit(CMD_NOT_FOUND);
 	}
+	errno = 0;
 	// system("env | grep \"PWD\"");
 	if ((wait_pid = waitpid(g_signal.fork_pid, &status, 0)) == -1)
 		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
