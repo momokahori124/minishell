@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 02:02:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 16:52:12 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 typedef struct	stat t_stat;
 
 
-typedef struct		s_my_env
+typedef struct		s_envlst
 {
 	char			*value;
-	struct s_my_env	*next;
-}					t_my_env;
+	struct s_envlst	*next;
+}					t_envlst;
 
 typedef struct		s_minishell_info
 {
 	char			*command;
 	char			**cmd_split;
 	int				cmd_lst_num;
-	struct s_my_env	*my_env;
+	struct s_envlst	*env;
 	char			*shell_level;
 	char			*current_dir_path;
 	struct s_cmdlst	*cmd_lst;

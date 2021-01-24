@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 01:10:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 19:16:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,17 @@
 # define SYNTAX_INPUT "minishell: syntax error near unexpected token `<\'\n"
 # define SYNTAX_NL "minishell: syntax error near unexpected token `newline\'\n"
 
-# define ERR_MANDATORY "That command is not supported by mandatory.\n"
 # define ERR_DB_SEMICOLON "minishell: `;;\' is not supported by mandatory.\n"
 # define ERR_DB_PIPE "minishell: `||\' is not supported by mandatory.\n"
 # define ERR_OUTPUT_PIPE "minishell: `>|\' is not supported by mandatory.\n"
 # define ERR_DB_INPUT "minishell: `<<\' is not supported by mandatory.\n"
 # define ERR_TR_INPUT "minishell: `<<<\' is not supported by mandatory.\n"
+# define ERR_MANDATORY "That command is not supported by mandatory.\n"
 
+# define ERR_ENV "Usage: env [No option] [No argument]\n"
+# define ERR_ECHO "Usage: echo [-n] ...\n"
+# define ERR_EXPORT "Usage: export [No option] ...\n"
+# define ERR_UNSET "Usage: unset [No option] ...\n"
 
 void	perror_exit(char *error_message, int line_num, char *file_name);
 void	free_perror_exit(char *ptr, char *error_message, int line_num, \
@@ -74,5 +78,7 @@ bool	warning_message(char *error_message, t_minishell_info *info);
 
 void	all_free_minishell_info(t_minishell_info *info);
 bool	err_no_such_file_or_directory(char *filename, t_minishell_info *info);
+
+void	error_mandatory(char *err_message, int num, t_minishell_info *info);
 
 #endif

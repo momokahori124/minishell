@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 04:04:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 18:50:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,9 @@ void		exec_echo(t_minishell_info *info, t_cmdlst *cmd)
 
 	args = cmd->arg;
 	n_flag = 0;
-	if (ft_strcmp(args[1], "-n") == 0)
-		n_flag = 1;
+	if (args[1][0] == '-')
+		if ((n_flag = 1) && ft_strcmp(args[1], "-n") != 0)
+			return (error_mandatory(ERR_ECHO, 21, info));
 	i = 1 + n_flag;
 	while (args[i])
 	{
@@ -111,6 +112,12 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 		exec_echo(info, cmd);
 	else if (type == CD)
 		exec_cd(info, cmd);
+	else if (type == ENV)
+		exec_env(info, cmd->arg[1]);
+	else if (type == EXPORT)
+		exec_export(info, cmd->arg);
+	else if (type == UNSET)
+		exec_unset(info, cmd->arg);
 	printf("exit status : %d\n", g_signal.exit_status);
 	return (true);
 }

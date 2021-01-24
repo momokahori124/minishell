@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:48:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 17:39:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 		free(info->cmd_lst);
 		info->cmd_lst = tmp;
 	}
+	// あとでかく
+	// while (info->env)
 	if (errno == 0)
 		exit(1);
 	perror_exit(error_message, line_num, file_name);
@@ -231,4 +233,12 @@ bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *i
 		ptr_2d_free((void ***)cmd_grp, i);
 	}
 	return (syntax_error(type, info));
+}
+
+void	error_mandatory(char *err_message, int num, t_minishell_info *info)
+{
+	red_error();
+	if (write(1, err_message, num) < 0)
+		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	return;
 }

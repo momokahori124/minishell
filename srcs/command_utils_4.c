@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 00:07:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 23:09:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 17:03:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	word_length(char *s, char c)
 	return (i);
 }
 
-static int		switch_env_value(char **s, char **res, t_my_env *my_env)
+static int		switch_env_value(char **s, char **res, t_envlst *env_lst)
 {
 	int			exit_status;
 
@@ -53,12 +53,12 @@ static int		switch_env_value(char **s, char **res, t_my_env *my_env)
 			return (-2);
 		return (-1);
 	}
-	if (**s == '$')
-		*s = search_env((*s) + 1, ft_strlen((*s) + 1), my_env);
+	if (**s == '$' && *(*(s) + 1) != '\0')
+		*s = search_env((*s) + 1, ft_strlen((*s) + 1), env_lst);
 	return (1);
 }
 
-static char		**insert_word(char *s, char c, size_t wc, t_my_env *my_env)
+static char		**insert_word(char *s, char c, size_t wc, t_envlst *env_lst)
 {
 	size_t		i;
 	size_t		len;
@@ -72,7 +72,7 @@ static char		**insert_word(char *s, char c, size_t wc, t_my_env *my_env)
 	{
 		while (*s == c)
 			s++;
-		if ((rc = switch_env_value(&s, &(res[i]), my_env)) == -2)
+		if ((rc = switch_env_value(&s, &(res[i]), env_lst)) == -2)
 			return (ptr_2d_free((void ***)&res, i));
 		else if (rc == -1)
 			continue ;
@@ -85,7 +85,7 @@ static char		**insert_word(char *s, char c, size_t wc, t_my_env *my_env)
 	return (res);
 }
 
-char			**split_switch_env_value(char *s, char c, t_my_env *my_env)
+char			**split_switch_env_value(char *s, char c, t_envlst *env_lst)
 {
 	char		**res;
 	size_t		wc;
@@ -100,6 +100,6 @@ char			**split_switch_env_value(char *s, char c, t_my_env *my_env)
 		res[0] = NULL;
 		return (res);
 	}
-	res = insert_word(s, c, wc, my_env);
+	res = insert_word(s, c, wc, env_lst);
 	return (res);
 }

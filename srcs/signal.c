@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 03:04:46 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 21:50:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,13 @@
 
 void	sig_quit(int code)
 {
-	exit(1);
-	(void)code;
+	if (g_signal.fork_pid == 0)
+		ft_putstr_fd("\b\b  \b\b", STDERR);
+	else
+	{
+		printf("Quit: %d\n", code);
+		g_signal.exit_status = 131;
+	}
 }
 
 void	sig_int(int code)
@@ -47,9 +52,7 @@ void	sig_int(int code)
 	else
 	{
 		write(1, "\b\b  \n", 5);
-		// put_prompt(NULL);
 		g_signal.exit_status = 130;
-		// waitpid(g_signal.fork_pid, NULL, -1);
 	}
 	exit(1);
 	g_signal.fork_pid = 0;

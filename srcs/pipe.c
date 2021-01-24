@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 16:31:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 21:52:37 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 							t_minishell_info *info)
 {
 	int	fork_pid;
-	int	status;
 
 	if ((fork_pid = fork()) == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
@@ -42,7 +41,6 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 						int new_pipefd[2], t_minishell_info *info)
 {
 	int	fork_pid;
-	int	status;
 
 	if ((pipe(new_pipefd)) == -1)
 		all_free_perror_exit(info, ERR_PIPE, __LINE__, __FILE__);
@@ -62,7 +60,6 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 						t_minishell_info *info)
 {
 	int	fork_pid;
-	int	status;
 
 	if ((pipe(pipefd)) == -1)
 		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);

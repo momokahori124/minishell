@@ -9,6 +9,8 @@
 
 int main()
 {
+	while (1)
+		;
     char *argv[] = {"cat", "|", "cat", "|", "ls" , NULL};
     int i, pipe_locate[10], pipe_count = 0;
     pipe_locate[0] = -1;

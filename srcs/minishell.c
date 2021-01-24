@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 02:55:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 21:52:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,34 +25,21 @@ void	put_envs(char *envp[])
 }
 
 // char	*search_env(char **env, char *str, t_minishell_info *info)
-char	*search_env(char *str, int num, t_my_env *my_env)
+char	*search_env(char *str, int num, t_envlst *env_lst)
 {
 	size_t		i;
-	size_t		j;
-	extern char	**environ;
 
-	i = -1;
-	// printf("%s\n", str);
-	while (environ[++i])
+	while (env_lst)
 	{
-		if (ft_strncmp(environ[i], str, num) == 0)
+		if ((env_lst->value)[0] == str[0] &&
+				ft_strncmp(env_lst->value, str, num) == 0)
 		{
-			j = 0;
-			while (environ[i][j] != '=')
-				j++;
-			return (environ[i] + j + 1);
+			i = 0;
+			while (env_lst->value[i] != '=')
+				i++;
+			return (env_lst->value + i + 1);
 		}
-	}
-	while (my_env)
-	{
-		if (ft_strncmp(my_env->value, str, num) == 0)
-		{
-			j = 0;
-			while (my_env->value[j] != '=')
-				j++;
-			return (my_env->value + j + 1);
-		}
-		my_env = my_env->next;
+		env_lst = env_lst->next;
 	}
 	return (NULL);
 }
@@ -111,13 +98,13 @@ int		console_loop(t_minishell_info *info, char *envp[])
 // 	system("leaks minishell");
 // }
 
-void	set_env_info(t_minishell_info *info)
+void	set_minishell_info(t_minishell_info *info)
 {
 	info->current_dir_path = getcwd(NULL, 0);
 	info->cmd_lst = NULL; // リスト初期化
 	info->cmd_split = NULL; // リスト初期化
 	info->cmd_lst_num = 0; // リスト初期化
-	info->my_env = NULL;
+	info->env = NULL;
 	info->command = NULL;
 	// info->prev_rc = 0;
 }
@@ -140,25 +127,80 @@ void	set_env_info(t_minishell_info *info)
 // 	return (pwd);
 // }
 
-void	set_prompt_message(char *envp[])
+void	set_prompt_message(char *envp[], t_envlst *env_lst)
 {
 	char *s;
 	(void)envp;
 
-	s = search_env("USER", 4, NULL);
+	s = search_env("USER", 4, env_lst);
 	g_user_name = s;
 	g_user_name_count = 0;
 	while (g_user_name[g_user_name_count])
 		g_user_name_count++;
 	// s = get_working_dir(envp[search_env(envp, "PWD")]);
-	s = search_env("PWD", 3, NULL);
+	s = search_env("PWD", 3, env_lst);
 	g_working_dir = s;
 	g_working_dir_count = 0;
 	while (g_working_dir[g_working_dir_count])
 		g_working_dir_count++;
 }
 
-// void	set_env()
+void	shell_level_up(void)
+{
+	extern char	**environ;
+	size_t		i;
+	int			j;
+
+	i = 0;
+	while (environ[i])
+	{
+		if (environ[i][0] == 'S' && environ[i][1] == 'H' &&
+			ft_strncmp(environ[i], "SHLVL", 5) == 0)
+		{
+			j = 0;
+			while (environ[i][j++] != '=')
+				;
+			printf("%d\n", ft_atoi(environ[i] + j) + 1);
+			int	current_shlvl = ft_atoi(environ[i] + j) + 1;
+			int	len = ft_numlen(current_shlvl);
+			environ[i][j + len] = '\0';
+			while (current_shlvl != 0)
+			{
+				environ[i][j + len - 1] = current_shlvl % 10 + '0';
+				current_shlvl /= 10;
+				len--;
+			}
+		}
+		i++;
+	}
+}
+
+void	set_env(t_minishell_info *info)
+{
+	t_envlst	*begin;
+	t_envlst	*next;
+	size_t		i;
+	extern char	**environ;
+
+	if (!(begin = malloc(sizeof(t_envlst))))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	begin->value = ft_strdup(environ[0]);
+	begin->next = NULL;
+	info->env = begin;
+	i = 1;
+	while (environ[i])
+	{
+		if (!(next = malloc(sizeof(t_envlst))))
+			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		// if (environ[i][0] == 'S' && ft_strncmp("SHLVL", environ[i], 5) == 0)
+			// next->value =
+		next->value = ft_strdup(environ[i]);
+		next->next = NULL;
+		begin->next = next;
+		begin = next;
+		i++;
+	}
+}
 
 int		main(int argc, char *argv[])
 {
@@ -172,21 +214,20 @@ int		main(int argc, char *argv[])
 		return (1);
 	}
 	// put_welcome_message();
-	set_prompt_message(environ);
-	info.shell_level = search_env("SHLVL", 5, NULL);
-	int i = 0;
-	while (i < 1)
-	{
-		info.shell_level[i] = ft_atoi(info.shell_level) + 1 + '0';
-		i++;
-	}
-	info.shell_level[i] = '\0';
 	// info.shell_level[0] += ft_atoi(info.shell_level) + 1 - '0';
-	printf("shell L : %s\n",info.shell_level);
-	set_env_info(&info); //ここでinfoの中にenv情報入れる
+	shell_level_up();
+	set_minishell_info(&info); //ここでinfoの中にenv情報入れる
+	set_env(&info); //ここでinfoの中にenv情報入れる
+	set_prompt_message(environ, info.env);
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
 	console_loop(&info, environ);
 	(void)argc;
 	(void)argv;
+}
+
+__attribute__((destructor))
+void end()
+{
+	system("leaks minishell");
 }

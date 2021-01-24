@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 23:12:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 18:50:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	**split_by_separator_contain_delimiters(char *str);
 char	**rm_space_in_array(char **arr, t_minishell_info *info);
 
 // utils4
-char			**split_switch_env_value(char *s, char c, t_my_env *my_env);
+char			**split_switch_env_value(char *s, char c, t_envlst *env_lst);
 
 // format
 bool	check_format_of_command(char ***grp, t_minishell_info *info);
@@ -95,5 +95,14 @@ void	exec_cd(t_minishell_info *info, t_cmdlst *cmd);
 
 void		exec_bin(t_minishell_info *info, t_cmdlst *cmd);
 bool	check_bash_standard_commands(t_minishell_info *info, char ***command);
+
+void	update_env_value(t_envlst **env_lst, char *env_name, char *env_value,
+							t_minishell_info *info);
+
+void	exec_env(t_minishell_info *info, char *arg);
+
+void		exec_export(t_minishell_info *info, char **args);
+
+void		exec_unset(t_minishell_info *info, char **args);
 
 #endif
