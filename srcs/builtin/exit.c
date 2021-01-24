@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 18:24:30 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 17:46:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 23:54:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/exit.h"
+#include "../../includes/exit.h"
 
 static void	normal_exit(t_minishell_info *info)
 {

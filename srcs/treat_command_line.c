@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 17:14:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:39:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,28 @@
 // 	add_cmd_to_lst(info, split, type);
 // 	return (type);
 // }
+
+/*
+** 各commandをリストで持つので情報をリストに繋げる関数
+*/
+
+bool		add_cmd_to_lst(t_minishell_info *info, char **command, int type)
+{
+	t_cmdlst	*cmd;
+
+	if (!(cmd = malloc(sizeof(t_cmdlst))))
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (type == CMD_NUM)
+		cmd->type = NOT_CMD;
+	else if (type == OUTPUT_PIPE)
+		cmd->type = OUTPUT;
+	else
+		cmd->type = type;
+	cmd->arg = command;
+	cmd->next = NULL;
+	cmd_lstadd_back(&(info->cmd_lst), cmd);
+	return (true);
+}
 
 bool	cmd_exit_check(char *cmd)
 {
@@ -136,16 +158,16 @@ bool	parsing(t_minishell_info *info, char *command)
 ** commandもinfo->commandもmalloc済
 */
 
-bool		parse_command_line(t_minishell_info *info)
+bool		parse_command_line(t_minishell_info *info, char *command)
 {
 	char	**cmd_grp;
 	int		i;
 
 	// printf("%s\n", info->command);
-	if (!(cmd_grp = split_by_separator_contain_delimiters(info->command)))
+	if (!(cmd_grp = split_by_separator_contain_delimiters(command)))
 		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	cmd_grp = rm_space_in_array(cmd_grp, info);
-	ptr_free((void **)&(info->command));
+	ptr_free((void **)&(command));
 	if (check_format_of_command(&cmd_grp, info) == false)
 		return (false);
 	i = -1;

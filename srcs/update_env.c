@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 16:37:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 18:43:05 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:20:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_envlst	*make_env(char *env_name, char *env_value, t_minishell_info *inf
 	return (new);
 }
 
-void	update_env_value(t_envlst **env, char *env_name, char *env_value,
+void			update_env_value(t_envlst **env, char *env_name, char *env_value,
 							t_minishell_info *info)
 {
 	t_envlst	*begin;

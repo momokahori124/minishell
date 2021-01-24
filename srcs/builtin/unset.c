@@ -6,16 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 22:03:07 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 01:07:25 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../includes/command.h"
 
-static void		remove_env_lst_if(t_envlst **env, char *data, int(*cmp_by)())
+static void		remove_env_lst_if(t_envlst **env, char *data, int (*cmp_by)())
 {
-	t_envlst *begin;
-	t_envlst *remove;
+	t_envlst	*begin;
+	t_envlst	*remove;
 
 	begin = *env;
 	while (*env && (*env)->next)
@@ -30,7 +30,7 @@ static void		remove_env_lst_if(t_envlst **env, char *data, int(*cmp_by)())
 		*env = (*env)->next;
 	}
 	*env = begin;
-	if (cmp_by(data, (*env)->value), ft_strlen(data) == 0)
+	if (cmp_by(data, (*env)->value, ft_strlen(data)) == 0)
 	{
 		remove = (*env)->next;
 		(*env)->next = (*env)->next->next;

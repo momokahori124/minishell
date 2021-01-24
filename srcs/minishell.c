@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 22:03:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:35:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,18 @@ void ft_putenv(char *s, t_minishell_info *info)
 ** pwd ; pwdみたいな時に二回getcwd呼ぶの嫌だったのでそうした
 */
 
-int		console_loop(t_minishell_info *info, char *envp[])
+int		console_loop(t_minishell_info *info)
 {
-	(void)envp;
+	char	*command;
+
 	put_prompt(info);
 	while (1)
 	{
-		if (read_command_line(info) == false)
+		if ((command = read_command_line(info)) == NULL)
 			write(1, "\033[0K", 4); //これいらないかも、なんで書いたのか忘れた
 		else
 		{
-			// if (parse_command_line(info, envp) == false)
-			// 	continue ; //pwd | で次|を押してプロンプトが二つ出るのを防いでる
-			if (parse_command_line(info) != false)
+			if (parse_command_line(info, command) != false)
 				execute_command(info);
 			// while (info->cmd_lst)
 			// {
@@ -105,7 +104,7 @@ void	set_minishell_info(t_minishell_info *info)
 	info->cmd_split = NULL; // リスト初期化
 	info->cmd_lst_num = 0; // リスト初期化
 	info->env = NULL;
-	info->command = NULL;
+	// info->command = NULL;
 	// info->prev_rc = 0;
 }
 
@@ -200,17 +199,11 @@ void	set_env(t_minishell_info *info)
 	}
 }
 
-int		main(int argc, char *argv[])
+int		main()
 {
 	t_minishell_info	info;
 	extern char			**environ;
 
-	if (argc != 1)
-	{
-		red_error();
-		ft_putendl_fd("Usage : ./minishell", 2);
-		return (1);
-	}
 	// put_welcome_message();
 	// info.shell_level[0] += ft_atoi(info.shell_level) + 1 - '0';
 	shell_level_up();
@@ -219,9 +212,7 @@ int		main(int argc, char *argv[])
 	set_prompt_message(environ, info.env);
 	signal(SIGQUIT, &sig_quit);
 	signal(SIGINT, &sig_int);
-	console_loop(&info, environ);
-	(void)argc;
-	(void)argv;
+	console_loop(&info);
 }
 
 // __attribute__((destructor))

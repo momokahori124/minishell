@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/20 21:12:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:29:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 ** freeしてfalseを返すだけの関数。normのため分けた
 */
 
-static bool	newline_only(char **command)
+static char	*newline_only(char **command)
 {
 	ptr_free((void **)command);
-	return (false);
+	return (NULL);
 }
 
 /*
@@ -65,7 +65,7 @@ static bool	check_quotation(char **command, char buf[2])
 ** 返り値boolじゃなくてもいいかも
 */
 
-bool		read_command_line(t_minishell_info *info)
+char	*read_command_line(t_minishell_info *info)
 {
 	char	*command;
 	char	buf[2];
@@ -88,8 +88,8 @@ bool		read_command_line(t_minishell_info *info)
 	}
 	if (buf[1] == '\'' || buf[1] == '\"')
 		return (wait_quotation(buf[1], &command, info));
-	info->command = command;
-	if (info->command[0] == '\0')
-		return (newline_only(&(info->command)));
-	return (true);
+	// info->command = command;
+	if (command[0] == '\0')
+		return (newline_only(&(command)));
+	return (command);
 }

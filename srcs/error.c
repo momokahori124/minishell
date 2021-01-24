@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 22:01:59 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:28:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 	// if (info == NULL)
 		// signal_error_exit()
 	i = 0;
-	free(info->command);
+	// free(info->command);
 	free(info->current_dir_path);
 	i = 0;
 	while (info->cmd_lst)
@@ -98,7 +98,7 @@ void		all_free_minishell_info(t_minishell_info *info)
 	size_t		i;
 
 	i = 0;
-	free(info->command);
+	// free(info->command);
 	free(info->current_dir_path);
 	i = 0;
 	while (info->cmd_lst)
@@ -145,12 +145,8 @@ void		free_exit(char **ptr, int state)
 void		ctrl_d_exit(char **ptr, t_minishell_info *info)
 {
 	ft_putstr_fd("\033[0Kexit\n", 2);
-	// free(info->command);
-	// free(info->current_dir_path);
-	// free(info->cmd_lst);
 	all_free_minishell_info(info);
 	free_exit(ptr, EXIT_FAILURE);
-	// errno = 0;
 }
 
 /*

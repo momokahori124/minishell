@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 21:52:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 23:54:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../includes/command.h"
 
 void		exec_export(t_minishell_info *info, char **args)
 {

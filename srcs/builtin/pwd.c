@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/24 17:18:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 17:42:02 by tjinichi         ###   ########.fr       */
+/*   Created: 2020/12/13 20:58:34 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/25 01:07:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../includes/command.h"
 
-static void	display_env(t_minishell_info *info)
+/*
+** commandがpwdだった時の処理関数
+*/
+
+void		exec_pwd(t_minishell_info *info)
 {
-	t_envlst	*env;
-
-	env = info->env;
-	while (env)
-	{
-		if (printf("%s\n", env->value) == -1)
-			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-		env = env->next;
-	}
-}
-
-void		exec_env(t_minishell_info *info, char *arg)
-{
-	if (arg != NULL)
-		return (error_mandatory(ERR_ENV, 37, info));
-	display_env(info);
+	if (ft_putendl_fd(info->current_dir_path, 1) == false)
+		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 }

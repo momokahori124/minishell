@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 18:50:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 01:06:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ t_global	g_signal;
 
 // t_sig	g_sig;
 
-// char	*read_command_line(t_minishell_info *info);
-bool	read_command_line(t_minishell_info *info);
-bool	parse_command_line(t_minishell_info *info);
+char	*read_command_line(t_minishell_info *info);
+// bool	read_command_line(t_minishell_info *info);
+bool	parse_command_line(t_minishell_info *info, char *command);
 
 bool	add_cmd_to_lst(t_minishell_info *info, char **command, int type);
 void	exec_pwd(t_minishell_info *info);
@@ -53,7 +53,8 @@ void	rm_chr_in_str(char **str, char chr);
 ssize_t	safe_read(char *buf, char **ptr, t_minishell_info *info);
 
 bool	rm_quotation(t_minishell_info *info);
-bool	wait_quotation(char first_appear, char **command, t_minishell_info *info);
+// bool	wait_quotation(char first_appear, char **command, t_minishell_info *info);
+char	*wait_quotation(char first_appear, char **command, t_minishell_info *info);
 
 // char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
 // bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
@@ -92,8 +93,10 @@ bool		is_semicolon_format_error(char ***grp, int i, \
 				t_minishell_info *info);
 
 void	exec_cd(t_minishell_info *info, t_cmdlst *cmd);
+bool	is_symbolic_dir(t_minishell_info *info, char *dir_name);
+void	trace_symbolic_src(t_minishell_info *info, char *dir_name);
 
-void		exec_bin(t_minishell_info *info, t_cmdlst *cmd);
+void		exec_bin(t_minishell_info *info, char **args);
 bool	check_bash_standard_commands(t_minishell_info *info, char ***command);
 
 void	update_env_value(t_envlst **env_lst, char *env_name, char *env_value,
@@ -104,5 +107,6 @@ void	exec_env(t_minishell_info *info, char *arg);
 void		exec_export(t_minishell_info *info, char **args);
 
 void		exec_unset(t_minishell_info *info, char **args);
+void		exec_echo(t_minishell_info *info, char **args);
 
 #endif

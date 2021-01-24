@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/23 02:58:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 00:26:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/command.h"
 
-static bool	press_eof_while_looking(char match, char **inputs, \
+static char	*press_eof_while_looking(char match, char **inputs, \
 				t_minishell_info *info, char **command)
 {
 	ptr_free((void **)inputs);
@@ -25,7 +25,7 @@ static bool	press_eof_while_looking(char match, char **inputs, \
 	if (write(1, "`\nminishell: syntax error: unexpected end of file\n", 50)
 				< 0)
 		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	return (false);
+	return (NULL);
 }
 
 static bool	do_when_input_char_equal_newline(int count[2], char **inputs, \
@@ -81,7 +81,7 @@ static bool	check_buf_and_return_value(ssize_t rc, char buf, int count[2], \
 	return (false);
 }
 
-bool		wait_quotation(char first_quo, char **command, \
+char	*wait_quotation(char first_quo, char **command, \
 						t_minishell_info *info)
 {
 	ssize_t		rc;
@@ -105,8 +105,8 @@ bool		wait_quotation(char first_quo, char **command, \
 		if (!(inputs = re_strjoinch(&inputs, buf)))
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
-	info->command = re_strjoin(command, *command, inputs);
-	rm_chr_in_str(&(info->command), first_quo);
+	*command = re_strjoin(command, *command, inputs);
+	rm_chr_in_str(command, first_quo);
 	ptr_free((void **)&inputs);
-	return (true);
+	return (*command);
 }
