@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 19:19:22 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 22:03:07 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		remove_env_lst_if(t_envlst **env, char *data, int(*cmp_by)())
 			remove = (*env)->next;
 			(*env)->next = (*env)->next->next;
 			ptr_free((void **)&(remove->value));
-			ptr_free((void **)remove);
+			ptr_free((void **)&remove);
 		}
 		*env = (*env)->next;
 	}

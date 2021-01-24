@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 21:52:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 22:03:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,8 +192,6 @@ void	set_env(t_minishell_info *info)
 	{
 		if (!(next = malloc(sizeof(t_envlst))))
 			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-		// if (environ[i][0] == 'S' && ft_strncmp("SHLVL", environ[i], 5) == 0)
-			// next->value =
 		next->value = ft_strdup(environ[i]);
 		next->next = NULL;
 		begin->next = next;
@@ -226,8 +224,8 @@ int		main(int argc, char *argv[])
 	(void)argv;
 }
 
-__attribute__((destructor))
-void end()
-{
-	system("leaks minishell");
-}
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks minishell");
+// }

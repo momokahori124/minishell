@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:50:48 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 17:39:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/24 22:01:59 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,15 @@ void		all_free_perror_exit(t_minishell_info *info, char *error_message, \
 		info->cmd_lst = tmp;
 	}
 	// あとでかく
-	// while (info->env)
+	while (info->env)
+	{
+		t_envlst *tmp;
+		tmp = info->env->next;
+		// ptr_2d_free((void ***)&(info->cmd_lst->arg), i);
+		free(info->env->value);
+		free(info->env);
+		info->env = tmp;
+	}
 	if (errno == 0)
 		exit(1);
 	perror_exit(error_message, line_num, file_name);
@@ -102,6 +110,15 @@ void		all_free_minishell_info(t_minishell_info *info)
 		ptr_2d_free((void ***)&(info->cmd_lst->arg), i);
 		free(info->cmd_lst);
 		info->cmd_lst = tmp;
+	}
+	while (info->env)
+	{
+		t_envlst *tmp;
+		tmp = info->env->next;
+		// ptr_2d_free((void ***)&(info->cmd_lst->arg), i);
+		free(info->env->value);
+		free(info->env);
+		info->env = tmp;
 	}
 	if (info->cmd_split != NULL)  // 先にNULL埋めておく
 	{
@@ -128,10 +145,12 @@ void		free_exit(char **ptr, int state)
 void		ctrl_d_exit(char **ptr, t_minishell_info *info)
 {
 	ft_putstr_fd("\033[0Kexit\n", 2);
-	free(info->command);
-	free(info->current_dir_path);
+	// free(info->command);
+	// free(info->current_dir_path);
 	// free(info->cmd_lst);
+	all_free_minishell_info(info);
 	free_exit(ptr, EXIT_FAILURE);
+	// errno = 0;
 }
 
 /*
