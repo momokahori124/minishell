@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_command_line.c                                :+:      :+:    :+:   */
+/*   waiting_for_input.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 00:29:53 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:15:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../includes/command.h"
 
 /*
 ** freeしてfalseを返すだけの関数。normのため分けた
@@ -65,7 +65,7 @@ static bool	check_quotation(char **command, char buf[2])
 ** 返り値boolじゃなくてもいいかも
 */
 
-char	*read_command_line(t_minishell_info *info)
+char	*waiting_for_input(t_minishell_info *info)
 {
 	char	*command;
 	char	buf[2];
@@ -87,8 +87,7 @@ char	*read_command_line(t_minishell_info *info)
 		check_return_value(rc, &command, buf[0], info);
 	}
 	if (buf[1] == '\'' || buf[1] == '\"')
-		return (wait_quotation(buf[1], &command, info));
-	// info->command = command;
+		return (waiting_for_quotation(buf[1], &command, info));
 	if (command[0] == '\0')
 		return (newline_only(&(command)));
 	return (command);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:43:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 00:35:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:33:44 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ int		console_loop(t_minishell_info *info)
 	put_prompt(info);
 	while (1)
 	{
-		if ((command = read_command_line(info)) == NULL)
+		if ((command = waiting_for_input(info)) == NULL)
 			write(1, "\033[0K", 4); //これいらないかも、なんで書いたのか忘れた
 		else
 		{
-			if (parse_command_line(info, command) != false)
+			if (parse_command(info, command) != false)
 				execute_command(info);
 			// while (info->cmd_lst)
 			// {
@@ -199,13 +199,12 @@ void	set_env(t_minishell_info *info)
 	}
 }
 
-int		main()
+int	main()
 {
 	t_minishell_info	info;
 	extern char			**environ;
 
 	// put_welcome_message();
-	// info.shell_level[0] += ft_atoi(info.shell_level) + 1 - '0';
 	shell_level_up();
 	set_minishell_info(&info); //ここでinfoの中にenv情報入れる
 	set_env(&info); //ここでinfoの中にenv情報入れる
@@ -214,9 +213,3 @@ int		main()
 	signal(SIGINT, &sig_int);
 	console_loop(&info);
 }
-
-// __attribute__((destructor))
-// void end()
-// {
-// 	system("leaks minishell");
-// }

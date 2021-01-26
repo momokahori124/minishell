@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wait_quotation.c                                   :+:      :+:    :+:   */
+/*   waiting_for_quotation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:23:07 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 00:26:54 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:13:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../includes/command.h"
 
 static char	*press_eof_while_looking(char match, char **inputs, \
 				t_minishell_info *info, char **command)
@@ -81,7 +81,7 @@ static bool	check_buf_and_return_value(ssize_t rc, char buf, int count[2], \
 	return (false);
 }
 
-char	*wait_quotation(char first_quo, char **command, \
+char	*waiting_for_quotation(char first_quo, char **command, \
 						t_minishell_info *info)
 {
 	ssize_t		rc;

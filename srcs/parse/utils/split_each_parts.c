@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_utils_2.c                                  :+:      :+:    :+:   */
+/*   split_each_parts.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/31 16:15:55 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/21 03:13:33 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/25 17:00:33 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/command.h"
+#include "../../../includes/command.h"
 
 static bool		isalnum_except_next_redir(char *str)
 {
@@ -85,7 +85,7 @@ static char		*insert_separator(char **str)
 	return (word);
 }
 
-char			**split_by_separator_contain_delimiters(char *str)
+char			**split_each_parts(char *str)
 {
 	char		**res;
 	size_t		word_count;

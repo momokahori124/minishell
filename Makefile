@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/25 01:06:45 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/26 14:16:56 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ CFLAGS = -g -Wall -Werror -Wextra             #    -fsanitize=address
 SRCFILE =	minishell.c \
 			minishell_utils.c \
 			error.c \
-			treat_command_line.c \
 			cute_message.c \
 			signal.c \
 			update_env.c \
@@ -31,24 +30,16 @@ SRCFILE =	minishell.c \
 			is_pipe_format_error.c \
 			is_semicolon_format_error.c \
 			command_utils_1.c \
-			command_utils_2.c \
 			command_utils_3.c \
 			command_utils_4.c \
 			exec_command.c \
 			pipe_redirect_utils.c \
 			is_what.c \
 			is_what2.c \
-			wait_quotation.c \
-			read_command_line.c \
 
 SRCDIR = ./srcs
 OBJDIR = objs
 
-SRCS = \
-	$(addprefix $(SRCDIR)/, $(SRCFILE)) \
-	$(BUILTIN_SRCS) \
-
-OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 #========== builtin function ===================================================
 BUILTIN_DIR = $(SRCDIR)/builtin
 BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
@@ -63,11 +54,57 @@ BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				pwd.c \
 				unset.c \
 )
-$(OBJDIR)/%.o : $(BUILTIN_DIR)/%.c
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/utils/%.c
 	@mkdir -p $(OBJDIR)
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(BUILTIN_DIR)/%.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
 #===============================================================================
+#========== read stdin function ================================================
+READ_DIR = $(SRCDIR)/read_stdin
+READ_SRCS = $(addprefix $(READ_DIR)/, \
+				utils/safe_read.c \
+				utils/rm_chr_in_str.c \
+				utils/add_command_group.c \
+				waiting_for_input.c \
+				waiting_for_quotation.c \
+				waiting_for_next_command.c \
+)
+$(OBJDIR)/%.o : $(READ_DIR)/utils/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(READ_DIR)/%.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+#===============================================================================
+#========== read stdin function ================================================
+PARSE_DIR = $(SRCDIR)/parse
+PARSE_SRCS = $(addprefix $(PARSE_DIR)/, \
+				utils/add_back_command_lst.c \
+				utils/is_command_exit.c \
+				utils/split_each_parts.c \
+				parse_command.c \
+)
+$(OBJDIR)/%.o : $(PARSE_DIR)/utils/%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+$(OBJDIR)/%.o : $(PARSE_DIR)/%.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	@echo "$(YELLOW) Compiling $(RESET)$(UNDER_LINE)"$<"$(RESET)"
+#===============================================================================
+
+SRCS = \
+	$(addprefix $(SRCDIR)/, $(SRCFILE)) \
+	$(BUILTIN_SRCS) \
+	$(READ_SRCS) \
+	$(PARSE_SRCS) \
+
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
+
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<

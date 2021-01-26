@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/19 20:54:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:16:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,34 +76,34 @@ t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many)
 	return (*cmd_lst);
 }
 
-void	rm_chr_in_str(char **str, char chr)
-{
-	size_t	i;
-	size_t	j;
+// void	rm_chr_in_str(char **str, char chr)
+// {
+// 	size_t	i;
+// 	size_t	j;
 
-	i = 0;
-	j = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] != chr)
-		{
-			(*str)[j] = (*str)[i];
-			j++;
-		}
-		i++;
-	}
-	(*str)[j] = '\0';
-}
+// 	i = 0;
+// 	j = 0;
+// 	while ((*str)[i])
+// 	{
+// 		if ((*str)[i] != chr)
+// 		{
+// 			(*str)[j] = (*str)[i];
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	(*str)[j] = '\0';
+// }
 
-ssize_t		safe_read(char *buf, char **ptr, t_minishell_info *info)
-{
-	ssize_t	rc;
+// ssize_t		safe_read(char *buf, char **ptr, t_minishell_info *info)
+// {
+// 	ssize_t	rc;
 
-	rc = read(0, buf, 1);
-	if (rc < 0)
-	{
-		ptr_free((void**)ptr);
-		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
-	}
-	return (rc);
-}
+// 	rc = read(0, buf, 1);
+// 	if (rc < 0)
+// 	{
+// 		ptr_free((void**)ptr);
+// 		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
+// 	}
+// 	return (rc);
+// }

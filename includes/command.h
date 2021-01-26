@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 01:06:18 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:51:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ t_global	g_signal;
 
 // t_sig	g_sig;
 
-char	*read_command_line(t_minishell_info *info);
+// char	*read_command_line(t_minishell_info *info);
+char	*waiting_for_input(t_minishell_info *info);
 // bool	read_command_line(t_minishell_info *info);
-bool	parse_command_line(t_minishell_info *info, char *command);
+bool	parse_command(t_minishell_info *info, char *command);
+bool	is_command_exit(char *cmd);
 
-bool	add_cmd_to_lst(t_minishell_info *info, char **command, int type);
+void	add_back_command_lst(t_minishell_info *info, char **command, int type);
 void	exec_pwd(t_minishell_info *info);
 
 char	*next_command(char *command);
@@ -54,12 +56,15 @@ ssize_t	safe_read(char *buf, char **ptr, t_minishell_info *info);
 
 bool	rm_quotation(t_minishell_info *info);
 // bool	wait_quotation(char first_appear, char **command, t_minishell_info *info);
-char	*wait_quotation(char first_appear, char **command, t_minishell_info *info);
+char	*waiting_for_quotation(char first_quo, char **command,
+					t_minishell_info *info);
 
 // char		**wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
 // bool	wait_for_next_cmd(char ***cmd_grp, int array_size, t_minishell_info *info);
-int		wait_for_next_cmd(char ***cmd_grp, int array_size,
+int		waiting_for_next_command(char ***cmd_grp, int array_size,
 								t_minishell_info *info);
+int		add_command_group(char **split, t_cmd_grp *cmd_grp_info, int split_size,
+					t_minishell_info *info);
 
 
 bool	execute_command(t_minishell_info *info);
@@ -71,7 +76,7 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 
 // utils2
 // char	**split_by_chrs_contain_delimiters(char *str, char *charset);
-char	**split_by_separator_contain_delimiters(char *str);
+char	**split_each_parts(char *str);
 
 // utils3
 char	**rm_space_in_array(char **arr, t_minishell_info *info);
@@ -97,7 +102,7 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name);
 void	trace_symbolic_src(t_minishell_info *info, char *dir_name);
 
 void		exec_bin(t_minishell_info *info, char **args);
-bool	check_bash_standard_commands(t_minishell_info *info, char ***command);
+// bool	check_bash_standard_commands(t_minishell_info *info, char ***command);
 
 void	update_env_value(t_envlst **env_lst, char *env_name, char *env_value,
 							t_minishell_info *info);
