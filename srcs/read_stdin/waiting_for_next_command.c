@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:51:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info,
 	if ((*inputs)[0] == '\0')
 		return (NEWLINE);
 	if (!(split = split_each_parts(*inputs)))
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	ptr_free((void **)inputs);
 	i = 0;
 	while (split[i])
@@ -50,9 +50,9 @@ static char	*prepare_in_advance(t_minishell_info *info, \
 	cmd_grp_info->cmd_grp = cmd_grp;
 	cmd_grp_info->array_size = array_size;
 	if (write(1, "> ", 2) < 0)
-		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 	if (!(res = ft_strdup("")))
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	return (res);
 }
 
@@ -102,7 +102,7 @@ int			waiting_for_next_command(char ***cmd_grp, int array_size,
 		if (write(1, "\033[0K", 4) < 0)
 		{
 			ptr_free((void **)&inputs);
-			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 		}
 		if (check_buf_and_return_value(rc, &inputs, buf, info) == false)
 		{

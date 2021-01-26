@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:18:21 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 23:54:20 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	display_env(t_minishell_info *info)
 	while (env)
 	{
 		if (printf("%s\n", env->value) == -1)
-			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		env = env->next;
 	}
 }

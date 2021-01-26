@@ -69,7 +69,7 @@ int main()
 	{
 		printf("%d\n", WTERMSIG(status));
 		//シグナルの番号を返すべきか
-		// all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		// all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 	}
     return 0;
 }

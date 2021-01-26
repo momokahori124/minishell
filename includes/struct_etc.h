@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 00:36:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 01:49:43 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define STRUCT_ETC_H
 
 typedef struct	stat t_stat;
-
 
 typedef struct		s_envlst
 {
@@ -24,7 +23,6 @@ typedef struct		s_envlst
 
 typedef struct		s_minishell_info
 {
-	char			**cmd_split;
 	char			*current_dir_path;
 	struct s_envlst	*env;
 	struct s_cmdlst	*cmd_lst;

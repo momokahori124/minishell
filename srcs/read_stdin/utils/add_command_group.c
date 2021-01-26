@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:07:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:18:12 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int			add_command_group(char **split, t_cmd_grp *cmd_grp_info, int split_size,
 	{
 		ptr_2d_free((void ***)cmd_grp, array_size);
 		ptr_2d_free((void ***)&split, split_size);
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	res = insert_2d_array(res, *cmd_grp, split);
 	cmd_grp_info->array_size += split_size;

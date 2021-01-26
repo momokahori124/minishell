@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 16:30:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	int	status;
 
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDIN_FILENO, info);
@@ -37,11 +37,11 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	}
 	close_pipe_fd(pipefd, info);
 	// if (waitpid(fork_pid, &status, 0) == -1)
-	// 	all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	// 	all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	// if (WIFEXITED(status))
 	// 	return ;
 	// else //シグナルの番号を返すべきか
-	// 	all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+	// 	all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
@@ -51,9 +51,9 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	int	status;
 
 	if ((pipe(new_pipefd)) == -1)
-		all_free_perror_exit(info, ERR_PIPE, __LINE__, __FILE__);
+		all_free_exit(info, ERR_PIPE, __LINE__, __FILE__);
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
@@ -63,11 +63,11 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	}
 	close_pipe_fd(old_pipefd, info);
 	if (waitpid(fork_pid, &status, 0) == -1)
-		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (WIFEXITED(status))
 		return ;
 	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 void	apply_first_pipe(t_cmdlst **cmd_lst,
@@ -78,9 +78,9 @@ void	apply_first_pipe(t_cmdlst **cmd_lst,
 	int	status;
 
 	if ((pipe(pipefd[0])) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd[0], STDOUT_FILENO, info);
@@ -116,14 +116,14 @@ void	apply_first_pipe(t_cmdlst **cmd_lst,
 	while (wait(NULL) > 0)
 		;
 	// if (waitpid(fork_pid, &status, 0) == -1)
-	// 	all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+	// 	all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (WIFEXITED(status))
 		return ;
 	else
 	{
 		printf("%d\n", WTERMSIG(status));
 		//シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 	}
 }
 

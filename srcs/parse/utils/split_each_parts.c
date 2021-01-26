@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 17:00:33 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 04:03:15 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 static bool		isalnum_except_next_redir(char *str)
 {
-	return (!(*str == '|' || *str == '>' || *str == '<' || *str == ';')
-			&& *(str + 1) != '>');
+	// printf("%c\n", *str);
+	return (!((*str == '|' || *str == '>' || *str == '<' || *str == ';')
+			&& *(str + 1) != '>'));
 }
 
 static size_t	count_words(char *str)

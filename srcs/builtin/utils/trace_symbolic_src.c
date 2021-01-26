@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:02:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 01:06:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*change_to_symbolic_source(char *dir_name, t_minishell_info *info)
 	while (dir_name[j])
 		j++;
 	if (!(res = malloc(i + j + 2)))
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = -1;
 	while (info->current_dir_path[++i])
 		res[i] = info->current_dir_path[i];
@@ -50,7 +50,7 @@ void		trace_symbolic_src(t_minishell_info *info, char *dir_name)
 	if (chdir(symbolic_src) == -1)
 	{
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
-			all_free_perror_exit(info, ERR_CHDIR, __LINE__, __FILE__);
+			all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 	}
-	update_env_value(&(info->env), "PWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "PWD=", info->current_dir_path, info);
 }

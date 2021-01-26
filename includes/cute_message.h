@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 03:55:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/22 02:46:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 00:39:24 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # define CMD_NOT_FOUND 127
 
 void		put_prompt(t_minishell_info *info);
-void		put_welcome_message(void);
+void		display_welcome_message(void);
 void		put_help_message(void);
 // int			put_cmd_not_found(char **line);
-void		put_cmd_not_found(char *command);
+// void		put_cmd_not_found(char *command);
 
 #endif

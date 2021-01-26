@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 01:07:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static void	go_to_home(t_minishell_info *info)
 {
 	char		*home_path;
 
-	update_env_value(&(info->env), "OLDPWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
 	home_path = search_env("HOME", 4, info->env);
 	if (chdir(home_path) == -1)
-		all_free_perror_exit(info, ERR_CHDIR, __LINE__, __FILE__);
+		all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = home_path;
 }
@@ -33,7 +33,7 @@ static void	go_to_path(t_minishell_info *info, char *dir,
 		return (go_to_home(info));
 	if (dir[0] == '.' && dir[1] == '\0')
 		return ;
-	update_env_value(&(info->env), "OLDPWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
 	dir_name = dir;
 	if (dir[0] == '$' && dir[1] != '\0')
 		dir_name = search_env(dir + 1, ft_strlen(dir + 1), info->env);
@@ -43,14 +43,14 @@ static void	go_to_path(t_minishell_info *info, char *dir,
 	if (chdir(dir_name) == -1)
 	{
 		if (errno == EFAULT || errno == EIO || errno == ENOMEM)
-			all_free_perror_exit(info, ERR_CHDIR, __LINE__, __FILE__);
+			all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 		if (write(STDERR_FILENO, "minishell: ", 12) < 0)
-			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		perror(dir_name);
 	}
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = getcwd(NULL, 0);
-	update_env_value(&(info->env), "PWD=", info->current_dir_path, info);
+	update_env_lst(&(info->env), "PWD=", info->current_dir_path, info);
 }
 
 static void	go_to_oldpwd(t_minishell_info *info)
@@ -61,14 +61,14 @@ static void	go_to_oldpwd(t_minishell_info *info)
 	if (oldpwd_path == NULL)
 	{
 		if (write(STDERR_FILENO, NO_OLDPWD, 29) < 0)
-			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		return ;
 	}
 	if (chdir(oldpwd_path) == -1)
-		all_free_perror_exit(info, ERR_CHDIR, __LINE__, __FILE__);
+		all_free_exit(info, ERR_CHDIR, __LINE__, __FILE__);
 	if (ft_putendl_fd(oldpwd_path, 1) == false)
-		all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
-	update_env_value(&(info->env), "OLDPWD=", info->current_dir_path, info);
+		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	update_env_lst(&(info->env), "OLDPWD=", info->current_dir_path, info);
 	ptr_free((void **)&(info->current_dir_path));
 	info->current_dir_path = oldpwd_path;
 }

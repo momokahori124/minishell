@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   pipe2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 02:58:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipe_redirect.h"
+
+// void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
+// {
+// 	if ((*cmd_lst)->arg != NULL)
+// 		ptr_2d_free((void ***)&((*cmd_lst)->arg), ARG_MAX);
+// 	ptr_free((void **)cmd_lst);
+// }
+
 
 /*
 ** パイプをうまく機能させようと思うと、
@@ -28,7 +36,7 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	int	status;
 
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		// puts("dddddd");
@@ -38,11 +46,11 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	}
 	close_pipe_fd(pipefd, info);
 	if (waitpid(fork_pid, &status, 0) == -1)
-		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (WIFEXITED(status))
 		return ;
 	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
@@ -52,9 +60,9 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	int	status;
 
 	if ((pipe(new_pipefd)) == -1)
-		all_free_perror_exit(info, ERR_PIPE, __LINE__, __FILE__);
+		all_free_exit(info, ERR_PIPE, __LINE__, __FILE__);
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
@@ -64,11 +72,11 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	}
 	close_pipe_fd(old_pipefd, info);
 	if (waitpid(fork_pid, &status, 0) == -1)
-		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (WIFEXITED(status))
 		return ;
 	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
@@ -78,9 +86,9 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	int	status;
 
 	if ((pipe(pipefd)) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	if ((fork_pid = fork()) == -1)
-		all_free_perror_exit(info, ERR_FORK, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
@@ -88,11 +96,11 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 		exit(0);
 	}
 	if (waitpid(fork_pid, &status, 0) == -1)
-		all_free_perror_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
+		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (WIFEXITED(status))
 		return ;
 	else //シグナルの番号を返すべきか
-		all_free_perror_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
+		all_free_exit(info, ERR_FAIL_CHILD, __LINE__, __FILE__);
 }
 
 /*

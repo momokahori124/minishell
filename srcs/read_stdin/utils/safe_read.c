@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 15:25:18 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 15:27:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ ssize_t		safe_read(char *buf, char **ptr, t_minishell_info *info)
 	if (rc < 0)
 	{
 		ptr_free((void**)ptr);
-		all_free_perror_exit(info, ERR_READ, __LINE__, __FILE__);
+		all_free_exit(info, ERR_READ, __LINE__, __FILE__);
 	}
 	return (rc);
 }

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:51:23 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 03:45:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	add_back_command_lst(t_minishell_info *info, char **command, int type);
 void	exec_pwd(t_minishell_info *info);
 
 char	*next_command(char *command);
-void	cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new);
-t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many);
+// void	cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new);
+// t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many);
 
 void	rm_chr_in_str(char **str, char chr);
 ssize_t	safe_read(char *buf, char **ptr, t_minishell_info *info);
@@ -67,7 +67,7 @@ int		add_command_group(char **split, t_cmd_grp *cmd_grp_info, int split_size,
 					t_minishell_info *info);
 
 
-bool	execute_command(t_minishell_info *info);
+void	execute_loop(t_minishell_info *info);
 // bool	execute(t_minishell_info *info, int type, char *cmd);
 bool	execute(t_minishell_info *info, t_cmdlst *cmd);
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
@@ -79,10 +79,11 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 char	**split_each_parts(char *str);
 
 // utils3
-char	**rm_space_in_array(char **arr, t_minishell_info *info);
+char	**rm_spaces_in_2d_array(char **arr, t_minishell_info *info);
 
 // utils4
-char			**split_switch_env_value(char *s, char c, t_envlst *env_lst);
+char			**split_and_switch_env_value(char *s, char c, t_envlst *env_lst);
+int		switch_env_value(char **s, char **res, t_envlst *env_lst);
 
 // format
 bool	check_format_of_command(char ***grp, t_minishell_info *info);
@@ -104,7 +105,7 @@ void	trace_symbolic_src(t_minishell_info *info, char *dir_name);
 void		exec_bin(t_minishell_info *info, char **args);
 // bool	check_bash_standard_commands(t_minishell_info *info, char ***command);
 
-void	update_env_value(t_envlst **env_lst, char *env_name, char *env_value,
+void	update_env_lst(t_envlst **env_lst, char *env_name, char *env_value,
 							t_minishell_info *info);
 
 void	exec_env(t_minishell_info *info, char *arg);

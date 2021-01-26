@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:55:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 00:55:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	is_symbolic_dir(t_minishell_info *info, char *dir_name)
 	if (lstat(dir_name, &stat_buf) == -1)
 	{
 		if (errno == EFAULT || errno == ELOOP || errno == ENOMEM)
-			all_free_perror_exit(info, ERR_LSTAT, __LINE__, __FILE__);
+			all_free_exit(info, ERR_LSTAT, __LINE__, __FILE__);
 		return (false);
 	}
 	if (S_ISLNK(stat_buf.st_mode) == 0 || S_ISDIR(stat_buf.st_mode))

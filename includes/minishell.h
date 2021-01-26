@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/24 16:48:49 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 01:59:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "minishell_utils.h"
 # include "color.h"
 # include "command.h"
-// # include "struct_etc.h"
+# include "struct_etc.h"
 // # include "command_pwd.h"
 # include "cute_message.h"
 # include "signal.h"
@@ -36,6 +36,10 @@
 // # define STDOUT 1
 
 char	*search_env(char *str, int num, t_envlst *env_lst);
-void	ft_putenv(char *s, t_minishell_info *info);
+// void	ft_putenv(char *s, t_minishell_info *info);
+void	set_minishell_info(t_minishell_info *info);
+void	set_prompt_message(char *envp[], t_envlst *env_lst);
+void	set_shell_level(void);
+void	set_env(t_minishell_info *info);
 
 #endif

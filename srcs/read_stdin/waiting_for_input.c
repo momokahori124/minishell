@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:15:32 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	check_return_value(ssize_t rc, char **command, char buf, \
 	if (rc != 0)
 	{
 		if (!(*command = re_strjoinch(command, buf)))
-			all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+			all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	}
 	else if (rc == 0 && (*command)[0] == '\0')
 		ctrl_d_exit(command, info);
@@ -72,7 +72,7 @@ char	*waiting_for_input(t_minishell_info *info)
 	ssize_t	rc;
 
 	if (!(command = ft_strdup("")))
-		all_free_perror_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	buf[0] = '\0';
 	buf[1] = '\0';
 	while ((rc = safe_read(&buf[0], &command, info)) >= 0 && buf[0] != '\n')
@@ -80,7 +80,7 @@ char	*waiting_for_input(t_minishell_info *info)
 		if (write(0, "\033[0K", 4) < 0)
 		{
 			ptr_free((void **)&command);
-			all_free_perror_exit(info, ERR_WRITE, __LINE__, __FILE__);
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 		}
 		if (check_quotation(&command, buf) == true)
 			continue ;
