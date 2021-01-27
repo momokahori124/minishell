@@ -16,7 +16,7 @@ static bool		isalnum_except_next_redir(char *str)
 {
 	// printf("%c\n", *str);
 	return (!((*str == '|' || *str == '>' || *str == '<' || *str == ';')
-			&& *(str + 1) != '>'));
+			|| (*str == '>' && *(str + 1) == '>')));
 }
 
 static size_t	count_words(char *str)

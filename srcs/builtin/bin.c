@@ -22,6 +22,47 @@ static void	put_cmd_not_found(char *command, t_minishell_info *info)
 		all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
 }
 
+static bool	check_executable_file_in_bin_dir(char *path, char **command,
+				t_minishell_info *info)
+{
+	t_stat	stat_buf;
+	char	*bin_path;
+
+	if (!(bin_path = ft_str3join(path, "/", command[0])))
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	if (lstat(bin_path, &stat_buf) == 0)
+	{
+		ptr_free((void **)&(command[0]));
+		command[0] = bin_path;
+		return (true);
+	}
+	ptr_free((void **)&bin_path);
+	return (false);
+}
+
+static bool	check_bash_standard_commands(t_minishell_info *info, char **command)
+{
+	char		*env_path;
+	char		**bin_paths;
+	int			i;
+
+	env_path = search_env("PATH", 4, info->env);
+	if (!(bin_paths = ft_split(env_path, ':')))
+	{
+		ptr_2d_free((void ***)command, ARG_MAX);
+		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
+	}
+	i = 0;
+	while (bin_paths[i])
+	{
+		if (check_executable_file_in_bin_dir(bin_paths[i], command, info) == true)
+			break ;
+		i++;
+	}
+	ptr_2d_free((void ***)&bin_paths, i);
+	return (true);
+}
+
 void		exec_bin(t_minishell_info *info, char **args)
 {
 	int			return_val;
@@ -34,6 +75,7 @@ void		exec_bin(t_minishell_info *info, char **args)
 		all_free_exit(info, ERR_FORK, __LINE__, __FILE__);
 	else if (g_signal.fork_pid == 0)
 	{
+		check_bash_standard_commands(info, args);
 		return_val = execve(args[0], args, environ);
 		if (errno == ENOENT || errno == EACCES)
 			put_cmd_not_found(args[0], info);
@@ -41,7 +83,6 @@ void		exec_bin(t_minishell_info *info, char **args)
 			all_free_exit(info, ERR_EXECVE, __LINE__, __FILE__);
 		exit(CMD_NOT_FOUND);
 	}
-	errno = 0;
 	if ((wait_pid = waitpid(g_signal.fork_pid, &status, 0)) == -1)
 		all_free_exit(info, ERR_WAIT_PID, __LINE__, __FILE__);
 	if (g_signal.exit_status != 130)

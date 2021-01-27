@@ -110,9 +110,9 @@ void	update_env_lst(t_envlst **env_lst, char *env_name, char *env_value,
 
 void	exec_env(t_minishell_info *info, char *arg);
 
-void		exec_export(t_minishell_info *info, char **args);
+void	exec_export(t_minishell_info *info, char **args);
 
-void		exec_unset(t_minishell_info *info, char **args);
-void		exec_echo(t_minishell_info *info, char **args);
+void	exec_unset(t_minishell_info *info, char **args);
+void	exec_echo(t_minishell_info *info, t_cmdlst *cmd);
 
 #endif

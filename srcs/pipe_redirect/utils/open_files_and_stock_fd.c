@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:15:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 04:14:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:08:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,12 @@ int				open_files_and_stock_fd(int fd[3], t_cmdlst **cmd_lst,
 		// 	if (fd[1] != -1)
 		// 		if (ft_close(&(fd[1])) == false)
 		// 				return (-1);
-		*cmd_lst = skip_lst_and_free(cmd_lst, 1);
+
+		// *cmd_lst = skip_lst_and_free(cmd_lst, 1);
+		*cmd_lst = (*cmd_lst)->next;
 		if (next_sep && (next_sep->type == PIPE || next_sep->type == SEMICOLON))
 			return (true);
 	}
-	free_alloc_ptr_in_cmd_lst(cmd_lst);
+	// free_alloc_ptr_in_cmd_lst(cmd_lst);
 	return (true);
 }

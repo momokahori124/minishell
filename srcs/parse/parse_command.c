@@ -6,52 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:11:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/command.h"
-
-static bool	check_executable_file_in_bin_dir(char *path, char ***command,
-				t_minishell_info *info)
-{
-	t_stat	stat_buf;
-	char	*bin_path;
-
-	if (!(bin_path = ft_str3join(path, "/", (*command)[0])))
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	if (lstat(bin_path, &stat_buf) == 0)
-	{
-		ptr_free((void **)&((*command)[0]));
-		(*command)[0] = bin_path;
-		return (true);
-	}
-	ptr_free((void **)&bin_path);
-	return (false);
-}
-
-static bool	check_bash_standard_commands(t_minishell_info *info, char ***command)
-{
-	char		*env_path;
-	char		**bin_paths;
-	int			i;
-
-	env_path = search_env("PATH", 4, info->env);
-	if (!(bin_paths = ft_split(env_path, ':')))
-	{
-		ptr_2d_free((void ***)command, ARG_MAX);
-		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
-	}
-	i = 0;
-	while (bin_paths[i])
-	{
-		if (check_executable_file_in_bin_dir(bin_paths[i], command, info) == true)
-			break ;
-		i++;
-	}
-	ptr_2d_free((void ***)&bin_paths, i);
-	return (true);
-}
 
 static void	devide_semicolon_and_redirect(int type, char ***split,
 						t_minishell_info *info)
@@ -92,10 +51,7 @@ static void	parsing(t_minishell_info *info, char *command)
 				type == SEMI_INPUT)
 		return (devide_semicolon_and_redirect(type, &split, info));
 	else if (type == NOT_CMD)
-	{
-		if (check_bash_standard_commands(info, &split) == true)
 			return (add_back_command_lst(info, split, BIN));
-	}
 	add_back_command_lst(info, split, type);
 }
 

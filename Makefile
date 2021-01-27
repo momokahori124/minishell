@@ -6,14 +6,14 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/27 03:46:16 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/27 15:27:06 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = gcc
-CFLAGS = -g -Wall -Werror -Wextra             #    -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra                -fsanitize=address
 # CFLAGS = -g     -fsanitize=address
 
 SRCFILE =	\

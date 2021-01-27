@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 01:00:09 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:04:26 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 	else if (type == PWD)
 		exec_pwd(info);
 	else if (type == ECHO)
-		exec_echo(info, cmd->arg);
+		exec_echo(info, cmd);
 	else if (type == CD)
 		exec_cd(info, cmd);
 	else if (type == ENV)
@@ -37,7 +37,7 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 		exec_export(info, cmd->arg);
 	else if (type == UNSET)
 		exec_unset(info, cmd->arg);
-	printf("exit status : %d\n", g_signal.exit_status);
+	// printf("exit status : %d\n", g_signal.exit_status);
 	return (true);
 }
 
