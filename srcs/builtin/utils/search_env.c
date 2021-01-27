@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_minishell_info.c                               :+:      :+:    :+:   */
+/*   search_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/27 01:51:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:20:56 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/27 19:18:45 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/27 19:18:55 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../../includes/command.h"
 
-void	set_minishell_info(t_minishell_info *info)
+char	*search_env(char *str, int num, t_envlst *env_lst)
 {
-	info->current_dir_path = getcwd(NULL, 0);
-	info->cmd_lst = NULL;
-	info->cmd_lst_num = 0;
-	info->env = NULL;
+	size_t		i;
+
+	while (env_lst)
+	{
+		if ((env_lst->value)[0] == str[0] &&
+				ft_strncmp(env_lst->value, str, num) == 0)
+		{
+			i = 0;
+			while (env_lst->value[i] != '=')
+				i++;
+			return (env_lst->value + i + 1);
+		}
+		env_lst = env_lst->next;
+	}
+	return (NULL);
 }

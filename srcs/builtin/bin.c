@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:26:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static bool	check_bash_standard_commands(t_minishell_info *info, char **command)
 	i = 0;
 	while (bin_paths[i])
 	{
-		if (check_executable_file_in_bin_dir(bin_paths[i], command, info) == true)
+		if (check_executable_file_in_bin_dir(bin_paths[i], command, info))
 			break ;
 		i++;
 	}
@@ -77,7 +77,7 @@ void		exec_bin(t_minishell_info *info, char **args)
 	{
 		check_bash_standard_commands(info, args);
 		return_val = execve(args[0], args, environ);
-		if (errno == ENOENT || errno == EACCES)
+		if (errno == ENOENT || errno == EACCES || errno == ENOEXEC)
 			put_cmd_not_found(args[0], info);
 		else if (return_val == -1)
 			all_free_exit(info, ERR_EXECVE, __LINE__, __FILE__);

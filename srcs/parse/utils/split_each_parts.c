@@ -6,18 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:54:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 04:03:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:55:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/command.h"
-
-static bool		isalnum_except_next_redir(char *str)
-{
-	// printf("%c\n", *str);
-	return (!((*str == '|' || *str == '>' || *str == '<' || *str == ';')
-			|| (*str == '>' && *(str + 1) == '>')));
-}
 
 static size_t	count_words(char *str)
 {
@@ -28,7 +21,8 @@ static size_t	count_words(char *str)
 	flag = 0;
 	while (*str)
 	{
-		while (*str && (isalnum_except_next_redir(str) || *str == ' ') && (flag = 1))
+		while (*str && (isalnum_except_next_redir(str) ||
+						*str == ' ') && (flag = 1))
 			str++;
 		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
 		{
@@ -44,13 +38,38 @@ static size_t	count_words(char *str)
 	return (word_count + flag);
 }
 
+static char		*re_insert_redirect(char **old, char **str)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	while ((*str)[i] && ft_isalnum((*str)[i]))
+		i++;
+	if (!(res = malloc(ft_strlen(*old) + i + 2)))
+		return (NULL);
+	i = -1;
+	while ((*old)[++i])
+		res[i] = (*old)[i];
+	res[i++] = ' ';
+	while (**str && ft_isalnum(**str))
+	{
+		res[i++] = **str;
+		(*str)++;
+	}
+	res[i] = '\0';
+	ptr_free((void **)old);
+	return (res);
+}
+
 static char		*insert_word(char **str)
 {
 	char		*word;
 	size_t		i;
 
 	i = 0;
-	while ((*str)[i] && !(isalnum_except_next_redir(&(*str)[i]) || (*str)[i] == ' '))
+	while ((*str)[i] && !(isalnum_except_next_redir(&(*str)[i]) ||
+				(*str)[i] == ' '))
 		i++;
 	if (!(word = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
@@ -71,7 +90,8 @@ static char		*insert_separator(char **str)
 	size_t		i;
 
 	i = 0;
-	while ((*str)[i] && (isalnum_except_next_redir(&(*str)[i]) || (*str)[i] == ' '))
+	while ((*str)[i] && (isalnum_except_next_redir(&(*str)[i]) ||
+				(*str)[i] == ' '))
 		i++;
 	if (!(word = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
@@ -103,6 +123,9 @@ char			**split_each_parts(char *str)
 				return (ptr_2d_free((void***)&res, --i));
 		if (*str && !(isalnum_except_next_redir(str) || *str == ' '))
 			if (!(res[i++] = insert_word(&str)))
+				return (ptr_2d_free((void***)&res, --i));
+		if (i == 1 && res[0][0] == '>')
+			if (!(res[0] = re_insert_redirect(&(res[0]), &str)))
 				return (ptr_2d_free((void***)&res, --i));
 	}
 	res[i] = NULL;

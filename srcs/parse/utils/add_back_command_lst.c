@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:27:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:55:02 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static void		cmd_lstadd_back(t_cmdlst **begin, t_cmdlst *new)
 	last->next = new;
 }
 
-void			add_back_command_lst(t_minishell_info *info, char **command, int type)
+void			add_back_command_lst(t_minishell_info *info,
+						char **command, int type)
 {
 	t_cmdlst	*cmd;
 

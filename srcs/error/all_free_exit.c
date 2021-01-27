@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 04:07:30 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:26:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,15 @@ static void		free_cmd_lst(t_cmdlst **cmdlst)
 	}
 }
 
-void		all_free_minishell_info(t_minishell_info *info)
+void			all_free_minishell_info(t_minishell_info *info)
 {
 	ptr_free((void**)&(info->current_dir_path));
 	free_cmd_lst(&(info->cmd_lst));
 	free_env_lst(&(info->env));
 }
 
-static void		put_error_location_and_exit(char *error_message, int line_num, char *file_name, t_minishell_info *info)
+static void		put_error_location_and_exit(char *error_message,
+			int line_num, char *file_name, t_minishell_info *info)
 {
 	char	*location_message;
 	char	*tmp;
@@ -69,14 +70,14 @@ static void		put_error_location_and_exit(char *error_message, int line_num, char
 	ft_perror_exit(error_message);
 }
 
-void		all_free_exit(t_minishell_info *info, char *error_message, \
+void			all_free_exit(t_minishell_info *info, char *error_message, \
 					int line_num, char *file_name)
 {
-	// if (info == NULL)
-		// signal_error_exit()
+	if (info == NULL)
+		signal_error_exit();
 	ptr_free((void**)&(info->current_dir_path));
 	free_cmd_lst(&(info->cmd_lst));
-	// free_env_lst(&(info->env));
+	ptr_2d_free((void ***)&(info->environ), 0);
 	if (errno == 0)
 		exit(1);
 	put_error_location_and_exit(error_message, line_num, file_name, info);

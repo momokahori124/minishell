@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/28 05:26:22 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,5 @@ void		exec_cd(t_minishell_info *info, t_cmdlst *cmd)
 		go_to_path(info, arg[2], false);
 	else
 		go_to_path(info, arg[1], false);
+	g_working_dir = info->current_dir_path;
 }

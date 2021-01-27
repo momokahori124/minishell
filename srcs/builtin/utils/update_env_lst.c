@@ -6,13 +6,14 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 16:37:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:05:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/command.h"
 
-static t_envlst	*make_env(char *env_name, char *env_value, t_minishell_info *info)
+static t_envlst	*make_env(char *env_name, char *env_value,
+					t_minishell_info *info)
 {
 	t_envlst	*new;
 
@@ -37,14 +38,13 @@ void			update_env_lst(t_envlst **env, char *env_name, char *env_value,
 			ft_strncmp(env_name, (*env)->value, ft_strlen(env_name)) == 0)
 		{
 			if (!((*env)->value =
-					  re_strjoin(&((*env)->value), env_name, env_value)))
+						re_strjoin(&((*env)->value), env_name, env_value)))
 				all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 			*env = begin;
 			return ;
 		}
 		if ((*env)->next == NULL)
 			save = *env;
-
 		*env = (*env)->next;
 	}
 	save->next = make_env(env_name, env_value, info);

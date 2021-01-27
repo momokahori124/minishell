@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 02:04:00 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 01:59:08 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:19:35 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 char	*search_env(char *str, int num, t_envlst *env_lst);
 // void	ft_putenv(char *s, t_minishell_info *info);
 void	set_minishell_info(t_minishell_info *info);
-void	set_prompt_message(char *envp[], t_envlst *env_lst);
+void	set_prompt_message(t_envlst *env_lst);
 void	set_shell_level(void);
 void	set_env(t_minishell_info *info);
 

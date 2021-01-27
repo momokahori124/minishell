@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:13:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	{
 		// puts("dddddd");
 		connect_std_in_out_and_pipe(pipefd, STDIN_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 	close_pipe_fd(pipefd, info);
@@ -67,7 +67,7 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	{
 		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
 		connect_std_in_out_and_pipe(new_pipefd, STDOUT_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 	close_pipe_fd(old_pipefd, info);
@@ -92,7 +92,7 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 	if (waitpid(fork_pid, &status, 0) == -1)

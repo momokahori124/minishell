@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:46:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static bool	check_quotation(char **command, char buf[2])
 ** 返り値boolじゃなくてもいいかも
 */
 
-char	*waiting_for_input(t_minishell_info *info)
+char		*waiting_for_input(t_minishell_info *info)
 {
 	char	*command;
 	char	buf[2];

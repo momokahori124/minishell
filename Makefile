@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/01/27 15:27:06 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/01/27 20:43:12 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,10 @@ CC = gcc
 CFLAGS = -g -Wall -Werror -Wextra                -fsanitize=address
 # CFLAGS = -g     -fsanitize=address
 
-SRCFILE =	\
+SRCFILE =	cute_message.c \
 
 SRCDIR = ./srcs
-OBJDIR = objs
+OBJDIR = ./objs
 
 #========== builtin function ===================================================
 BUILTIN_DIR = $(SRCDIR)/builtin
@@ -27,6 +27,7 @@ BUILTIN_SRCS = $(addprefix $(BUILTIN_DIR)/, \
 				utils/error_mandatory.c \
 				utils/is_symbolic_link.c \
 				utils/trace_symbolic_src.c \
+				utils/search_env.c \
 				utils/update_env_lst.c \
 				bin.c \
 				cd.c \
@@ -70,6 +71,7 @@ PARSE_SRCS = $(addprefix $(PARSE_DIR)/, \
 				utils/add_back_command_lst.c \
 				utils/dollar_switch_env_value.c \
 				utils/is_command_exit.c \
+				utils/isalnum_except_next_redir.c \
 				utils/split_each_parts.c \
 				utils/split_and_switch_env_value.c \
 				utils/rm_spaces_in_2d_array.c \
@@ -155,9 +157,10 @@ $(OBJDIR)/%.o : $(MINISHELL_DIR)/%.c
 #========== error function =================================================
 ERROR_DIR = $(SRCDIR)/error
 ERROR_SRCS = $(addprefix $(ERROR_DIR)/, \
-				syntax_error.c \
 				all_free_exit.c \
 				ft_perror_exit.c \
+				signal_error_exit.c \
+				syntax_error.c \
 )
 $(OBJDIR)/%.o : $(ERROR_DIR)/setting/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -180,9 +183,9 @@ SRCS = \
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 
-# $(OBJDIR)/%.o : $(SRCDIR)/%.c
-# 	@mkdir -p $(OBJDIR)
-# 	$(CC) $(CFLAGS) -c -o $@ $<
+$(OBJDIR)/%.o : $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 LIBS = ./utils/Libft/
 LIBFT = ./utils/Libft/libft.a
@@ -198,6 +201,7 @@ all: $(NAME)
 clean:
 	@make clean -C $(LIBS)
 	rm -f $(OBJS)
+	rm -rf $(OBJDIR)
 
 fclean: clean
 	@make fclean -C $(LIBS)

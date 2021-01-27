@@ -6,13 +6,14 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:15:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:16:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/28 05:20:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../includes/command.h"
 
-bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *info)
+bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp,
+			t_minishell_info *info)
 {
 	int	i;
 

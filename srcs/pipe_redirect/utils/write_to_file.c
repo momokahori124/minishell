@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:24:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:13:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		write_to_file(int fd, int std, t_cmdlst *begin,
 		all_free_exit(info, ERR_DUP, __LINE__, __FILE__);
 	if (dup2(fd, std) == -1)
 		all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
-	execute(info, begin);
+	execute_each_command(info, begin);
 	if (dup2(backup, std) == -1)
 		all_free_exit(info, ERR_DUP2, __LINE__, __FILE__);
 	if (close(fd) == -1) // これはいらないかもdup2で勝手にクローズされる？
@@ -38,7 +38,7 @@ void		write_to_file(int fd, int std, t_cmdlst *begin,
 	// 	all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	// if ((fd = open(filename, O_CREAT | O_WRONLY | mode, 0666)) == -1)
 	// 	all_free_exit(info, ERR_OPEN, __LINE__, __FILE__);
-	// execute(info, begin);
+	// execute_each_command(info, begin);
 	// if (close(fd) == -1)
 	// 	all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 	// if (dup(backup_stdout) == -1)

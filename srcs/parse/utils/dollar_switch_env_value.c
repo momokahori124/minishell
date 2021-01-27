@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 03:42:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:52:28 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/28 05:25:01 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,15 @@ static char	*check_dollar_in_one_word(char *s, char c)
 	return (NULL);
 }
 
-int		switch_env_value(char **s, char **res, t_envlst *env_lst)
+int			switch_env_value(char **s, char **res, t_envlst *env_lst)
 {
-	char		*dollar_ptr;
+	char	*dollar_ptr;
+	char	*sub;
 
 	if (!(dollar_ptr = check_dollar_in_one_word(*s, '$')))
 		return (1);
 	if (**s == '\\' && *(*(s) + 1) == '$')
-	{
-		(*s)++;
-		return (1);
-	}
+		return ((*s)++ || 1);
 	else if (**s == '$' && *(*(s) + 1) == '?')
 	{
 		(*s) += 2;
@@ -46,7 +44,7 @@ int		switch_env_value(char **s, char **res, t_envlst *env_lst)
 			return (-2);
 		return (-1);
 	}
-	char *sub = ft_substr(*s, 0, dollar_ptr - *s);
+	sub = ft_substr(*s, 0, dollar_ptr - *s);
 	if (!(*res = ft_strjoin(sub, search_env((dollar_ptr) + 1,
 									ft_strlen((dollar_ptr) + 1), env_lst))))
 	{

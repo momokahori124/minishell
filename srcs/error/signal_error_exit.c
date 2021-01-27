@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_minishell_info.c                               :+:      :+:    :+:   */
+/*   signal_error_exit.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/27 01:51:29 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:20:56 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/27 19:08:01 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/27 19:10:48 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../includes/error.h"
 
-void	set_minishell_info(t_minishell_info *info)
+void	signal_error_exit(void)
 {
-	info->current_dir_path = getcwd(NULL, 0);
-	info->cmd_lst = NULL;
-	info->cmd_lst_num = 0;
-	info->env = NULL;
+	red_error();
+	write(STDERR_FILENO, "signal fnction error\n", 21);
+	exit(1);
 }

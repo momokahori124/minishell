@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 22:06:26 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/11 15:59:24 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 18:02:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strlen(const char *str)
 	if (!str)
 	{
 		red_error();
-		write(1, "The ft_strlen function has received a NULL argument.", 52);
+		write(2, "The ft_strlen function has received a NULL argument.", 52);
 		return (-1);
 	}
 	i = 0;

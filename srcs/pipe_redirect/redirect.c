@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 19:45:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:50:34 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_cmdlst		*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst)
 	int			fd[3];
 
 	begin = prepare_in_advance(fd, cmd_lst);
-	rc = open_files_and_stock_fd(fd, cmd_lst, info);
+	rc = open_files_and_stock_fd(fd, begin->type, cmd_lst, info);
 	if (rc == false || rc == -1)
 	{
 		free_alloc_ptr_in_cmd_lst(&begin);

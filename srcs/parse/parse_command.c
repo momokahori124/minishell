@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:27 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 15:11:10 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:56:41 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	parsing(t_minishell_info *info, char *command)
 	const char	*base[CMD_NUM] = {"\0", "2>", "2>>", ";", ";<", ";>", ";>>",
 	"<", ">", ">>", ">|", "cd", "echo", "env", "export", "pwd", "unset", "|"};
 	// ">|"の扱いどうするか
-
 	if (!(split = split_and_switch_env_value(command, ' ', info->env)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	if (split[0] == NULL)
@@ -63,9 +62,11 @@ static void	parsing(t_minishell_info *info, char *command)
 bool		parse_command(t_minishell_info *info, char *command)
 {
 	char	**cmd_grp;
+	char	*tmp;
 	int		i;
 
-	if (!(cmd_grp = split_each_parts(command)))
+	tmp = skip_space(command);
+	if (!(cmd_grp = split_each_parts(tmp)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	cmd_grp = rm_spaces_in_2d_array(cmd_grp, info);
 	ptr_free((void **)&(command));

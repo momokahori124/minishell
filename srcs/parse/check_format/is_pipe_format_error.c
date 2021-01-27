@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:10:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 00:10:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:53:01 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static bool	is_pipe_format_error3(char ***grp, int i, t_minishell_info *info)
 		return (ptr_2d_free_and_syntax_error(DB_INPUT, grp, info));
 	else if ((*grp)[i + 1][0] == '<' && (*grp)[i + 1][1] == '<')
 		return (ptr_2d_free_and_syntax_error(DB_INPUT, grp, info));
-	else if (((*grp)[i + 1][0] == '>' || (*grp)[i + 1][0] == '<') && !(*grp)[i + 2])
+	else if (((*grp)[i + 1][0] == '>' || (*grp)[i + 1][0] == '<') &&
+				!(*grp)[i + 2])
 		return (ptr_2d_free_and_syntax_error(NEWLINE, grp, info));
 	else if ((*grp)[i + 1][0] == ';' && (*grp)[i + 1][1] == ';')
 		return (ptr_2d_free_and_syntax_error(DB_SEMICOLON, grp, info));

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/13 23:16:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 15:04:26 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/01/27 21:03:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数
 */
 
-bool	execute(t_minishell_info *info, t_cmdlst *cmd)
+bool		execute_each_command(t_minishell_info *info, t_cmdlst *cmd)
 {
 	int	type;
 
@@ -37,15 +37,16 @@ bool	execute(t_minishell_info *info, t_cmdlst *cmd)
 		exec_export(info, cmd->arg);
 	else if (type == UNSET)
 		exec_unset(info, cmd->arg);
-	// printf("exit status : %d\n", g_signal.exit_status);
 	return (true);
 }
 
-void		execute_loop(t_minishell_info *info)
+void		execute_each_command_loop(t_minishell_info *info)
 {
 	while (info->cmd_lst)
 	{
-		if (info->cmd_lst->next && (info->cmd_lst->next->type == OUTPUT ||
+		if (info->cmd_lst->type == OUTPUT)
+			just_open_file(info, info->cmd_lst);
+		else if (info->cmd_lst->next && (info->cmd_lst->next->type == OUTPUT ||
 				info->cmd_lst->next->type == DB_OUTPUT ||
 				info->cmd_lst->next->type == INPUT ||
 				info->cmd_lst->next->type == STDERR_OUTPUT ||
@@ -54,7 +55,7 @@ void		execute_loop(t_minishell_info *info)
 		else if (info->cmd_lst->next && info->cmd_lst->next->type == PIPE)
 			info->cmd_lst = pipe_sep(info, &(info->cmd_lst));
 		else
-			execute(info, info->cmd_lst);
+			execute_each_command(info, info->cmd_lst);
 		if (info->cmd_lst == NULL)
 			break ;
 		skip_lst_and_free(&(info->cmd_lst), 1);

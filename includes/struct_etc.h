@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 01:49:43 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:15:16 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct		s_envlst
 typedef struct		s_minishell_info
 {
 	char			*current_dir_path;
+	char			**environ;
 	struct s_envlst	*env;
 	struct s_cmdlst	*cmd_lst;
 	int				cmd_lst_num;

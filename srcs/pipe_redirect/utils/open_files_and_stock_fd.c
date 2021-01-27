@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:15:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 15:08:45 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/28 05:19:31 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int		set_mode(int type)
 	return (0);
 }
 
-static bool		open_files(int fd[2], int type, char *filename, t_minishell_info *info)
+static bool		open_files(int fd[2], int type, char *filename,
+				t_minishell_info *info)
 {
 	int	mode;
 
@@ -40,8 +41,7 @@ static bool		open_files(int fd[2], int type, char *filename, t_minishell_info *i
 		if ((fd[1] = open(filename, O_RDONLY)) == -1)
 		{
 			if (errno == ENOENT)
-				return (err_no_such_file_or_directory(
-					filename, info));
+				return (err_no_such_file_or_directory(filename, info));
 			all_free_exit(info, ERR_OPEN, __LINE__, __FILE__);
 		}
 	}
@@ -82,8 +82,19 @@ static int		check_last_redir_and_close_fd(int fd[3], t_cmdlst *next_sep)
 	return (true);
 }
 
-int				open_files_and_stock_fd(int fd[3], t_cmdlst **cmd_lst,
-						t_minishell_info *info)
+void			just_open_file(t_minishell_info *info, t_cmdlst *cmd)
+{
+	int	fd;
+
+	if ((fd = open(cmd->arg[1], O_CREAT | O_WRONLY | set_mode(cmd->type), 0666))
+			== -1)
+		all_free_exit(info, ERR_OPEN, __LINE__, __FILE__);
+	if (close(fd) == -1)
+		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+}
+
+int				open_files_and_stock_fd(int fd[3], int type,
+						t_cmdlst **cmd_lst, t_minishell_info *info)
 {
 	t_cmdlst	*next_sep;
 
@@ -93,24 +104,16 @@ int				open_files_and_stock_fd(int fd[3], t_cmdlst **cmd_lst,
 		if (open_files(fd, (*cmd_lst)->type, (*cmd_lst)->next->arg[0], info)
 			== false)
 			return (false);
-
-		// if == -1だったら
-		check_last_redir_and_close_fd(fd, next_sep);
-
-		// if (next_sep && (next_sep->type == OUTPUT || next_sep->type == DB_OUTPUT))
-		// 	if (fd[0] != -1)
-		// 		if (ft_close(&(fd[0])) == false)
-		// 			return (-1);
-		// if (next_sep && next_sep->type == INPUT)
-		// 	if (fd[1] != -1)
-		// 		if (ft_close(&(fd[1])) == false)
-		// 				return (-1);
-
-		// *cmd_lst = skip_lst_and_free(cmd_lst, 1);
-		*cmd_lst = (*cmd_lst)->next;
+		if (check_last_redir_and_close_fd(fd, next_sep) == -1)
+			all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
+		if (type != ECHO)
+			*cmd_lst = skip_lst_and_free(cmd_lst, 1);
+		else
+			*cmd_lst = (*cmd_lst)->next;
 		if (next_sep && (next_sep->type == PIPE || next_sep->type == SEMICOLON))
 			return (true);
 	}
-	// free_alloc_ptr_in_cmd_lst(cmd_lst);
+	if (type != ECHO)
+		free_alloc_ptr_in_cmd_lst(cmd_lst);
 	return (true);
 }

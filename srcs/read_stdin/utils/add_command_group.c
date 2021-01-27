@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:07:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:46:17 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ static char	**insert_2d_array(char **dst, char **src1, char **src2)
 	return (dst);
 }
 
-
-int			add_command_group(char **split, t_cmd_grp *cmd_grp_info, int split_size,
-							t_minishell_info *info)
+int			add_command_group(char **split, t_cmd_grp *cmd_grp_info,
+							int split_size, t_minishell_info *info)
 {
 	char	**res;
 	char	***cmd_grp;

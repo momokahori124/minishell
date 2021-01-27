@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:47:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static int	check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info,
 	i = 0;
 	while (split[i])
 	{
-		// pipeの読み込み中にいろいろエラーを弾く。
-		// 多分これでいけてるはず
 		if (i != 0 && split[i][0] == '|' && split[i][1] != '|' && !split[i + 1])
 			return (add_command_group(split, cmd_grp_info, i + 1, info));
 		if (is_output_format_error(&split, i, info) == false)
@@ -73,7 +71,8 @@ static bool	check_buf_and_return_value(ssize_t rc, char **inputs, char buf, \
 	return (true);
 }
 
-static bool	do_when_input_char_equal_newline(char **inputs, t_cmd_grp *cmd_grp_info, t_minishell_info *info)
+static bool	do_when_input_char_equal_newline(char **inputs,
+					t_cmd_grp *cmd_grp_info, t_minishell_info *info)
 {
 	int	rc;
 
@@ -110,7 +109,7 @@ int			waiting_for_next_command(char ***cmd_grp, int array_size,
 			return (false);
 		}
 		if (buf == '\n')
-			if (do_when_input_char_equal_newline(&inputs, &cmd_grp_info, info) == false)
+			if (!do_when_input_char_equal_newline(&inputs, &cmd_grp_info, info))
 				return (cmd_grp_info.array_size);
 	}
 	return (false);

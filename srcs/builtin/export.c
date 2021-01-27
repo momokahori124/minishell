@@ -6,11 +6,58 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:38:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/command.h"
+
+static void	safe_printf(int check, char *env, t_minishell_info *info)
+{
+	if (check == 0)
+	{
+		if (printf("declare -x PWD=%s\n",
+				search_env("PWD", 3, info->env)) == -1)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	}
+	else if (check == 1)
+	{
+		if (printf("declare -x OLDPWD=%s\n",
+				search_env("OLDPWD", 6, info->env)) == -1)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	}
+	else if (check == 2)
+	{
+		if (printf("declare -x %s\n", env) == -1)
+			all_free_exit(info, ERR_WRITE, __LINE__, __FILE__);
+	}
+}
+
+static void	display_sorted_env(t_minishell_info *info)
+{
+	size_t		i;
+	char		**env;
+
+	i = 0;
+	env = info->environ;
+	while (env[i])
+		i++;
+	merge_strsort(env, 0, i - 1, ft_strcmp);
+	i = -1;
+	while (env[++i])
+	{
+		if ((env[i][0] == '_' && env[i][1] == '='))
+			continue ;
+		if (env[i][0] == 'P' && env[i][1] == 'W' && env[i][2] == 'D' &&
+					env[i][3] == '=')
+			safe_printf(0, NULL, info);
+		else if ((env[i][0] == 'O' && env[i][1] == 'L' && env[i][2] == 'D' &&
+					ft_strncmp(env[i] + 3, "PWD", 3) == 0))
+			safe_printf(1, NULL, info);
+		else
+			safe_printf(2, env[i], info);
+	}
+}
 
 void		exec_export(t_minishell_info *info, char **args)
 {
@@ -18,6 +65,8 @@ void		exec_export(t_minishell_info *info, char **args)
 	int			i;
 	int			j;
 
+	if (args[1] == NULL)
+		return (display_sorted_env(info));
 	if (args[1][0] == '-')
 		return (error_mandatory(ERR_EXPORT, 30, info));
 	j = 0;

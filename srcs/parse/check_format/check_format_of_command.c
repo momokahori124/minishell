@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:05:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 00:06:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:54:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ bool	check_format_of_command(char ***grp, t_minishell_info *info)
 	i = -1;
 	while ((*grp)[++i])
 	{
-		if (i != 0 && (*grp)[i][0] == '|' && (*grp)[i][1] != '|' && !(*grp)[i + 1])
+		if (i != 0 && (*grp)[i][0] == '|' && (*grp)[i][1] != '|'
+					&& !(*grp)[i + 1])
 		{
 			info->cmd_lst_num = waiting_for_next_command(grp, i + 1, info);
 			if (*grp == NULL)

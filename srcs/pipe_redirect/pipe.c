@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 20:48:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 ** (引用) https://www.haya-programming.com/entry/2018/11/08/185349
 */
 
-void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
+static void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 							t_minishell_info *info)
 {
 	int	fork_pid;
@@ -31,13 +31,13 @@ void	apply_last_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDIN_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 	close_pipe_fd(pipefd, info);
 }
 
-void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
+static void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 						int new_pipefd[2], t_minishell_info *info)
 {
 	int	fork_pid;
@@ -50,13 +50,13 @@ void	apply_middle_pipe(t_cmdlst **cmd_lst, int old_pipefd[2],
 	{
 		connect_std_in_out_and_pipe(old_pipefd, STDIN_FILENO, info);
 		connect_std_in_out_and_pipe(new_pipefd, STDOUT_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 	close_pipe_fd(old_pipefd, info);
 }
 
-void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
+static void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 						t_minishell_info *info)
 {
 	int	fork_pid;
@@ -68,7 +68,7 @@ void	apply_first_pipe(t_cmdlst **cmd_lst, int pipefd[2],
 	else if (fork_pid == 0)
 	{
 		connect_std_in_out_and_pipe(pipefd, STDOUT_FILENO, info);
-		execute(info, *cmd_lst);
+		execute_each_command(info, *cmd_lst);
 		exit(0);
 	}
 }

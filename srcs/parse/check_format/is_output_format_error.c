@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 03:15:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 00:10:37 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/28 05:29:52 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 bool	is_output_format_error4(char ***grp, int i, t_minishell_info *info)
 {
-	if ((*grp)[i + 1][0] == ';')
+	if ((*grp)[i + 1][0] == '|')
+		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
+	else if ((*grp)[i + 1][0] == ';' && (*grp)[i + 1][1] == ';')
+		return (ptr_2d_free_and_syntax_error(DB_SEMICOLON, grp, info));
+	else if ((*grp)[i + 1][0] == ';')
 		return (ptr_2d_free_and_syntax_error(SEMICOLON, grp, info));
-	else if ((*grp)[i + 1][0] == '<' && (*grp)[i + 1][1] == '<' && (*grp)[i + 1][2] == '<')
+	else if ((*grp)[i + 1][0] == '<' && (*grp)[i + 1][1] == '<' &&
+					(*grp)[i + 1][2] == '<')
 		return (ptr_2d_free_and_syntax_error(TR_INPUT, grp, info));
 	else if ((*grp)[i + 1][0] == '<' && (*grp)[i + 1][1] == '<')
 		return (ptr_2d_free_and_syntax_error(DB_INPUT, grp, info));
@@ -27,6 +32,8 @@ bool	is_output_format_error4(char ***grp, int i, t_minishell_info *info)
 
 bool	is_output_format_error3(char ***grp, int i, t_minishell_info *info)
 {
+	if ((*grp)[i][1] == '>' && (*grp)[i][2] == '|')
+		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
 	if ((*grp)[i][1] == '|' && (*grp)[i][2] == '|' && (*grp)[i][3] == '|')
 		return (ptr_2d_free_and_syntax_error(DB_PIPE, grp, info));
 	else if ((*grp)[i][1] == '|' && (*grp)[i][2] == '|')
@@ -47,10 +54,6 @@ bool	is_output_format_error3(char ***grp, int i, t_minishell_info *info)
 		return (ptr_2d_free_and_syntax_error(OUTPUT, grp, info));
 	else if ((*grp)[i + 1][0] == '|' && (*grp)[i + 1][1] == '|')
 		return (ptr_2d_free_and_syntax_error(DB_PIPE, grp, info));
-	else if ((*grp)[i + 1][0] == '|')
-		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
-	else if ((*grp)[i + 1][0] == ';' && (*grp)[i + 1][1] == ';')
-		return (ptr_2d_free_and_syntax_error(DB_SEMICOLON, grp, info));
 	return (true);
 }
 
@@ -66,7 +69,8 @@ bool	is_output_format_error2(char ***grp, int i, t_minishell_info *info)
 		return (ptr_2d_free_and_syntax_error(DB_SEMICOLON, grp, info));
 	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == ';')
 		return (ptr_2d_free_and_syntax_error(SEMICOLON, grp, info));
-	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == '<' && (*grp)[i][3] == '<' && (*grp)[i][4] == '<')
+	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == '<' && (*grp)[i][3] == '<'
+		&& (*grp)[i][4] == '<')
 		return (ptr_2d_free_and_syntax_error(TR_INPUT, grp, info));
 	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == '<' && (*grp)[i][3] == '<')
 		return (ptr_2d_free_and_syntax_error(DB_INPUT, grp, info));
@@ -78,8 +82,6 @@ bool	is_output_format_error2(char ***grp, int i, t_minishell_info *info)
 		return (ptr_2d_free_and_syntax_error(SEMICOLON, grp, info));
 	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == '|' && (*grp)[i][3] == '|')
 		return (ptr_2d_free_and_syntax_error(DB_PIPE, grp, info));
-	else if ((*grp)[i][1] == '>' && (*grp)[i][2] == '|')
-		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
 	return (true);
 }
 

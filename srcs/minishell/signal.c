@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:07:21 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:21:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	sig_quit(int code)
 void	sig_int(int code)
 {
 	(void)code;
-	if (g_signal.fork_pid == 0) //子だったら
+	if (g_signal.fork_pid == 0)
 	{
 		write(STDERR_FILENO, "\b\b  \n", 5);
 		put_prompt(NULL);
@@ -42,7 +42,5 @@ void	sig_int(int code)
 		write(STDERR_FILENO, "\b\b  \n", 5);
 		g_signal.exit_status = 130;
 	}
-	exit(1);
 	g_signal.fork_pid = 0;
-	// g_signal.sigint = 1;
 }

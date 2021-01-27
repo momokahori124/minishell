@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:06:54 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:45:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:46:30 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define COMMAND_H
 
 # include "struct_etc.h"
-// # include "minishell.h"
+# include "minishell.h"
 # include "exit.h"
 # include "pipe_redirect.h"
 
@@ -67,9 +67,9 @@ int		add_command_group(char **split, t_cmd_grp *cmd_grp_info, int split_size,
 					t_minishell_info *info);
 
 
-void	execute_loop(t_minishell_info *info);
-// bool	execute(t_minishell_info *info, int type, char *cmd);
-bool	execute(t_minishell_info *info, t_cmdlst *cmd);
+void	execute_each_command_loop(t_minishell_info *info);
+// bool	execute_each_command(t_minishell_info *info, int type, char *cmd);
+bool	execute_each_command(t_minishell_info *info, t_cmdlst *cmd);
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 
 // t_cmdlst	*redirect_sep(t_minishell_info *info, t_cmdlst **cmd_lst);
@@ -77,6 +77,7 @@ void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst);
 // utils2
 // char	**split_by_chrs_contain_delimiters(char *str, char *charset);
 char	**split_each_parts(char *str);
+bool		isalnum_except_next_redir(char *str);
 
 // utils3
 char	**rm_spaces_in_2d_array(char **arr, t_minishell_info *info);
