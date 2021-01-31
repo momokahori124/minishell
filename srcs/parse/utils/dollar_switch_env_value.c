@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 03:42:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:25:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/01 00:12:58 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int			switch_env_value(char **s, char **res, t_envlst *env_lst)
 	char	*sub;
 
 	if (!(dollar_ptr = check_dollar_in_one_word(*s, '$')))
+		return (1);
+	if ((*(*(s) + 1) == '$') || (*(*(s) + 1) == '\0'))
 		return (1);
 	if (**s == '\\' && *(*(s) + 1) == '$')
 		return ((*s)++ || 1);

@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 18:44:56 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 01:07:25 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/01/31 03:21:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,3 +52,9 @@ void			exec_unset(t_minishell_info *info, char **args)
 		i++;
 	}
 }
+
+// __attribute__((destructor))
+// void end()
+// {
+// 	system("leaks a.out");
+// }
