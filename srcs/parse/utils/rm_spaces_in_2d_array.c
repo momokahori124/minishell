@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 01:30:47 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static bool	spaces_or_not_in_array(char **arr, int *element_num, int *i)
 {

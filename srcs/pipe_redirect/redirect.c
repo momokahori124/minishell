@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 19:45:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:50:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:47:45 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/pipe_redirect.h"
+#include "../../includes/minishell.h"
 
 static t_cmdlst	*prepare_in_advance(int fd[3], t_cmdlst **cmd_lst)
 {

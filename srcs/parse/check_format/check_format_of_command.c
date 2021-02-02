@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:05:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:54:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:47:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 bool	check_format_of_command(char ***grp, t_minishell_info *info)
 {

@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:15:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:19:31 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:37:32 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
-static int		set_mode(int type)
+static int	set_mode(int type)
 {
 	if (type == OUTPUT)
 		return (O_TRUNC);
@@ -25,7 +25,7 @@ static int		set_mode(int type)
 	return (0);
 }
 
-static bool		open_files(int fd[2], int type, char *filename,
+static bool	open_files(int fd[2], int type, char *filename,
 				t_minishell_info *info)
 {
 	int	mode;
@@ -54,7 +54,7 @@ static bool		open_files(int fd[2], int type, char *filename,
 	return (true);
 }
 
-static int		check_last_redir_and_close_fd(int fd[3], t_cmdlst *next_sep)
+static int	check_last_redir_and_close_fd(int fd[3], t_cmdlst *next_sep)
 {
 	if (next_sep && (next_sep->type == OUTPUT || next_sep->type == DB_OUTPUT))
 	{
@@ -82,7 +82,7 @@ static int		check_last_redir_and_close_fd(int fd[3], t_cmdlst *next_sep)
 	return (true);
 }
 
-void			just_open_file(t_minishell_info *info, t_cmdlst *cmd)
+void		just_open_file(t_minishell_info *info, t_cmdlst *cmd)
 {
 	int	fd;
 
@@ -93,7 +93,7 @@ void			just_open_file(t_minishell_info *info, t_cmdlst *cmd)
 		all_free_exit(info, ERR_CLOSE, __LINE__, __FILE__);
 }
 
-int				open_files_and_stock_fd(int fd[3], int type,
+int			open_files_and_stock_fd(int fd[3], int type,
 						t_cmdlst **cmd_lst, t_minishell_info *info)
 {
 	t_cmdlst	*next_sep;

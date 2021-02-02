@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 20:52:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:48:11 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:48:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/pipe_redirect.h"
+#include "../../includes/minishell.h"
 
 /*
 ** パイプをうまく機能させようと思うと、

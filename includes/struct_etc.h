@@ -6,12 +6,14 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:44:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:15:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:03:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_ETC_H
 # define STRUCT_ETC_H
+
+# include <unistd.h>
 
 typedef struct	stat t_stat;
 
@@ -42,6 +44,13 @@ typedef struct		s_cmd_grp
 	char			***cmd_grp;
 	int				array_size;
 }					t_cmd_grp;
+
+typedef struct	s_global
+{
+	pid_t	fork_pid;
+	int		exit_status;
+}				t_global;
+t_global		g_signal;
 
 enum	e_cmd
 {
@@ -75,20 +84,14 @@ enum	e_cmd
 # define OUTPUT_INPUT CMD_NUM + 7
 # define DB_OUTPUT_INPUT CMD_NUM + 8
 
-// # define SEMICOLON SEMICOLON
-// # define INPUT INPUT
-// # define OUTPUT OUTPUT
-// # define DB_OUTPUT DB_OUTPUT
-// # define PIPE PIPE
 # define NOT_FOUND -1
-# define NOT_FOUND -1
+// # define NOT_FOUND -1
+# define CMD_NOT_FOUND 127
 
 # define NEXT_CMD 2
 
 char		*g_user_name;
 int			g_user_name_count;
 char		*g_working_dir;
-int			g_working_dir_count;
-// pid_t		g_bin_fork_pid;
 
 #endif

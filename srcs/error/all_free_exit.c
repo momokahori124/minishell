@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:54:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:26:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:08:05 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/error.h"
+#include "../../includes/minishell.h"
 
 static void		free_env_lst(t_envlst **envlst)
 {
@@ -56,7 +56,7 @@ static void		put_error_location_and_exit(char *error_message,
 	char	*tmp;
 
 	red_error();
-	if (write(STDERR_FILENO, g_working_dir, g_working_dir_count) < 0)
+	if (write(STDERR_FILENO, g_working_dir, ft_strlen(g_working_dir)) < 0)
 		exit(EXIT_FAILURE);
 	if (!(location_message = ft_str3join("/", file_name, ":")))
 		ft_perror_exit(ERR_MALLOC);

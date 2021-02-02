@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:00:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:47:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:45:09 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 static int	check_more_pipe(char **inputs, t_cmd_grp *cmd_grp_info,
 								t_minishell_info *info)

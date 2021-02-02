@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 19:18:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:18:55 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 16:59:56 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 char	*search_env(char *str, int num, t_envlst *env_lst)
 {

@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:39:52 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:41:14 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 bool	is_command_exit(char *cmd)
 {

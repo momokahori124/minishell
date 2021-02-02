@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:27:50 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:55:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:27:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static t_cmdlst	*cmd_lstlast(t_cmdlst *lst)
 {

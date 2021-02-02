@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:26:09 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:13:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:33:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
 void		mix_input_and_stderr_output(int fd[3], t_cmdlst *begin,
 				t_minishell_info *info)

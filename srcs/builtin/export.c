@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:38:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:03:57 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 static void	safe_printf(int check, char *env, t_minishell_info *info)
 {

@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:10:49 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:53:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:25:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static bool	is_pipe_format_error3(char ***grp, int i, t_minishell_info *info)
 {

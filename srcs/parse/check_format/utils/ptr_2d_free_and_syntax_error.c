@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:15:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:20:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:24:06 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../../includes/command.h"
+#include "../../../../includes/minishell.h"
 
 bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp,
 			t_minishell_info *info)

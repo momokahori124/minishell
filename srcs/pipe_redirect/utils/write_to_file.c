@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:24:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:13:41 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:33:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
 void		write_to_file(int fd, int std, t_cmdlst *begin,
 					t_minishell_info *info)

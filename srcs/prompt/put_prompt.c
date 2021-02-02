@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:41:03 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:25:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:41:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cute_message.h"
+#include "../../includes/minishell.h"
 
 void		put_prompt(t_minishell_info *info)
 {

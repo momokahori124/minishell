@@ -6,7 +6,7 @@
 #    By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/23 01:57:04 by tjinichi          #+#    #+#              #
-#    Updated: 2021/02/01 00:08:12 by tjinichi         ###   ########.fr        #
+#    Updated: 2021/02/02 17:50:19 by tjinichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 CFLAGS = -g -Wall -Werror -Wextra                -fsanitize=address
 # CFLAGS = -g     -fsanitize=address
 
-SRCFILE =	cute_message.c \
+SRCFILE =	 \
 
 SRCDIR = ./srcs
 OBJDIR = ./objs

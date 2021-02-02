@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 01:01:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:46:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:46:40 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 /*
 ** freeしてfalseを返すだけの関数。normのため分けた

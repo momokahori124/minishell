@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:31:41 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:33:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
 void	connect_std_in_out_and_pipe(int pipefd[2], int i_o,
 				t_minishell_info *info)

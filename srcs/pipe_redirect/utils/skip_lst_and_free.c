@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 22:39:58 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:03:15 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:37:36 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
 t_cmdlst	*skip_lst_and_free(t_cmdlst **cmd_lst, int how_many)
 {

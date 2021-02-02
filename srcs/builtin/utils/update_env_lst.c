@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 16:37:31 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:05:36 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:00:04 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static t_envlst	*make_env(char *env_name, char *env_value,
 					t_minishell_info *info)

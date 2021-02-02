@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 20:29:16 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:20:13 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static bool	is_semicolon_format_error4(char ***grp, int i, \
 		t_minishell_info *info)

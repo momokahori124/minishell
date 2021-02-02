@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:55:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 16:59:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 bool	is_symbolic_dir(t_minishell_info *info, char *dir_name)
 {

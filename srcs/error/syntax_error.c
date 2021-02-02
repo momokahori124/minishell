@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:18:39 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 02:53:34 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:08:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/error.h"
+#include "../../includes/minishell.h"
 
-ssize_t	syntax_error2(int type)
+static ssize_t	syntax_error2(int type)
 {
 	ssize_t	write_rc;
 
@@ -38,7 +38,7 @@ ssize_t	syntax_error2(int type)
 	return (write_rc);
 }
 
-bool	syntax_error(int type, t_minishell_info *info)
+bool			syntax_error(int type, t_minishell_info *info)
 {
 	ssize_t	write_rc;
 

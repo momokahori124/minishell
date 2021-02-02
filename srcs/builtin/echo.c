@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:04:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:06:03 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:39:11 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 static void	put_newline(t_minishell_info *info)
 {

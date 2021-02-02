@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 03:42:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/01 00:12:58 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static char	*check_dollar_in_one_word(char *s, char c)
 {

@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 21:03:13 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 21:03:42 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:48:42 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 /*
 ** 構造体に持ったコマンドのタイプを元にそれに応じた処理を振り分ける関数

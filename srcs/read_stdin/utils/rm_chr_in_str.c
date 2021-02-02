@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:17:05 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/25 16:17:16 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 void	rm_chr_in_str(char **str, char chr)
 {

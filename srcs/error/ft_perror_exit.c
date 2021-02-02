@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:55:26 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:58:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:08:18 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/error.h"
+#include "../../includes/minishell.h"
 
 static void	ft_perror(char *err_message)
 {

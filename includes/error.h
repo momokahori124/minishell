@@ -6,15 +6,16 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 01:51:32 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:11:01 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:12:53 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
 # define ERROR_H
 
-# include "minishell.h"
+// # include "minishell.h"
 # include "struct_etc.h"
+# include "standard_lib.h"
 # define ERR_READ "Failed to \033[4mread\033[0m at the above location. "
 # define ERR_WRITE "Failed to \033[4mwrite\033[0m at the above location. "
 # define ERR_MALLOC "Failed to \033[4mmalloc\033[0m at the above location. "
@@ -36,8 +37,7 @@
 # define SYNTAX_EOL_NUM -1
 # define SYNTAX_EOL "minishell: syntax error: unexpected end of file\n"
 
-# define WARNING -2
-# define NEWLINE -3
+# define NEWLINE -2
 
 
 # define NO_OLDPWD "minishell: cd: OLDPWD not set"
@@ -62,24 +62,11 @@
 # define ERR_EXPORT "Usage: export [No option] ...\n"
 # define ERR_UNSET "Usage: unset [No option] ...\n"
 
-// void	perror_exit(char *error_message, int line_num, char *file_name);
-void	free_perror_exit(char *ptr, char *error_message, int line_num, \
-				char *file_name);
-// void	free_exit(char **ptr, int state);
-void	all_free_exit(t_minishell_info *info, char *error_message, \
-				int line_num, char *file_name);
-void	signal_error_exit(void);
-
-void	ctrl_d_exit(char **ptr, t_minishell_info *info);
-bool	syntax_error(int type, t_minishell_info *info);
-bool	ptr_2d_free_and_syntax_error(int type, char ***cmd_grp, t_minishell_info *info);
-// bool	syntax_warning(int type);
-
-void	all_free_minishell_info(t_minishell_info *info);
-bool	err_no_such_file_or_directory(char *filename, t_minishell_info *info);
-
-void	error_mandatory(char *err_message, int num, t_minishell_info *info);
-
-void	ft_perror_exit(char *error_message);
+void			all_free_minishell_info(t_minishell_info *info);
+void			all_free_exit(t_minishell_info *info, char *error_message, \
+							int line_num, char *file_name);
+void			ft_perror_exit(char *error_message);
+void			signal_error_exit(void);
+bool			syntax_error(int type, t_minishell_info *info);
 
 #endif

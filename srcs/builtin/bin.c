@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 00:06:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:26:00 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:01:38 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/command.h"
+#include "../../includes/minishell.h"
 
 static void	put_cmd_not_found(char *command, t_minishell_info *info)
 {

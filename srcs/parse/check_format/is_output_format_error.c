@@ -6,13 +6,13 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 03:15:08 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/28 05:29:52 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:25:10 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
-bool	is_output_format_error4(char ***grp, int i, t_minishell_info *info)
+static bool	is_output_format_error4(char ***grp, int i, t_minishell_info *info)
 {
 	if ((*grp)[i + 1][0] == '|')
 		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
@@ -30,7 +30,7 @@ bool	is_output_format_error4(char ***grp, int i, t_minishell_info *info)
 	return (true);
 }
 
-bool	is_output_format_error3(char ***grp, int i, t_minishell_info *info)
+static bool	is_output_format_error3(char ***grp, int i, t_minishell_info *info)
 {
 	if ((*grp)[i][1] == '>' && (*grp)[i][2] == '|')
 		return (ptr_2d_free_and_syntax_error(PIPE, grp, info));
@@ -57,7 +57,7 @@ bool	is_output_format_error3(char ***grp, int i, t_minishell_info *info)
 	return (true);
 }
 
-bool	is_output_format_error2(char ***grp, int i, t_minishell_info *info)
+static bool	is_output_format_error2(char ***grp, int i, t_minishell_info *info)
 {
 	if ((*grp)[i][1] == '>' && (*grp)[i][2] == '>' && (*grp)[i][3] == '>')
 		return (ptr_2d_free_and_syntax_error(DB_OUTPUT, grp, info));
@@ -85,7 +85,7 @@ bool	is_output_format_error2(char ***grp, int i, t_minishell_info *info)
 	return (true);
 }
 
-bool	is_output_format_error(char ***grp, int i, t_minishell_info *info)
+bool		is_output_format_error(char ***grp, int i, t_minishell_info *info)
 {
 	if ((*grp)[i][0] != '>')
 		return (true);

@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 02:11:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:05:04 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 16:59:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 void	error_mandatory(char *err_message, int num, t_minishell_info *info)
 {

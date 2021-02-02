@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:02:59 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:09:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:00:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static char	*change_to_symbolic_source(char *dir_name, t_minishell_info *info)
 {

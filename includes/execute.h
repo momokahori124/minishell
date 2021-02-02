@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_pwd.h                                      :+:      :+:    :+:   */
+/*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/13 21:00:34 by tjinichi          #+#    #+#             */
-/*   Updated: 2020/12/13 21:21:18 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/02/02 17:12:55 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/02/02 17:14:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_PWD_H
-# define COMMAND_PWD_H
+#ifndef EXECUTE_H
+# define EXECUTE_H
 
-# include "command.h"
+# include "struct_etc.h"
+# include "standard_lib.h"
 
-int		add_pwd_to_lst(t_cmdlst *info, char *command);
+void		execute_each_command_loop(t_minishell_info *info);
+bool		execute_each_command(t_minishell_info *info, t_cmdlst *cmd);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 16:07:37 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 20:46:17 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static char	**insert_2d_array(char **dst, char **src1, char **src2)
 {

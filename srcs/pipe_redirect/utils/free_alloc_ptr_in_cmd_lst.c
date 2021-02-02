@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:36:42 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 01:39:56 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:33:08 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/pipe_redirect.h"
+#include "../../../includes/minishell.h"
 
 void	free_alloc_ptr_in_cmd_lst(t_cmdlst **cmd_lst)
 {

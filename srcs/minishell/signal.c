@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 04:50:53 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:21:51 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:46:54 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/signal.h"
+#include "../../includes/minishell.h"
 
 /*
 ** このファイルにある関数はコピペなので無視で良い

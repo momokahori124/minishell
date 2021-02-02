@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 01:50:40 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 19:19:47 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 16:49:28 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,4 @@ void	set_prompt_message(t_envlst *env_lst)
 		g_user_name_count++;
 	s = search_env("PWD", 3, env_lst);
 	g_working_dir = s;
-	g_working_dir_count = 0;
-	while (g_working_dir[g_working_dir_count])
-		g_working_dir_count++;
 }

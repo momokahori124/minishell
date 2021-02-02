@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.h                                             :+:      :+:    :+:   */
+/*   prompt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/14 18:25:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/14 18:26:53 by tjinichi         ###   ########.fr       */
+/*   Created: 2021/02/02 17:39:55 by tjinichi          #+#    #+#             */
+/*   Updated: 2021/02/02 17:41:23 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXIT_H
-# define EXIT_H
+#ifndef PROMPT_H
+# define PROMPT_H
 
 # include "struct_etc.h"
-# include "minishell.h"
+# include "standard_lib.h"
 
-void		exec_exit(t_minishell_info *info);
+void	display_welcome_message(void);
+void	put_prompt(t_minishell_info *info);
 
 #endif

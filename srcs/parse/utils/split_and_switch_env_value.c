@@ -6,11 +6,11 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 00:07:45 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/01/27 03:54:02 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:38:00 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/command.h"
+#include "../../../includes/minishell.h"
 
 static size_t	word_count(char const *s, char c)
 {
