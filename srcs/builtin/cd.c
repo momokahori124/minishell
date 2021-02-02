@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 01:13:20 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:03:27 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:52:27 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		exec_cd(t_minishell_info *info, t_cmdlst *cmd)
 	if (arg[1] == NULL ||
 		(arg[1] != NULL && arg[1][0] == '~' && arg[1][1] == '\0'))
 		go_to_home(info);
-	else if (arg[1][0] == '-' && arg[1][1] == '\0')
+	if (arg[1][0] == '-' && arg[1][1] == '\0')
 		go_to_oldpwd(info);
 	else if (arg[1][0] == '-' && arg[1][1] == 'P' && arg[1][2] == '\0')
 		go_to_path(info, arg[2], true);

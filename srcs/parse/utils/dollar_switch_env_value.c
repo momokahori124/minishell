@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 03:42:25 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:26:29 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 21:13:51 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ int			switch_env_value(char **s, char **res, t_envlst *env_lst)
 		return (-1);
 	}
 	sub = ft_substr(*s, 0, dollar_ptr - *s);
-	if (!(*res = ft_strjoin(sub, search_env((dollar_ptr) + 1,
-									ft_strlen((dollar_ptr) + 1), env_lst))))
+	char	*tmp = search_env((dollar_ptr) + 1, ft_strlen(dollar_ptr) + 1, env_lst);
+	if (tmp == NULL)
+		return (1);
+	if (!(*res = ft_strjoin(sub, tmp)))
 	{
 		ptr_free((void**)&sub);
 		return (-2);

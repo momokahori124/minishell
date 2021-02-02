@@ -6,7 +6,7 @@
 /*   By: tjinichi <tjinichi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 17:56:17 by tjinichi          #+#    #+#             */
-/*   Updated: 2021/02/02 17:03:57 by tjinichi         ###   ########.fr       */
+/*   Updated: 2021/02/02 21:19:03 by tjinichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,11 @@ void		exec_export(t_minishell_info *info, char **args)
 	while (args[j + 1])
 		j++;
 	i = 0;
-	while (args[j][i] != '=')
+	while (args[j][i] && args[j][i] != '=')
 		i++;
+	// if (args[j][i] == '\0')
+	//
+	// export a='a' b=' b ' c='c ' d=' d' e='e e'
 	if (!(env_name = malloc(i + 1)))
 		all_free_exit(info, ERR_MALLOC, __LINE__, __FILE__);
 	i = -1;
